@@ -114,3 +114,20 @@ Running notes for the viva, one section per build step.
 - *Why do markers and labels keep their size when zooming?* — `ItemIgnoresTransformations` draws them in pixels, and pens are cosmetic, so line width is in pixels too. Only positions follow the zoom.
 - *How do you tell a click from a drag?* — The press position is remembered; a release within 4 px of it counts as a click. Anything further was a pan.
 - *What happens with a 0 × 0 window?* — `fit_rect` and `fit_all` return early (ER11); T23 resizes to 0 × 0 and checks the transform is unchanged.
+
+## Step 8 — App state, search boxes, route panel, worker, main window (M4, feature freeze)
+
+**What was built.** `metro/app_state.py` (pure state + update functions), `metro/ui/search_box.py`, `metro/ui/route_panel.py` (route rows and the banner), `metro/ui/worker.py` (`RouteWorker` on a `QThread` + `RouteRunner`), `metro/ui/main_window.py` and `main.py`. Tests: T15, T16, TM12 (`tests/test_app_state.py`) and T25–T28 plus the other workflows (`tests/test_gui.py`).
+
+**Key functions.**
+- `AppState.phase`: worked out from the fields (computing → "Computing", a route → "RouteShown", …). There is no stored phase that could disagree with the data [D33].
+- `select_station(state, network, field, station_id)`: refuses closed stations (ER6), flags same-station (ER5), and clears the old route because a new choice is the user's own action.
+- `can_find(state, network)`: the single place that decides whether Find is allowed; its reason becomes the disabled button's tooltip.
+- `RouteRunner.start / cancel / is_current`: each request gets a number; starting a new one or resetting increases the number and sets the old cancel event, so an old result is recognised as stale and dropped (ER14). Timers give "Computing…" after 150 ms and fail the request after 2 s (ER13).
+- `MainWindow.apply(state)`: the only function that changes widgets. Every handler computes a new `AppState` and calls `apply`.
+
+**Likely questions.**
+- *How do you keep the UI responsive?* — `find_route` runs in `RouteWorker.compute` on a separate `QThread`. The request signal is queued across threads, and results come back as signals to the UI thread.
+- *What stops an old, slow result from overwriting a newer one?* — The request number. `is_current` compares the result's number with the latest; anything else is discarded. T25 tests this with a deliberately slow search function.
+- *Why can't the cancel just kill the thread?* — Killing a thread can leave data half-updated. Instead `find_route` checks the cancel event every 256 pops and stops cleanly by raising `RouteCancelled`.
+- *What happens on an unexpected exception?* — The worker logs the stack trace to `metro.log` and the user sees "Something went wrong. Your selection was kept." with Retry (ER17).

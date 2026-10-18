@@ -53,3 +53,19 @@ A3 says the Janakpuri West transfer is "overridden to 104 s". A transfer *cheape
 ### D42 — How the draft dataset was produced (Step 6)
 
 The real data was drafted from the DMRC GTFS feed plus Wikipedia/OpenStreetMap for the 2025–26 sections (details and every source in `data/README.md`). The drafted CSVs in `data/source/` are now the team's master copy, and `tools/csv_to_json.py` generates the JSON. Every station is `verified: false` until the team checks it. The 30 golden routes in `tests/golden/routes.json` are structures expected from the DMRC map (`"checked": false` until the team confirms each one).
+
+### D43 — Request bookkeeping lives in `RouteRunner` (Step 8)
+
+PRD §6.5 describes the request number, cancel event, 150 ms timer and 2 s watchdog as part of the main window. They are in `RouteRunner` (`metro/ui/worker.py`) instead, next to `RouteWorker`. The main window calls `runner.start(...)` / `runner.cancel()` and listens to `found`, `failed` and `slow`. All the threading code is then in one file, and the window only deals with `AppState`. After a watchdog timeout the request number is also increased, so a late result of the abandoned search is treated as stale.
+
+### D44 — Esc is handled in `MainWindow.keyPressEvent` (Step 8)
+
+A window-wide `QShortcut` for Esc did not fire while a text field had focus. Key presses that no child widget uses bubble up to the window, so `keyPressEvent` sees Esc from anywhere. The search box consumes Esc while its list is open, so "Esc closes the list first, then resets" needs no extra check.
+
+### D45 — Suggestions are an inline list, not a popup (Step 8)
+
+The suggestion list is a `QListWidget` placed directly under each field (as in the §6.1 layout), not a floating popup. The keyboard focus stays in the field; an event filter maps Up/Down/Enter/Esc onto the list. This avoids popup focus problems and is simple to test.
+
+### D46 — A station typed over is no longer chosen (Step 8)
+
+Editing the text of a field after choosing a station clears that choice (`SearchBox.cleared`). Otherwise the field could show one name while the state held another station.
