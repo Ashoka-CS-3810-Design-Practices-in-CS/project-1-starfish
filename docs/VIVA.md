@@ -98,3 +98,19 @@ Running notes for the viva, one section per build step.
 - *Where did the data come from and how much is verified?* — DMRC's GTFS feed for order, coordinates and running times; Wikipedia and OpenStreetMap for the sections opened in 2025–26; 120 s default where no times exist. Nothing is marked verified until the team checks it (`data/README.md`).
 - *How can the golden test not be circular?* — The golden file holds structures expected from the official map (line sequence and interchange stations), not router output. Minutes are compared to networkx, not written down.
 - *What does T20 prove?* — Closing a station only removes nodes and arcs, so it can never create a shorter path. If a closure ever made a route faster, the graph build or the search would be wrong.
+
+## Step 7 — Map view (M4)
+
+**What was built.** `metro/ui/map_view.py` (the `MapView` widget) and `metro/ui/route_overlay.py` (route drawing and selection rings), plus `station_lines` and `station_tooltip` in `metro/describe.py`. Tests T22–T24 and checks for clicks, the overlay and label level-of-detail are in `tests/test_gui_map.py`.
+
+**Key functions.**
+- `project(lat, lon, origin)`: x = (lon − lon0)·cos(lat0)·K, y = −(lat − lat0)·K. The cosine stops east–west distances from being stretched; the minus sign puts north at the top because screen y grows downwards.
+- `MapView.zoom_by(factor)`: works out the target zoom, clamps it to 0.2–20 × the fit scale, and scales by the ratio. Qt's `AnchorUnderMouse` keeps the point under the cursor fixed [D27].
+- `MapView.stations_near(pos)`: asks Qt for the items in a 16 × 16 px square (`items(QRect)`, backed by Qt's BSP index), keeps station markers, and sorts them by pixel distance.
+- `MapView.update_labels()`: computes the label tier from the zoom and only touches labels when the tier changes [D21].
+- `RouteOverlay.draw(route, network)`: draws each leg as thick lines on top; every second ride gets a white dashed centre line so neighbouring legs differ without colour; walks are dotted grey. The network is never rebuilt.
+
+**Likely questions.**
+- *Why do markers and labels keep their size when zooming?* — `ItemIgnoresTransformations` draws them in pixels, and pens are cosmetic, so line width is in pixels too. Only positions follow the zoom.
+- *How do you tell a click from a drag?* — The press position is remembered; a release within 4 px of it counts as a click. Anything further was a pan.
+- *What happens with a 0 × 0 window?* — `fit_rect` and `fit_all` return early (ER11); T23 resizes to 0 × 0 and checks the transform is unchanged.
