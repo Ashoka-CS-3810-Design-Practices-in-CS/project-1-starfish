@@ -23,4 +23,10 @@ The line-expanded routing graph; lexicographic Dijkstra with a super-source and 
 
 ## Later decisions
 
-_Added as the build progresses._
+### D36 — Cross-file checks in their own module (Step 2)
+
+The PRD layout puts all validation in `data.py`. With all eleven checks, that file would pass the 300-line limit, so the checks that need more than one file (4, 6, 7, 8, 10, 11) live in `metro/validate.py`. `data.py` still owns reading, per-entry field checks (2, 3, 5, 9) and building the `Network`. `load_network` is still the only entry point.
+
+### D37 — Broken fixtures store only the changed file (Step 2)
+
+Each folder in `tests/fixtures/broken/` holds only the file(s) that differ from `toy_metro`. The `broken_dataset` test fixture copies `toy_metro` to a temporary folder and lays the broken files over it. This keeps each defect visible in a single small file instead of 4 near-identical copies.
