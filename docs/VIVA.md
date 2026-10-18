@@ -148,3 +148,28 @@ Running notes for the viva, one section per build step.
 - *How is colour never the only cue?* — Leg rows show the line name next to the swatch, and neighbouring legs on the map differ by a dashed centre line; walks are dotted.
 
 **Still to do by the team:** the manual smoke test on Windows, macOS and Linux (A3 M5).
+
+## Step 10 — Documentation (M6)
+
+**What was written.** `docs/algorithms.md` (Algorithms 1–5 and 8, with [D16] and [D17]), `docs/data_repr.md`, `docs/performance.md` (measured numbers and coverage), `docs/demo.md` (6 scenarios), a template for `docs/usability.md` (the team fills it in after the SUS sessions), and the answers below.
+
+---
+
+## Design-review answers (A3 §9)
+
+**1. Hardest algorithmic problem — charging interchanges correctly.**
+`build_graph` gives every (station, service) pair its own node, so a change of train is a real `transfer` arc with a real cost, including branch changes on the same line (Yamuna Bank, Ashok Park Main). `find_route` starts every node of the source at zero (super-source, so no change at the origin) and stops at the first popped node of the destination (early exit, so no false change at the end). Walkways: `assemble_route` turns a walk between two rides into an `Interchange(is_walk=True)` and a walk at either end into a WALK leg, which is not an interchange [D17].
+
+**2. Key data structure.** The adjacency list `RoutingGraph.adj` plus a `heapq` of `(key_tuple, node)`. Dijkstra only needs "arcs leaving this node", and the real graph has 582 arcs against 272² ≈ 74 000 matrix cells. Comparing tuples gives the tie-breaking for free; comparing node numbers last makes it deterministic.
+
+**3. Most expensive operation.** One full `find_route` is O((N + A) log N), about 0.25 ms (p95) on the real data. Across the whole app, building and repainting the Qt scene costs far more than routing.
+
+**4. Invalid input.** `normalise` (cut to 100 characters, NFKC, control characters, case, spaces, "sec"); `search` never raises (T14); `can_find` refuses missing, same or closed stations before any search runs; no route is the value `None`, not an exception; `load_network` reports *every* data problem at once.
+
+**5. Most likely to change.** The routing cost model: new criteria, A\*, fares, real timetables.
+
+**6. How it is isolated.** All of it lives in `metro/router.py`: a criterion is one key function in `KEY_FUNCTIONS`. The UI only ever sees the `Route` dataclass, and `tests/test_imports.py` keeps Qt out of the core.
+
+**7. Rejected alternatives.** Modal error dialogs (they block the user for problems that leave the app usable [D19]); all-pairs precomputation (59 000 routes to store when one query takes 0.25 ms); and the simplifications [D26]–[D35] (trie, custom viewport maths, executor abstraction, transition table, …), each with its reason in `docs/decisions.md`.
+
+**8. A feature addable without redesign.** A new criterion is one key function added to `KEY_FUNCTIONS` and one entry in the criterion box. Alternative routes (FR17) would be a new function that calls `find_route` repeatedly with some arcs masked out; nothing else changes.
