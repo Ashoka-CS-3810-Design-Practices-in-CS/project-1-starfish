@@ -139,3 +139,25 @@ def test_t20_closing_a_station_never_shortens_a_route(real):
         after = find_route(build_graph(variant), variant, src, dst)
         if after is not None:
             assert before is not None and after.total_s >= before.total_s
+
+
+def key_changes(route) -> int:
+    """Changes as counted by the search key: interchanges plus WALK legs [D17]."""
+    return len(route.interchanges) + sum(leg.kind == "WALK" for leg in route.legs)
+
+
+def test_t21_fewest_changes_and_fewest_stops(real):
+    """T21 [Should]: fewest_changes never has more changes than fastest, and the reported
+    interchange count never exceeds the key's count; fewest_stops never has more stops."""
+    network, graph = real
+    rng = random.Random(21)
+    ids = list(network.stations)
+    for _ in range(300):
+        src, dst = rng.sample(ids, 2)
+        fastest = find_route(graph, network, src, dst)
+        fewest = find_route(graph, network, src, dst, "fewest_changes")
+        stops = find_route(graph, network, src, dst, "fewest_stops")
+        assert key_changes(fewest) <= key_changes(fastest)
+        assert len(fewest.interchanges) <= key_changes(fewest)
+        assert fewest.total_s >= fastest.total_s
+        assert stops.stops <= fastest.stops

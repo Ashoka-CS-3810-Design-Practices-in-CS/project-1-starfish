@@ -192,3 +192,28 @@ def test_startup_error_text_lists_problems(broken_dataset):
     text = main.problems_text(info.value, folder)
     assert text.startswith("The network data has 4 problems.")
     assert text.endswith(f"Data folder: {folder}")
+
+
+def test_accessibility_baseline(qtbot):
+    """[D20] Every control has an accessible name; the route rows name the line in words."""
+    from PySide6.QtWidgets import QAbstractButton, QComboBox, QLineEdit, QListWidget
+    window = make_window(qtbot)
+    controls = window.findChildren(QAbstractButton) + window.findChildren(QLineEdit) + \
+        window.findChildren(QComboBox) + window.findChildren(QListWidget)
+    unnamed = [w for w in controls if w.isVisible() and not w.accessibleName()
+               and w.parent() is not None and w.objectName() != "qt_spinbox_lineedit"]
+    assert unnamed == []
+    choose(window, "A", "F")
+    qtbot.waitUntil(lambda: window.state.phase == "RouteShown")
+    assert "Red Line" in window.route_panel.rows.item(0).text()
+
+
+def test_criterion_change_then_find(qtbot):
+    """FR16: choosing Fewest stops and pressing Find recomputes A->F via Green (TM6)."""
+    window = make_window(qtbot)
+    choose(window, "A", "F")
+    qtbot.waitUntil(lambda: window.state.phase == "RouteShown")
+    window.criterion.setCurrentIndex(2)
+    qtbot.mouseClick(window.find_button, Qt.MouseButton.LeftButton)
+    qtbot.waitUntil(lambda: window.state.route.stops == 2)
+    assert window.state.route.total_s == 780
