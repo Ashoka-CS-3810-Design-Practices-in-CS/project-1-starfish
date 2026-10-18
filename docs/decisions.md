@@ -30,3 +30,10 @@ The PRD layout puts all validation in `data.py`. With all eleven checks, that fi
 ### D37 — Broken fixtures store only the changed file (Step 2)
 
 Each folder in `tests/fixtures/broken/` holds only the file(s) that differ from `toy_metro`. The `broken_dataset` test fixture copies `toy_metro` to a temporary folder and lays the broken files over it. This keeps each defect visible in a single small file instead of 4 near-identical copies.
+
+### D38 — Search details (Step 5)
+
+- **Index entries carry the name and the closed flag.** PRD §5.4 describes index entries as `(text, station_id, is_code)`. Each `IndexEntry` also stores the canonical name (for the `(rank, distance, name)` sort) and `closed` (so results can be dimmed) to avoid a second lookup per result.
+- **Fuzzy also compares with the start of the name.** Comparing a 5-letter query with a 11-letter name always fails the length check, so a typo while still typing ("rajib") would never be found. `classify` compares the query with the whole name *and* with the name's first `len(query)` characters, using the same `k` [D16].
+- **Codes match only exactly.** A code is short and arbitrary, so prefix or fuzzy matches on codes would mostly be noise.
+- **Whitespace becomes a space before control characters are dropped.** Tabs and newlines are Unicode category `Cc`; dropping them first would join words ("rajivchowk"). Found by `test_t13_normalise_steps`.

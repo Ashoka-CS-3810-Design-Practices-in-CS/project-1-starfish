@@ -64,3 +64,19 @@ Running notes for the viva, one section per build step.
 - *Why is lexicographic Dijkstra still correct?* — All arc costs are non-negative tuples, and adding a non-negative tuple never makes a tuple lexicographically smaller. That is the only property Dijkstra needs.
 - *Why is a walk at the start not an interchange?* — You have not boarded anything yet, so nothing is being "changed" ([D17]). It is still counted as a change in the search key, so the reported count can only be smaller than the key's (T21).
 - *How are ties broken?* — Heap entries are `(key, node)`, so equal keys fall back to the node index, which comes from sorted IDs. TL5 checks that the loop direction is the same on every run.
+
+## Step 5 — Station search (M3)
+
+**What was built.** `metro/search.py`: normalisation, the search index, the A2 ranking rules as a linear scan [D26], and a banded Levenshtein. Tests cover T11–T14, the fuzzy threshold [D16], and 10 000 random hostile strings. Measured p95 is about 4 ms per keystroke on a 300-station index (target ≤ 50 ms).
+
+**Key functions.**
+- `normalise(text)`: cut to 100 characters, NFKC (turns full-width "ＲＡＪ" into "RAJ"), whitespace to spaces, drop control characters, lowercase, collapse spaces, "sec" → "sector".
+- `build_index(stations)`: one entry per code, name and alias, all normalised once at start-up.
+- `classify(query, entry, k)`: decides CODE / NAME / PREFIX / SUBSTRING / FUZZY for one entry, trying the cheap checks first.
+- `levenshtein_within(a, b, k)`: two-row edit distance that gives up as soon as every value in a row is above k.
+- `search(index, query)`: keeps each station's best match and returns the top 8 by `(rank, distance, name)`.
+
+**Likely questions.**
+- *Why is stopping early correct?* — Each cell in the next row is at least the smallest value in the current row (all three moves add 0 or 1 to a cell from the row above or the same row). If the whole row is above k, the final answer must be too.
+- *Why no fuzzy matching below 3 characters?* — With 1–2 letters, one edit can turn the query into almost anything, so every station would match ([D16]).
+- *Why not a trie?* — About 300 stations × 3 texts is ~1 000 comparisons per keystroke, a few milliseconds. A trie would need insertion, traversal and cached top-8 code to save time nobody can notice ([D26]).
