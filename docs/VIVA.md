@@ -47,3 +47,20 @@ Running notes for the viva, one section per build step.
 - *Why not one node per station?* — Then "arrive on Red, leave on Blue" and "stay on Red" would look the same, and the transfer cost could not be charged. Splitting a station by service makes the change a real arc.
 - *Why an adjacency list rather than a matrix?* — Roughly 1 000 arcs versus about 120 000 cells for a matrix of ~350 nodes; Dijkstra only ever needs "the arcs leaving this node".
 - *What does closing a station do?* — It gets no nodes, so no ride arc can pass through it ([D1]); the test `test_closed_station_has_no_node` shows C closed leaves Red split into A–B and D.
+
+## Step 4 — Route search and assembly (M3)
+
+**What was built.** `metro/router.py` (lexicographic Dijkstra, route assembly, direction labels, display minutes) and `tests/oracle.py` (Floyd–Warshall). Tests cover TM1–TM11 and TL1–TL5 with exact numbers, and Dijkstra agrees with Floyd–Warshall on every ordered pair of both toy fixtures. TM12 (A→A) is about `can_find`, so it is tested with `app_state.py` in Step 8.
+
+**Key functions.**
+- `find_route(graph, network, src, dst, criterion, cancel)`: pushes every node of `src` at cost (0, 0, 0) (the super-source), pops the cheapest key, skips stale heap entries (lazy deletion), and stops at the first popped node whose station is `dst` (early exit). Returns `None` when the heap empties.
+- `arc_cost(time_s, kind)`: a ride adds (t, 0, 1); a transfer or walk adds (t, 1, 0). The criterion's key function only reorders this tuple, and Python compares tuples left to right, so tie-breaks come for free.
+- `assemble_route(...)`: splits the path into pieces (`split_into_pieces`), turns ride pieces into RIDE legs, whatever lies between two rides into one `Interchange`, and walks before the first or after the last ride into WALK legs. It then asserts the three invariants.
+- `direction_label(...)`: "towards <terminus>" for normal services; for a loop, the next interchange station in the travel direction.
+- `all_pairs_times(graph)` (`tests/oracle.py`): Floyd–Warshall on node times, taking the minimum over all nodes of each station.
+
+**Likely questions.**
+- *Why does early exit guarantee no false change at the destination?* — We stop the moment *any* node of the destination station is popped. A transfer arc at the destination would only make a more expensive node of the same station, which is never popped first.
+- *Why is lexicographic Dijkstra still correct?* — All arc costs are non-negative tuples, and adding a non-negative tuple never makes a tuple lexicographically smaller. That is the only property Dijkstra needs.
+- *Why is a walk at the start not an interchange?* — You have not boarded anything yet, so nothing is being "changed" ([D17]). It is still counted as a change in the search key, so the reported count can only be smaller than the key's (T21).
+- *How are ties broken?* — Heap entries are `(key, node)`, so equal keys fall back to the node index, which comes from sorted IDs. TL5 checks that the loop direction is the same on every run.
