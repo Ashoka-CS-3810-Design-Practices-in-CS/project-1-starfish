@@ -1,0 +1,14 @@
+{
+ "default_other_line_s": 240,
+ "default_same_line_s": 120,
+ "overrides": [
+  {"station": "YMBK", "service_a": "BLUE-MAIN", "service_b": "BLUE-BR", "time_s": 120}
+ ],
+ "no_transfer": [
+  ["MAG-1", "MAG-2"]
+ ],
+ "walkways": [
+  {"id": "W-01", "a": "DHKN", "b": "DDSC", "time_s": 300, "one_way": false},
+  {"id": "W-02", "a": "PBBH", "b": "PBBA", "time_s": 240, "one_way": false}
+ ]
+}

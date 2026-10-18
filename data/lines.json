@@ -1,0 +1,415 @@
+[
+ {
+  "id": "RED",
+  "name": "Red Line",
+  "color": "#E2231A",
+  "services": [
+   {
+    "id": "RED-MAIN",
+    "stations": [
+     "RTHL",
+     "RNWT",
+     "RNET",
+     "PTMP",
+     "KTEV",
+     "NJSH",
+     "KVPM",
+     "KYNR",
+     "INDR",
+     "SRNR",
+     "PPNR",
+     "PLBN",
+     "TSHR",
+     "KSHG",
+     "SRPK",
+     "SLMP",
+     "WLCM",
+     "SHHD",
+     "MRPK",
+     "JHLM",
+     "DDGN",
+     "SDNR",
+     "RJBH",
+     "MRMT",
+     "SMPK",
+     "MNNR",
+     "ARTH",
+     "HNRR",
+     "SDSL"
+    ],
+    "loop": false
+   }
+  ]
+ },
+ {
+  "id": "YELLOW",
+  "name": "Yellow Line",
+  "color": "#E8B100",
+  "services": [
+   {
+    "id": "YELLOW-MAIN",
+    "stations": [
+     "SRBL",
+     "RO18",
+     "HRBL",
+     "JHNG",
+     "AHNR",
+     "AZDP",
+     "MLTN",
+     "GRTH",
+     "VSHW",
+     "VNSH",
+     "CLLS",
+     "KSHG",
+     "CNCK",
+     "CRBR",
+     "NDLS",
+     "RJCK",
+     "PLCK",
+     "CLST",
+     "UGBN",
+     "LKKN",
+     "JRBG",
+     "DLHT",
+     "AIIM",
+     "GNPK",
+     "HZKS",
+     "MYNR",
+     "SAKE",
+     "QBMR",
+     "CHHT",
+     "SLTN",
+     "GHTR",
+     "ANGH",
+     "GRDR",
+     "SKND",
+     "MGRD",
+     "ICCK",
+     "MMCY"
+    ],
+    "loop": false
+   }
+  ]
+ },
+ {
+  "id": "BLUE",
+  "name": "Blue Line",
+  "color": "#1E5AA8",
+  "services": [
+   {
+    "id": "BLUE-MAIN",
+    "stations": [
+     "DW21",
+     "DW08",
+     "DW09",
+     "DW10",
+     "DW11",
+     "DW12",
+     "DW13",
+     "DW14",
+     "DWRK",
+     "DKMR",
+     "NAWA",
+     "UMNR",
+     "UMNA",
+     "JNPW",
+     "JRET",
+     "TKNR",
+     "SHNR",
+     "TRGN",
+     "RRGN",
+     "RHNR",
+     "MTNR",
+     "KTNR",
+     "SHDP",
+     "PLNR",
+     "RRPC",
+     "KLBH",
+     "JHND",
+     "RKAM",
+     "RJCK",
+     "BRKH",
+     "MDHS",
+     "SMCT",
+     "INDA",
+     "YMBK",
+     "AKSH",
+     "MRVR",
+     "MRVA",
+     "NWAK",
+     "NO15",
+     "NO16",
+     "NO18",
+     "BTGD",
+     "GFCS",
+     "NDCY",
+     "NO34",
+     "NO52",
+     "NO61",
+     "NO59",
+     "NO62",
+     "NECT"
+    ],
+    "loop": false
+   },
+   {
+    "id": "BLUE-BR",
+    "stations": [
+     "YMBK",
+     "LMNR",
+     "NNVR",
+     "PTVR",
+     "KRKR",
+     "ADVR",
+     "KSHM",
+     "VASH"
+    ],
+    "loop": false
+   }
+  ]
+ },
+ {
+  "id": "GREEN",
+  "name": "Green Line",
+  "color": "#1B9E4B",
+  "services": [
+   {
+    "id": "GREEN-MAIN",
+    "stations": [
+     "INDR",
+     "AKPK",
+     "PBBH",
+     "SJPK",
+     "MDPR",
+     "PMVR",
+     "PMVA",
+     "PRGR",
+     "UGNR",
+     "MJSL",
+     "NNGL",
+     "NLRY",
+     "RNPK",
+     "MNDK",
+     "MKIL",
+     "GHVR",
+     "TRKN",
+     "TRBR",
+     "PTSR",
+     "BHCY",
+     "BRHR"
+    ],
+    "loop": false
+   },
+   {
+    "id": "GREEN-BR",
+    "stations": [
+     "KTNR",
+     "SRRM",
+     "AKPK"
+    ],
+    "loop": false
+   }
+  ]
+ },
+ {
+  "id": "VIOLET",
+  "name": "Violet Line",
+  "color": "#7B3FA0",
+  "services": [
+   {
+    "id": "VIOLET-MAIN",
+    "stations": [
+     "KSHG",
+     "LLQL",
+     "JMMD",
+     "DHGT",
+     "ITOX",
+     "MDHS",
+     "JNPT",
+     "CLST",
+     "KNMT",
+     "JLNR",
+     "JNGP",
+     "LTNR",
+     "MLCH",
+     "KHCY",
+     "NRPC",
+     "KJMR",
+     "GDPR",
+     "HHNR",
+     "JLAL",
+     "STVR",
+     "MNET",
+     "TGHL",
+     "BRBR",
+     "SARA",
+     "NCCK",
+     "MLMR",
+     "SE28",
+     "BLMR",
+     "ODFD",
+     "NMCK",
+     "BTCK",
+     "ESMR",
+     "STSS",
+     "RJNR"
+    ],
+    "loop": false
+   }
+  ]
+ },
+ {
+  "id": "PINK",
+  "name": "Pink Line",
+  "color": "#E0559B",
+  "services": [
+   {
+    "id": "PINK-RING",
+    "stations": [
+     "MJPK",
+     "AZDP",
+     "SRBH",
+     "NJSH",
+     "SHKR",
+     "PBBA",
+     "ESBR",
+     "RRGN",
+     "MYPR",
+     "NNVA",
+     "DHCT",
+     "DDSC",
+     "SRVH",
+     "BJCM",
+     "SNNR",
+     "DLHT",
+     "SHEN",
+     "LTNR",
+     "VNBP",
+     "ASHR",
+     "SRKL",
+     "MRVR",
+     "SRRA",
+     "TRSY",
+     "ETVD",
+     "MLWT",
+     "IPEN",
+     "ADVR",
+     "KRKR",
+     "KMCT",
+     "KNNR",
+     "ETAD",
+     "WLCM",
+     "JFFR",
+     "MJBR",
+     "YNVR",
+     "BHJN",
+     "KRKS",
+     "NRSN",
+     "JRWD",
+     "JDMR",
+     "BURA"
+    ],
+    "loop": true
+   },
+   {
+    "id": "PINK-SPUR",
+    "stations": [
+     "MJBR",
+     "GKLP",
+     "JREV",
+     "SVVR"
+    ],
+    "loop": false
+   }
+  ]
+ },
+ {
+  "id": "MAGENTA",
+  "name": "Magenta Line",
+  "color": "#B0167F",
+  "services": [
+   {
+    "id": "MAG-1",
+    "stations": [
+     "KNPK",
+     "JNPW",
+     "DRMR",
+     "DSHR",
+     "PALA",
+     "SRBR",
+     "TE01",
+     "SRVR",
+     "VTVR",
+     "MNRK",
+     "RRKK",
+     "IITX",
+     "HZKS",
+     "PLPK",
+     "CGDH",
+     "GRKH",
+     "NREV",
+     "KJMR",
+     "OLNC",
+     "SVVA",
+     "JMML",
+     "OLVR",
+     "JLVR",
+     "KDKJ",
+     "OLBD",
+     "BTGD"
+    ],
+    "loop": false
+   },
+   {
+    "id": "MAG-2",
+    "stations": [
+     "MJPK",
+     "BHLS",
+     "HRBL",
+     "HRVG",
+     "URPR",
+     "MNCK",
+     "DLCK"
+    ],
+    "loop": false
+   }
+  ]
+ },
+ {
+  "id": "GREY",
+  "name": "Grey Line",
+  "color": "#7D7F82",
+  "services": [
+   {
+    "id": "GREY-MAIN",
+    "stations": [
+     "DWRK",
+     "NNGA",
+     "NJFG",
+     "DSBS"
+    ],
+    "loop": false
+   }
+  ]
+ },
+ {
+  "id": "AIRPORT",
+  "name": "Airport Express",
+  "color": "#F07C00",
+  "services": [
+   {
+    "id": "AIRPORT-MAIN",
+    "stations": [
+     "YA25",
+     "DW21",
+     "IGAT",
+     "DHAY",
+     "DHKN",
+     "SJSM",
+     "NDLS"
+    ],
+    "loop": false
+   }
+  ]
+ }
+]

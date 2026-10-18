@@ -1,0 +1,1822 @@
+[
+ {
+  "id": "S-0001",
+  "line": "RED",
+  "a": "RTHL",
+  "b": "RNWT",
+  "time_s": 170
+ },
+ {
+  "id": "S-0002",
+  "line": "RED",
+  "a": "RNWT",
+  "b": "RNET",
+  "time_s": 150
+ },
+ {
+  "id": "S-0003",
+  "line": "RED",
+  "a": "RNET",
+  "b": "PTMP",
+  "time_s": 125
+ },
+ {
+  "id": "S-0004",
+  "line": "RED",
+  "a": "PTMP",
+  "b": "KTEV",
+  "time_s": 140
+ },
+ {
+  "id": "S-0005",
+  "line": "RED",
+  "a": "KTEV",
+  "b": "NJSH",
+  "time_s": 150
+ },
+ {
+  "id": "S-0006",
+  "line": "RED",
+  "a": "NJSH",
+  "b": "KVPM",
+  "time_s": 160
+ },
+ {
+  "id": "S-0007",
+  "line": "RED",
+  "a": "KVPM",
+  "b": "KYNR",
+  "time_s": 120
+ },
+ {
+  "id": "S-0008",
+  "line": "RED",
+  "a": "KYNR",
+  "b": "INDR",
+  "time_s": 140
+ },
+ {
+  "id": "S-0009",
+  "line": "RED",
+  "a": "INDR",
+  "b": "SRNR",
+  "time_s": 155
+ },
+ {
+  "id": "S-0010",
+  "line": "RED",
+  "a": "SRNR",
+  "b": "PPNR",
+  "time_s": 175
+ },
+ {
+  "id": "S-0011",
+  "line": "RED",
+  "a": "PPNR",
+  "b": "PLBN",
+  "time_s": 135
+ },
+ {
+  "id": "S-0012",
+  "line": "RED",
+  "a": "PLBN",
+  "b": "TSHR",
+  "time_s": 135
+ },
+ {
+  "id": "S-0013",
+  "line": "RED",
+  "a": "TSHR",
+  "b": "KSHG",
+  "time_s": 145
+ },
+ {
+  "id": "S-0014",
+  "line": "RED",
+  "a": "KSHG",
+  "b": "SRPK",
+  "time_s": 225
+ },
+ {
+  "id": "S-0015",
+  "line": "RED",
+  "a": "SRPK",
+  "b": "SLMP",
+  "time_s": 170
+ },
+ {
+  "id": "S-0016",
+  "line": "RED",
+  "a": "SLMP",
+  "b": "WLCM",
+  "time_s": 145
+ },
+ {
+  "id": "S-0017",
+  "line": "RED",
+  "a": "WLCM",
+  "b": "SHHD",
+  "time_s": 150
+ },
+ {
+  "id": "S-0018",
+  "line": "RED",
+  "a": "SHHD",
+  "b": "MRPK",
+  "time_s": 150
+ },
+ {
+  "id": "S-0019",
+  "line": "RED",
+  "a": "MRPK",
+  "b": "JHLM",
+  "time_s": 135
+ },
+ {
+  "id": "S-0020",
+  "line": "RED",
+  "a": "JHLM",
+  "b": "DDGN",
+  "time_s": 135
+ },
+ {
+  "id": "S-0021",
+  "line": "RED",
+  "a": "DDGN",
+  "b": "SDNR",
+  "time_s": 146
+ },
+ {
+  "id": "S-0022",
+  "line": "RED",
+  "a": "SDNR",
+  "b": "RJBH",
+  "time_s": 150
+ },
+ {
+  "id": "S-0023",
+  "line": "RED",
+  "a": "RJBH",
+  "b": "MRMT",
+  "time_s": 140
+ },
+ {
+  "id": "S-0024",
+  "line": "RED",
+  "a": "MRMT",
+  "b": "SMPK",
+  "time_s": 142
+ },
+ {
+  "id": "S-0025",
+  "line": "RED",
+  "a": "SMPK",
+  "b": "MNNR",
+  "time_s": 156
+ },
+ {
+  "id": "S-0026",
+  "line": "RED",
+  "a": "MNNR",
+  "b": "ARTH",
+  "time_s": 105
+ },
+ {
+  "id": "S-0027",
+  "line": "RED",
+  "a": "ARTH",
+  "b": "HNRR",
+  "time_s": 173
+ },
+ {
+  "id": "S-0028",
+  "line": "RED",
+  "a": "HNRR",
+  "b": "SDSL",
+  "time_s": 133
+ },
+ {
+  "id": "S-0029",
+  "line": "YELLOW",
+  "a": "SRBL",
+  "b": "RO18",
+  "time_s": 151
+ },
+ {
+  "id": "S-0030",
+  "line": "YELLOW",
+  "a": "RO18",
+  "b": "HRBL",
+  "time_s": 196
+ },
+ {
+  "id": "S-0031",
+  "line": "YELLOW",
+  "a": "HRBL",
+  "b": "JHNG",
+  "time_s": 146
+ },
+ {
+  "id": "S-0032",
+  "line": "YELLOW",
+  "a": "JHNG",
+  "b": "AHNR",
+  "time_s": 153
+ },
+ {
+  "id": "S-0033",
+  "line": "YELLOW",
+  "a": "AHNR",
+  "b": "AZDP",
+  "time_s": 155
+ },
+ {
+  "id": "S-0034",
+  "line": "YELLOW",
+  "a": "AZDP",
+  "b": "MLTN",
+  "time_s": 153
+ },
+ {
+  "id": "S-0035",
+  "line": "YELLOW",
+  "a": "MLTN",
+  "b": "GRTH",
+  "time_s": 144
+ },
+ {
+  "id": "S-0036",
+  "line": "YELLOW",
+  "a": "GRTH",
+  "b": "VSHW",
+  "time_s": 136
+ },
+ {
+  "id": "S-0037",
+  "line": "YELLOW",
+  "a": "VSHW",
+  "b": "VNSH",
+  "time_s": 152
+ },
+ {
+  "id": "S-0038",
+  "line": "YELLOW",
+  "a": "VNSH",
+  "b": "CLLS",
+  "time_s": 141
+ },
+ {
+  "id": "S-0039",
+  "line": "YELLOW",
+  "a": "CLLS",
+  "b": "KSHG",
+  "time_s": 150
+ },
+ {
+  "id": "S-0040",
+  "line": "YELLOW",
+  "a": "KSHG",
+  "b": "CNCK",
+  "time_s": 156
+ },
+ {
+  "id": "S-0041",
+  "line": "YELLOW",
+  "a": "CNCK",
+  "b": "CRBR",
+  "time_s": 152
+ },
+ {
+  "id": "S-0042",
+  "line": "YELLOW",
+  "a": "CRBR",
+  "b": "NDLS",
+  "time_s": 125
+ },
+ {
+  "id": "S-0043",
+  "line": "YELLOW",
+  "a": "NDLS",
+  "b": "RJCK",
+  "time_s": 170
+ },
+ {
+  "id": "S-0044",
+  "line": "YELLOW",
+  "a": "RJCK",
+  "b": "PLCK",
+  "time_s": 153
+ },
+ {
+  "id": "S-0045",
+  "line": "YELLOW",
+  "a": "PLCK",
+  "b": "CLST",
+  "time_s": 129
+ },
+ {
+  "id": "S-0046",
+  "line": "YELLOW",
+  "a": "CLST",
+  "b": "UGBN",
+  "time_s": 112
+ },
+ {
+  "id": "S-0047",
+  "line": "YELLOW",
+  "a": "UGBN",
+  "b": "LKKN",
+  "time_s": 151
+ },
+ {
+  "id": "S-0048",
+  "line": "YELLOW",
+  "a": "LKKN",
+  "b": "JRBG",
+  "time_s": 148
+ },
+ {
+  "id": "S-0049",
+  "line": "YELLOW",
+  "a": "JRBG",
+  "b": "DLHT",
+  "time_s": 148
+ },
+ {
+  "id": "S-0050",
+  "line": "YELLOW",
+  "a": "DLHT",
+  "b": "AIIM",
+  "time_s": 133
+ },
+ {
+  "id": "S-0051",
+  "line": "YELLOW",
+  "a": "AIIM",
+  "b": "GNPK",
+  "time_s": 140
+ },
+ {
+  "id": "S-0052",
+  "line": "YELLOW",
+  "a": "GNPK",
+  "b": "HZKS",
+  "time_s": 184
+ },
+ {
+  "id": "S-0053",
+  "line": "YELLOW",
+  "a": "HZKS",
+  "b": "MYNR",
+  "time_s": 186
+ },
+ {
+  "id": "S-0054",
+  "line": "YELLOW",
+  "a": "MYNR",
+  "b": "SAKE",
+  "time_s": 207
+ },
+ {
+  "id": "S-0055",
+  "line": "YELLOW",
+  "a": "SAKE",
+  "b": "QBMR",
+  "time_s": 190
+ },
+ {
+  "id": "S-0056",
+  "line": "YELLOW",
+  "a": "QBMR",
+  "b": "CHHT",
+  "time_s": 158
+ },
+ {
+  "id": "S-0057",
+  "line": "YELLOW",
+  "a": "CHHT",
+  "b": "SLTN",
+  "time_s": 171
+ },
+ {
+  "id": "S-0058",
+  "line": "YELLOW",
+  "a": "SLTN",
+  "b": "GHTR",
+  "time_s": 147
+ },
+ {
+  "id": "S-0059",
+  "line": "YELLOW",
+  "a": "GHTR",
+  "b": "ANGH",
+  "time_s": 214
+ },
+ {
+  "id": "S-0060",
+  "line": "YELLOW",
+  "a": "ANGH",
+  "b": "GRDR",
+  "time_s": 216
+ },
+ {
+  "id": "S-0061",
+  "line": "YELLOW",
+  "a": "GRDR",
+  "b": "SKND",
+  "time_s": 126
+ },
+ {
+  "id": "S-0062",
+  "line": "YELLOW",
+  "a": "SKND",
+  "b": "MGRD",
+  "time_s": 147
+ },
+ {
+  "id": "S-0063",
+  "line": "YELLOW",
+  "a": "MGRD",
+  "b": "ICCK",
+  "time_s": 160
+ },
+ {
+  "id": "S-0064",
+  "line": "YELLOW",
+  "a": "ICCK",
+  "b": "MMCY",
+  "time_s": 140
+ },
+ {
+  "id": "S-0065",
+  "line": "BLUE",
+  "a": "DW21",
+  "b": "DW08",
+  "time_s": 202
+ },
+ {
+  "id": "S-0066",
+  "line": "BLUE",
+  "a": "DW08",
+  "b": "DW09",
+  "time_s": 128
+ },
+ {
+  "id": "S-0067",
+  "line": "BLUE",
+  "a": "DW09",
+  "b": "DW10",
+  "time_s": 140
+ },
+ {
+  "id": "S-0068",
+  "line": "BLUE",
+  "a": "DW10",
+  "b": "DW11",
+  "time_s": 127
+ },
+ {
+  "id": "S-0069",
+  "line": "BLUE",
+  "a": "DW11",
+  "b": "DW12",
+  "time_s": 140
+ },
+ {
+  "id": "S-0070",
+  "line": "BLUE",
+  "a": "DW12",
+  "b": "DW13",
+  "time_s": 120
+ },
+ {
+  "id": "S-0071",
+  "line": "BLUE",
+  "a": "DW13",
+  "b": "DW14",
+  "time_s": 124
+ },
+ {
+  "id": "S-0072",
+  "line": "BLUE",
+  "a": "DW14",
+  "b": "DWRK",
+  "time_s": 165
+ },
+ {
+  "id": "S-0073",
+  "line": "BLUE",
+  "a": "DWRK",
+  "b": "DKMR",
+  "time_s": 195
+ },
+ {
+  "id": "S-0074",
+  "line": "BLUE",
+  "a": "DKMR",
+  "b": "NAWA",
+  "time_s": 135
+ },
+ {
+  "id": "S-0075",
+  "line": "BLUE",
+  "a": "NAWA",
+  "b": "UMNR",
+  "time_s": 140
+ },
+ {
+  "id": "S-0076",
+  "line": "BLUE",
+  "a": "UMNR",
+  "b": "UMNA",
+  "time_s": 125
+ },
+ {
+  "id": "S-0077",
+  "line": "BLUE",
+  "a": "UMNA",
+  "b": "JNPW",
+  "time_s": 157
+ },
+ {
+  "id": "S-0078",
+  "line": "BLUE",
+  "a": "JNPW",
+  "b": "JRET",
+  "time_s": 125
+ },
+ {
+  "id": "S-0079",
+  "line": "BLUE",
+  "a": "JRET",
+  "b": "TKNR",
+  "time_s": 134
+ },
+ {
+  "id": "S-0080",
+  "line": "BLUE",
+  "a": "TKNR",
+  "b": "SHNR",
+  "time_s": 121
+ },
+ {
+  "id": "S-0081",
+  "line": "BLUE",
+  "a": "SHNR",
+  "b": "TRGN",
+  "time_s": 122
+ },
+ {
+  "id": "S-0082",
+  "line": "BLUE",
+  "a": "TRGN",
+  "b": "RRGN",
+  "time_s": 134
+ },
+ {
+  "id": "S-0083",
+  "line": "BLUE",
+  "a": "RRGN",
+  "b": "RHNR",
+  "time_s": 125
+ },
+ {
+  "id": "S-0084",
+  "line": "BLUE",
+  "a": "RHNR",
+  "b": "MTNR",
+  "time_s": 140
+ },
+ {
+  "id": "S-0085",
+  "line": "BLUE",
+  "a": "MTNR",
+  "b": "KTNR",
+  "time_s": 139
+ },
+ {
+  "id": "S-0086",
+  "line": "BLUE",
+  "a": "KTNR",
+  "b": "SHDP",
+  "time_s": 146
+ },
+ {
+  "id": "S-0087",
+  "line": "BLUE",
+  "a": "SHDP",
+  "b": "PLNR",
+  "time_s": 157
+ },
+ {
+  "id": "S-0088",
+  "line": "BLUE",
+  "a": "PLNR",
+  "b": "RRPC",
+  "time_s": 132
+ },
+ {
+  "id": "S-0089",
+  "line": "BLUE",
+  "a": "RRPC",
+  "b": "KLBH",
+  "time_s": 138
+ },
+ {
+  "id": "S-0090",
+  "line": "BLUE",
+  "a": "KLBH",
+  "b": "JHND",
+  "time_s": 138
+ },
+ {
+  "id": "S-0091",
+  "line": "BLUE",
+  "a": "JHND",
+  "b": "RKAM",
+  "time_s": 133
+ },
+ {
+  "id": "S-0092",
+  "line": "BLUE",
+  "a": "RKAM",
+  "b": "RJCK",
+  "time_s": 156
+ },
+ {
+  "id": "S-0093",
+  "line": "BLUE",
+  "a": "RJCK",
+  "b": "BRKH",
+  "time_s": 170
+ },
+ {
+  "id": "S-0094",
+  "line": "BLUE",
+  "a": "BRKH",
+  "b": "MDHS",
+  "time_s": 135
+ },
+ {
+  "id": "S-0095",
+  "line": "BLUE",
+  "a": "MDHS",
+  "b": "SMCT",
+  "time_s": 140
+ },
+ {
+  "id": "S-0096",
+  "line": "BLUE",
+  "a": "SMCT",
+  "b": "INDA",
+  "time_s": 130
+ },
+ {
+  "id": "S-0097",
+  "line": "BLUE",
+  "a": "INDA",
+  "b": "YMBK",
+  "time_s": 194
+ },
+ {
+  "id": "S-0098",
+  "line": "BLUE",
+  "a": "YMBK",
+  "b": "AKSH",
+  "time_s": 205
+ },
+ {
+  "id": "S-0099",
+  "line": "BLUE",
+  "a": "AKSH",
+  "b": "MRVR",
+  "time_s": 176
+ },
+ {
+  "id": "S-0100",
+  "line": "BLUE",
+  "a": "MRVR",
+  "b": "MRVA",
+  "time_s": 137
+ },
+ {
+  "id": "S-0101",
+  "line": "BLUE",
+  "a": "MRVA",
+  "b": "NWAK",
+  "time_s": 131
+ },
+ {
+  "id": "S-0102",
+  "line": "BLUE",
+  "a": "NWAK",
+  "b": "NO15",
+  "time_s": 141
+ },
+ {
+  "id": "S-0103",
+  "line": "BLUE",
+  "a": "NO15",
+  "b": "NO16",
+  "time_s": 123
+ },
+ {
+  "id": "S-0104",
+  "line": "BLUE",
+  "a": "NO16",
+  "b": "NO18",
+  "time_s": 137
+ },
+ {
+  "id": "S-0105",
+  "line": "BLUE",
+  "a": "NO18",
+  "b": "BTGD",
+  "time_s": 130
+ },
+ {
+  "id": "S-0106",
+  "line": "BLUE",
+  "a": "BTGD",
+  "b": "GFCS",
+  "time_s": 154
+ },
+ {
+  "id": "S-0107",
+  "line": "BLUE",
+  "a": "GFCS",
+  "b": "NDCY",
+  "time_s": 138
+ },
+ {
+  "id": "S-0108",
+  "line": "BLUE",
+  "a": "NDCY",
+  "b": "NO34",
+  "time_s": 139
+ },
+ {
+  "id": "S-0109",
+  "line": "BLUE",
+  "a": "NO34",
+  "b": "NO52",
+  "time_s": 142
+ },
+ {
+  "id": "S-0110",
+  "line": "BLUE",
+  "a": "NO52",
+  "b": "NO61",
+  "time_s": 157
+ },
+ {
+  "id": "S-0111",
+  "line": "BLUE",
+  "a": "NO61",
+  "b": "NO59",
+  "time_s": 132
+ },
+ {
+  "id": "S-0112",
+  "line": "BLUE",
+  "a": "NO59",
+  "b": "NO62",
+  "time_s": 143
+ },
+ {
+  "id": "S-0113",
+  "line": "BLUE",
+  "a": "NO62",
+  "b": "NECT",
+  "time_s": 150
+ },
+ {
+  "id": "S-0114",
+  "line": "BLUE",
+  "a": "YMBK",
+  "b": "LMNR",
+  "time_s": 190
+ },
+ {
+  "id": "S-0115",
+  "line": "BLUE",
+  "a": "LMNR",
+  "b": "NNVR",
+  "time_s": 140
+ },
+ {
+  "id": "S-0116",
+  "line": "BLUE",
+  "a": "NNVR",
+  "b": "PTVR",
+  "time_s": 125
+ },
+ {
+  "id": "S-0117",
+  "line": "BLUE",
+  "a": "PTVR",
+  "b": "KRKR",
+  "time_s": 145
+ },
+ {
+  "id": "S-0118",
+  "line": "BLUE",
+  "a": "KRKR",
+  "b": "ADVR",
+  "time_s": 133
+ },
+ {
+  "id": "S-0119",
+  "line": "BLUE",
+  "a": "ADVR",
+  "b": "KSHM",
+  "time_s": 136
+ },
+ {
+  "id": "S-0120",
+  "line": "BLUE",
+  "a": "KSHM",
+  "b": "VASH",
+  "time_s": 175
+ },
+ {
+  "id": "S-0121",
+  "line": "GREEN",
+  "a": "INDR",
+  "b": "AKPK",
+  "time_s": 170
+ },
+ {
+  "id": "S-0122",
+  "line": "GREEN",
+  "a": "AKPK",
+  "b": "PBBH",
+  "time_s": 145
+ },
+ {
+  "id": "S-0123",
+  "line": "GREEN",
+  "a": "PBBH",
+  "b": "SJPK",
+  "time_s": 160
+ },
+ {
+  "id": "S-0124",
+  "line": "GREEN",
+  "a": "SJPK",
+  "b": "MDPR",
+  "time_s": 130
+ },
+ {
+  "id": "S-0125",
+  "line": "GREEN",
+  "a": "MDPR",
+  "b": "PMVR",
+  "time_s": 140
+ },
+ {
+  "id": "S-0126",
+  "line": "GREEN",
+  "a": "PMVR",
+  "b": "PMVA",
+  "time_s": 100
+ },
+ {
+  "id": "S-0127",
+  "line": "GREEN",
+  "a": "PMVA",
+  "b": "PRGR",
+  "time_s": 135
+ },
+ {
+  "id": "S-0128",
+  "line": "GREEN",
+  "a": "PRGR",
+  "b": "UGNR",
+  "time_s": 135
+ },
+ {
+  "id": "S-0129",
+  "line": "GREEN",
+  "a": "UGNR",
+  "b": "MJSL",
+  "time_s": 115
+ },
+ {
+  "id": "S-0130",
+  "line": "GREEN",
+  "a": "MJSL",
+  "b": "NNGL",
+  "time_s": 125
+ },
+ {
+  "id": "S-0131",
+  "line": "GREEN",
+  "a": "NNGL",
+  "b": "NLRY",
+  "time_s": 130
+ },
+ {
+  "id": "S-0132",
+  "line": "GREEN",
+  "a": "NLRY",
+  "b": "RNPK",
+  "time_s": 149
+ },
+ {
+  "id": "S-0133",
+  "line": "GREEN",
+  "a": "RNPK",
+  "b": "MNDK",
+  "time_s": 140
+ },
+ {
+  "id": "S-0134",
+  "line": "GREEN",
+  "a": "MNDK",
+  "b": "MKIL",
+  "time_s": 150
+ },
+ {
+  "id": "S-0135",
+  "line": "GREEN",
+  "a": "MKIL",
+  "b": "GHVR",
+  "time_s": 180
+ },
+ {
+  "id": "S-0136",
+  "line": "GREEN",
+  "a": "GHVR",
+  "b": "TRKN",
+  "time_s": 184
+ },
+ {
+  "id": "S-0137",
+  "line": "GREEN",
+  "a": "TRKN",
+  "b": "TRBR",
+  "time_s": 157
+ },
+ {
+  "id": "S-0138",
+  "line": "GREEN",
+  "a": "TRBR",
+  "b": "PTSR",
+  "time_s": 157
+ },
+ {
+  "id": "S-0139",
+  "line": "GREEN",
+  "a": "PTSR",
+  "b": "BHCY",
+  "time_s": 177
+ },
+ {
+  "id": "S-0140",
+  "line": "GREEN",
+  "a": "BHCY",
+  "b": "BRHR",
+  "time_s": 199
+ },
+ {
+  "id": "S-0141",
+  "line": "GREEN",
+  "a": "KTNR",
+  "b": "SRRM",
+  "time_s": 120
+ },
+ {
+  "id": "S-0142",
+  "line": "GREEN",
+  "a": "SRRM",
+  "b": "AKPK",
+  "time_s": 205
+ },
+ {
+  "id": "S-0143",
+  "line": "VIOLET",
+  "a": "KSHG",
+  "b": "LLQL",
+  "time_s": 189
+ },
+ {
+  "id": "S-0144",
+  "line": "VIOLET",
+  "a": "LLQL",
+  "b": "JMMD",
+  "time_s": 113
+ },
+ {
+  "id": "S-0145",
+  "line": "VIOLET",
+  "a": "JMMD",
+  "b": "DHGT",
+  "time_s": 159
+ },
+ {
+  "id": "S-0146",
+  "line": "VIOLET",
+  "a": "DHGT",
+  "b": "ITOX",
+  "time_s": 138
+ },
+ {
+  "id": "S-0147",
+  "line": "VIOLET",
+  "a": "ITOX",
+  "b": "MDHS",
+  "time_s": 125
+ },
+ {
+  "id": "S-0148",
+  "line": "VIOLET",
+  "a": "MDHS",
+  "b": "JNPT",
+  "time_s": 219
+ },
+ {
+  "id": "S-0149",
+  "line": "VIOLET",
+  "a": "JNPT",
+  "b": "CLST",
+  "time_s": 103
+ },
+ {
+  "id": "S-0150",
+  "line": "VIOLET",
+  "a": "CLST",
+  "b": "KNMT",
+  "time_s": 232
+ },
+ {
+  "id": "S-0151",
+  "line": "VIOLET",
+  "a": "KNMT",
+  "b": "JLNR",
+  "time_s": 177
+ },
+ {
+  "id": "S-0152",
+  "line": "VIOLET",
+  "a": "JLNR",
+  "b": "JNGP",
+  "time_s": 147
+ },
+ {
+  "id": "S-0153",
+  "line": "VIOLET",
+  "a": "JNGP",
+  "b": "LTNR",
+  "time_s": 177
+ },
+ {
+  "id": "S-0154",
+  "line": "VIOLET",
+  "a": "LTNR",
+  "b": "MLCH",
+  "time_s": 140
+ },
+ {
+  "id": "S-0155",
+  "line": "VIOLET",
+  "a": "MLCH",
+  "b": "KHCY",
+  "time_s": 161
+ },
+ {
+  "id": "S-0156",
+  "line": "VIOLET",
+  "a": "KHCY",
+  "b": "NRPC",
+  "time_s": 159
+ },
+ {
+  "id": "S-0157",
+  "line": "VIOLET",
+  "a": "NRPC",
+  "b": "KJMR",
+  "time_s": 139
+ },
+ {
+  "id": "S-0158",
+  "line": "VIOLET",
+  "a": "KJMR",
+  "b": "GDPR",
+  "time_s": 138
+ },
+ {
+  "id": "S-0159",
+  "line": "VIOLET",
+  "a": "GDPR",
+  "b": "HHNR",
+  "time_s": 195
+ },
+ {
+  "id": "S-0160",
+  "line": "VIOLET",
+  "a": "HHNR",
+  "b": "JLAL",
+  "time_s": 162
+ },
+ {
+  "id": "S-0161",
+  "line": "VIOLET",
+  "a": "JLAL",
+  "b": "STVR",
+  "time_s": 162
+ },
+ {
+  "id": "S-0162",
+  "line": "VIOLET",
+  "a": "STVR",
+  "b": "MNET",
+  "time_s": 155
+ },
+ {
+  "id": "S-0163",
+  "line": "VIOLET",
+  "a": "MNET",
+  "b": "TGHL",
+  "time_s": 212
+ },
+ {
+  "id": "S-0164",
+  "line": "VIOLET",
+  "a": "TGHL",
+  "b": "BRBR",
+  "time_s": 165
+ },
+ {
+  "id": "S-0165",
+  "line": "VIOLET",
+  "a": "BRBR",
+  "b": "SARA",
+  "time_s": 188
+ },
+ {
+  "id": "S-0166",
+  "line": "VIOLET",
+  "a": "SARA",
+  "b": "NCCK",
+  "time_s": 187
+ },
+ {
+  "id": "S-0167",
+  "line": "VIOLET",
+  "a": "NCCK",
+  "b": "MLMR",
+  "time_s": 135
+ },
+ {
+  "id": "S-0168",
+  "line": "VIOLET",
+  "a": "MLMR",
+  "b": "SE28",
+  "time_s": 136
+ },
+ {
+  "id": "S-0169",
+  "line": "VIOLET",
+  "a": "SE28",
+  "b": "BLMR",
+  "time_s": 157
+ },
+ {
+  "id": "S-0170",
+  "line": "VIOLET",
+  "a": "BLMR",
+  "b": "ODFD",
+  "time_s": 152
+ },
+ {
+  "id": "S-0171",
+  "line": "VIOLET",
+  "a": "ODFD",
+  "b": "NMCK",
+  "time_s": 148
+ },
+ {
+  "id": "S-0172",
+  "line": "VIOLET",
+  "a": "NMCK",
+  "b": "BTCK",
+  "time_s": 157
+ },
+ {
+  "id": "S-0173",
+  "line": "VIOLET",
+  "a": "BTCK",
+  "b": "ESMR",
+  "time_s": 170
+ },
+ {
+  "id": "S-0174",
+  "line": "VIOLET",
+  "a": "ESMR",
+  "b": "STSS",
+  "time_s": 140
+ },
+ {
+  "id": "S-0175",
+  "line": "VIOLET",
+  "a": "STSS",
+  "b": "RJNR",
+  "time_s": 380
+ },
+ {
+  "id": "S-0176",
+  "line": "PINK",
+  "a": "MJPK",
+  "b": "AZDP",
+  "time_s": 237
+ },
+ {
+  "id": "S-0177",
+  "line": "PINK",
+  "a": "AZDP",
+  "b": "SRBH",
+  "time_s": 180
+ },
+ {
+  "id": "S-0178",
+  "line": "PINK",
+  "a": "SRBH",
+  "b": "NJSH",
+  "time_s": 167
+ },
+ {
+  "id": "S-0179",
+  "line": "PINK",
+  "a": "NJSH",
+  "b": "SHKR",
+  "time_s": 162
+ },
+ {
+  "id": "S-0180",
+  "line": "PINK",
+  "a": "SHKR",
+  "b": "PBBA",
+  "time_s": 231
+ },
+ {
+  "id": "S-0181",
+  "line": "PINK",
+  "a": "PBBA",
+  "b": "ESBR",
+  "time_s": 190
+ },
+ {
+  "id": "S-0182",
+  "line": "PINK",
+  "a": "ESBR",
+  "b": "RRGN",
+  "time_s": 135
+ },
+ {
+  "id": "S-0183",
+  "line": "PINK",
+  "a": "RRGN",
+  "b": "MYPR",
+  "time_s": 193
+ },
+ {
+  "id": "S-0184",
+  "line": "PINK",
+  "a": "MYPR",
+  "b": "NNVA",
+  "time_s": 198
+ },
+ {
+  "id": "S-0185",
+  "line": "PINK",
+  "a": "NNVA",
+  "b": "DHCT",
+  "time_s": 199
+ },
+ {
+  "id": "S-0186",
+  "line": "PINK",
+  "a": "DHCT",
+  "b": "DDSC",
+  "time_s": 325
+ },
+ {
+  "id": "S-0187",
+  "line": "PINK",
+  "a": "DDSC",
+  "b": "SRVH",
+  "time_s": 159
+ },
+ {
+  "id": "S-0188",
+  "line": "PINK",
+  "a": "SRVH",
+  "b": "BJCM",
+  "time_s": 175
+ },
+ {
+  "id": "S-0189",
+  "line": "PINK",
+  "a": "BJCM",
+  "b": "SNNR",
+  "time_s": 153
+ },
+ {
+  "id": "S-0190",
+  "line": "PINK",
+  "a": "SNNR",
+  "b": "DLHT",
+  "time_s": 143
+ },
+ {
+  "id": "S-0191",
+  "line": "PINK",
+  "a": "DLHT",
+  "b": "SHEN",
+  "time_s": 155
+ },
+ {
+  "id": "S-0192",
+  "line": "PINK",
+  "a": "SHEN",
+  "b": "LTNR",
+  "time_s": 190
+ },
+ {
+  "id": "S-0193",
+  "line": "PINK",
+  "a": "LTNR",
+  "b": "VNBP",
+  "time_s": 195
+ },
+ {
+  "id": "S-0194",
+  "line": "PINK",
+  "a": "VNBP",
+  "b": "ASHR",
+  "time_s": 200
+ },
+ {
+  "id": "S-0195",
+  "line": "PINK",
+  "a": "ASHR",
+  "b": "SRKL",
+  "time_s": 194
+ },
+ {
+  "id": "S-0196",
+  "line": "PINK",
+  "a": "SRKL",
+  "b": "MRVR",
+  "time_s": 316
+ },
+ {
+  "id": "S-0197",
+  "line": "PINK",
+  "a": "MRVR",
+  "b": "SRRA",
+  "time_s": 119
+ },
+ {
+  "id": "S-0198",
+  "line": "PINK",
+  "a": "SRRA",
+  "b": "TRSY",
+  "time_s": 149
+ },
+ {
+  "id": "S-0199",
+  "line": "PINK",
+  "a": "TRSY",
+  "b": "ETVD",
+  "time_s": 153
+ },
+ {
+  "id": "S-0200",
+  "line": "PINK",
+  "a": "ETVD",
+  "b": "MLWT",
+  "time_s": 150
+ },
+ {
+  "id": "S-0201",
+  "line": "PINK",
+  "a": "MLWT",
+  "b": "IPEN",
+  "time_s": 183
+ },
+ {
+  "id": "S-0202",
+  "line": "PINK",
+  "a": "IPEN",
+  "b": "ADVR",
+  "time_s": 270
+ },
+ {
+  "id": "S-0203",
+  "line": "PINK",
+  "a": "ADVR",
+  "b": "KRKR",
+  "time_s": 133
+ },
+ {
+  "id": "S-0204",
+  "line": "PINK",
+  "a": "KRKR",
+  "b": "KMCT",
+  "time_s": 170
+ },
+ {
+  "id": "S-0205",
+  "line": "PINK",
+  "a": "KMCT",
+  "b": "KNNR",
+  "time_s": 137
+ },
+ {
+  "id": "S-0206",
+  "line": "PINK",
+  "a": "KNNR",
+  "b": "ETAD",
+  "time_s": 128
+ },
+ {
+  "id": "S-0207",
+  "line": "PINK",
+  "a": "ETAD",
+  "b": "WLCM",
+  "time_s": 172
+ },
+ {
+  "id": "S-0208",
+  "line": "PINK",
+  "a": "WLCM",
+  "b": "JFFR",
+  "time_s": 215
+ },
+ {
+  "id": "S-0209",
+  "line": "PINK",
+  "a": "JFFR",
+  "b": "MJBR",
+  "time_s": 170
+ },
+ {
+  "id": "S-0210",
+  "line": "PINK",
+  "a": "MJBR",
+  "b": "YNVR",
+  "time_s": 120
+ },
+ {
+  "id": "S-0211",
+  "line": "PINK",
+  "a": "YNVR",
+  "b": "BHJN",
+  "time_s": 120
+ },
+ {
+  "id": "S-0212",
+  "line": "PINK",
+  "a": "BHJN",
+  "b": "KRKS",
+  "time_s": 120
+ },
+ {
+  "id": "S-0213",
+  "line": "PINK",
+  "a": "KRKS",
+  "b": "NRSN",
+  "time_s": 120
+ },
+ {
+  "id": "S-0214",
+  "line": "PINK",
+  "a": "NRSN",
+  "b": "JRWD",
+  "time_s": 120
+ },
+ {
+  "id": "S-0215",
+  "line": "PINK",
+  "a": "JRWD",
+  "b": "JDMR",
+  "time_s": 120
+ },
+ {
+  "id": "S-0216",
+  "line": "PINK",
+  "a": "JDMR",
+  "b": "BURA",
+  "time_s": 120
+ },
+ {
+  "id": "S-0217",
+  "line": "PINK",
+  "a": "BURA",
+  "b": "MJPK",
+  "time_s": 120
+ },
+ {
+  "id": "S-0218",
+  "line": "PINK",
+  "a": "MJBR",
+  "b": "GKLP",
+  "time_s": 150
+ },
+ {
+  "id": "S-0219",
+  "line": "PINK",
+  "a": "GKLP",
+  "b": "JREV",
+  "time_s": 164
+ },
+ {
+  "id": "S-0220",
+  "line": "PINK",
+  "a": "JREV",
+  "b": "SVVR",
+  "time_s": 136
+ },
+ {
+  "id": "S-0221",
+  "line": "MAGENTA",
+  "a": "KNPK",
+  "b": "JNPW",
+  "time_s": 120
+ },
+ {
+  "id": "S-0222",
+  "line": "MAGENTA",
+  "a": "JNPW",
+  "b": "DRMR",
+  "time_s": 175
+ },
+ {
+  "id": "S-0223",
+  "line": "MAGENTA",
+  "a": "DRMR",
+  "b": "DSHR",
+  "time_s": 181
+ },
+ {
+  "id": "S-0224",
+  "line": "MAGENTA",
+  "a": "DSHR",
+  "b": "PALA",
+  "time_s": 153
+ },
+ {
+  "id": "S-0225",
+  "line": "MAGENTA",
+  "a": "PALA",
+  "b": "SRBR",
+  "time_s": 234
+ },
+ {
+  "id": "S-0226",
+  "line": "MAGENTA",
+  "a": "SRBR",
+  "b": "TE01",
+  "time_s": 194
+ },
+ {
+  "id": "S-0227",
+  "line": "MAGENTA",
+  "a": "TE01",
+  "b": "SRVR",
+  "time_s": 205
+ },
+ {
+  "id": "S-0228",
+  "line": "MAGENTA",
+  "a": "SRVR",
+  "b": "VTVR",
+  "time_s": 188
+ },
+ {
+  "id": "S-0229",
+  "line": "MAGENTA",
+  "a": "VTVR",
+  "b": "MNRK",
+  "time_s": 172
+ },
+ {
+  "id": "S-0230",
+  "line": "MAGENTA",
+  "a": "MNRK",
+  "b": "RRKK",
+  "time_s": 160
+ },
+ {
+  "id": "S-0231",
+  "line": "MAGENTA",
+  "a": "RRKK",
+  "b": "IITX",
+  "time_s": 128
+ },
+ {
+  "id": "S-0232",
+  "line": "MAGENTA",
+  "a": "IITX",
+  "b": "HZKS",
+  "time_s": 134
+ },
+ {
+  "id": "S-0233",
+  "line": "MAGENTA",
+  "a": "HZKS",
+  "b": "PLPK",
+  "time_s": 169
+ },
+ {
+  "id": "S-0234",
+  "line": "MAGENTA",
+  "a": "PLPK",
+  "b": "CGDH",
+  "time_s": 124
+ },
+ {
+  "id": "S-0235",
+  "line": "MAGENTA",
+  "a": "CGDH",
+  "b": "GRKH",
+  "time_s": 125
+ },
+ {
+  "id": "S-0236",
+  "line": "MAGENTA",
+  "a": "GRKH",
+  "b": "NREV",
+  "time_s": 159
+ },
+ {
+  "id": "S-0237",
+  "line": "MAGENTA",
+  "a": "NREV",
+  "b": "KJMR",
+  "time_s": 116
+ },
+ {
+  "id": "S-0238",
+  "line": "MAGENTA",
+  "a": "KJMR",
+  "b": "OLNC",
+  "time_s": 137
+ },
+ {
+  "id": "S-0239",
+  "line": "MAGENTA",
+  "a": "OLNC",
+  "b": "SVVA",
+  "time_s": 158
+ },
+ {
+  "id": "S-0240",
+  "line": "MAGENTA",
+  "a": "SVVA",
+  "b": "JMML",
+  "time_s": 173
+ },
+ {
+  "id": "S-0241",
+  "line": "MAGENTA",
+  "a": "JMML",
+  "b": "OLVR",
+  "time_s": 167
+ },
+ {
+  "id": "S-0242",
+  "line": "MAGENTA",
+  "a": "OLVR",
+  "b": "JLVR",
+  "time_s": 201
+ },
+ {
+  "id": "S-0243",
+  "line": "MAGENTA",
+  "a": "JLVR",
+  "b": "KDKJ",
+  "time_s": 212
+ },
+ {
+  "id": "S-0244",
+  "line": "MAGENTA",
+  "a": "KDKJ",
+  "b": "OLBD",
+  "time_s": 175
+ },
+ {
+  "id": "S-0245",
+  "line": "MAGENTA",
+  "a": "OLBD",
+  "b": "BTGD",
+  "time_s": 232
+ },
+ {
+  "id": "S-0246",
+  "line": "MAGENTA",
+  "a": "MJPK",
+  "b": "BHLS",
+  "time_s": 120
+ },
+ {
+  "id": "S-0247",
+  "line": "MAGENTA",
+  "a": "BHLS",
+  "b": "HRBL",
+  "time_s": 120
+ },
+ {
+  "id": "S-0248",
+  "line": "MAGENTA",
+  "a": "HRBL",
+  "b": "HRVG",
+  "time_s": 120
+ },
+ {
+  "id": "S-0249",
+  "line": "MAGENTA",
+  "a": "HRVG",
+  "b": "URPR",
+  "time_s": 120
+ },
+ {
+  "id": "S-0250",
+  "line": "MAGENTA",
+  "a": "URPR",
+  "b": "MNCK",
+  "time_s": 120
+ },
+ {
+  "id": "S-0251",
+  "line": "MAGENTA",
+  "a": "MNCK",
+  "b": "DLCK",
+  "time_s": 120
+ },
+ {
+  "id": "S-0252",
+  "line": "GREY",
+  "a": "DWRK",
+  "b": "NNGA",
+  "time_s": 156
+ },
+ {
+  "id": "S-0253",
+  "line": "GREY",
+  "a": "NNGA",
+  "b": "NJFG",
+  "time_s": 264
+ },
+ {
+  "id": "S-0254",
+  "line": "GREY",
+  "a": "NJFG",
+  "b": "DSBS",
+  "time_s": 140
+ },
+ {
+  "id": "S-0255",
+  "line": "AIRPORT",
+  "a": "YA25",
+  "b": "DW21",
+  "time_s": 120
+ },
+ {
+  "id": "S-0256",
+  "line": "AIRPORT",
+  "a": "DW21",
+  "b": "IGAT",
+  "time_s": 261
+ },
+ {
+  "id": "S-0257",
+  "line": "AIRPORT",
+  "a": "IGAT",
+  "b": "DHAY",
+  "time_s": 385
+ },
+ {
+  "id": "S-0258",
+  "line": "AIRPORT",
+  "a": "DHAY",
+  "b": "DHKN",
+  "time_s": 423
+ },
+ {
+  "id": "S-0259",
+  "line": "AIRPORT",
+  "a": "DHKN",
+  "b": "SJSM",
+  "time_s": 397
+ },
+ {
+  "id": "S-0260",
+  "line": "AIRPORT",
+  "a": "SJSM",
+  "b": "NDLS",
+  "time_s": 200
+ }
+]

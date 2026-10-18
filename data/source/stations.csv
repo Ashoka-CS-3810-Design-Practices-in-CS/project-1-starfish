@@ -1,0 +1,245 @@
+id,name,lat,lon,aliases,closed,verified,source
+RTHL,Rithala,28.720821,77.105042,,false,false,DMRC GTFS 2023
+RNWT,Rohini West,28.715008,77.115746,,false,false,DMRC GTFS 2023
+RNET,Rohini East,28.707941,77.125732,,false,false,DMRC GTFS 2023
+PTMP,Pitampura,28.703180,77.132355,Madhuban Chowk (Red Line),false,false,DMRC GTFS 2023
+KTEV,Kohat Enclave,28.697943,77.140465,,false,false,DMRC GTFS 2023
+NJSH,Netaji Subhash Place,28.695637,77.152428,Netaji Subash Place,false,false,DMRC GTFS 2023
+KVPM,Keshav Puram,28.688944,77.161774,,false,false,DMRC GTFS 2023
+KYNR,Kanhaiya Nagar,28.682386,77.162552,,false,false,DMRC GTFS 2023
+INDR,Inderlok,28.673452,77.170235,,false,false,DMRC GTFS 2023
+SRNR,Shastri Nagar,28.670135,77.181679,,false,false,DMRC GTFS 2023
+PPNR,Pratap Nagar,28.666632,77.196869,,false,false,DMRC GTFS 2023
+PLBN,Pulbangash,28.665710,77.206329,Pul Bangash,false,false,DMRC GTFS 2023
+TSHR,Tis Hazari,28.667137,77.216721,,false,false,DMRC GTFS 2023
+KSHG,Kashmere Gate,28.667879,77.228012,Kashmiri Gate;ISBT,false,false,DMRC GTFS 2023
+SRPK,Shastri Park,28.668451,77.250404,,false,false,DMRC GTFS 2023
+SLMP,Seelampur,28.670324,77.267311,Seelam Pur,false,false,DMRC GTFS 2023
+WLCM,Welcome,28.671986,77.277931,,false,false,DMRC GTFS 2023
+SHHD,Shahdara,28.673531,77.287270,,false,false,DMRC GTFS 2023
+MRPK,Mansarovar Park,28.675352,77.301178,Mansrover park,false,false,DMRC GTFS 2023
+JHLM,Jhilmil,28.675648,77.312393,,false,false,DMRC GTFS 2023
+DDGN,Dilshad Garden,28.675991,77.321495,,false,false,DMRC GTFS 2023
+SDNR,Shaheed Nagar,28.676615,77.333809,,false,false,DMRC GTFS 2023
+RJBH,Raj Bagh,28.677122,77.346466,,false,false,DMRC GTFS 2023
+MRMT,Major Mohit Sharma Rajender Nagar,28.678095,77.359528,,false,false,DMRC GTFS 2023
+SMPK,Shyam Park,28.678217,77.370911,,false,false,DMRC GTFS 2023
+MNNR,Mohan Nagar,28.678560,77.384209,,false,false,DMRC GTFS 2023
+ARTH,Arthala,28.677200,77.391876,,false,false,DMRC GTFS 2023
+HNRR,Hindon River,28.673508,77.406540,,false,false,DMRC GTFS 2023
+SDSL,Shaheed Sthal (New Bus Adda),28.670177,77.416031,New Bus Adda,false,false,DMRC GTFS 2023
+SRBL,Samaypur Badli,28.742872,77.146545,,false,false,DMRC GTFS 2023
+RO18,Rohini Sector 18-19,28.740192,77.135574,,false,false,DMRC GTFS 2023
+HRBL,Haiderpur Badli Mor,28.718657,77.149956,,false,false,DMRC GTFS 2023
+JHNG,Jahangirpuri,28.728180,77.161240,,false,false,DMRC GTFS 2023
+AHNR,Adarsh Nagar,28.696377,77.208809,,false,false,DMRC GTFS 2023
+AZDP,Azadpur,28.707287,77.179863,,false,false,DMRC GTFS 2023
+MLTN,Model Town,28.702833,77.193764,,false,false,DMRC GTFS 2023
+GRTH,Guru Tegh Bahadur Nagar,28.698195,77.206985,,false,false,DMRC GTFS 2023
+VSHW,Vishwavidyalaya,28.694765,77.212418,,false,false,DMRC GTFS 2023
+VNSH,Vidhan Sabha,28.687845,77.221626,,false,false,DMRC GTFS 2023
+CLLS,Civil Lines,28.676945,77.224953,,false,false,DMRC GTFS 2023
+CNCK,Chandni Chowk,28.656443,77.229218,,false,false,DMRC GTFS 2023
+CRBR,Chawri Bazar,28.649635,77.226280,,false,false,DMRC GTFS 2023
+NDLS,New Delhi,28.642944,77.222351,NDLS;New Delhi Railway Station,false,false,DMRC GTFS 2023
+RJCK,Rajiv Chowk,28.632896,77.219574,CP;Connaught Place,false,false,DMRC GTFS 2023
+PLCK,Patel Chowk,28.622967,77.212288,,false,false,DMRC GTFS 2023
+CLST,Central Secretariat,28.614973,77.212029,,false,false,DMRC GTFS 2023
+UGBN,Udyog Bhawan,28.611525,77.210052,,false,false,DMRC GTFS 2023
+LKKN,Lok Kalyan Marg,28.597519,77.209122,,false,false,DMRC GTFS 2023
+JRBG,Jorbagh,28.587234,77.212662,,false,false,DMRC GTFS 2023
+DLHT,Dilli Haat - INA,28.575195,77.209473,INA,false,false,DMRC GTFS 2023
+AIIM,AIIMS,28.568199,77.207947,,false,false,DMRC GTFS 2023
+GNPK,Green Park,28.559853,77.206902,,false,false,DMRC GTFS 2023
+HZKS,Hauz Khas,28.543346,77.206673,,false,false,DMRC GTFS 2023
+MYNR,Malviya Nagar,28.528170,77.205612,,false,false,DMRC GTFS 2023
+SAKE,Saket,28.520638,77.199379,,false,false,DMRC GTFS 2023
+QBMR,Qutab Minar,28.512714,77.185791,,false,false,DMRC GTFS 2023
+CHHT,Chhattarpur,28.506584,77.174866,,false,false,DMRC GTFS 2023
+SLTN,Sultanpur,28.499214,77.161362,,false,false,DMRC GTFS 2023
+GHTR,Ghitorni,28.493830,77.149071,,false,false,DMRC GTFS 2023
+ANGH,Arjan Garh,28.480820,77.125870,,false,false,DMRC GTFS 2023
+GRDR,Gurudronacharya,28.482075,77.102219,,false,false,DMRC GTFS 2023
+SKND,Sikanderpur,28.481352,77.092995,,false,false,DMRC GTFS 2023
+MGRD,MG Road,28.479670,77.080444,,false,false,DMRC GTFS 2023
+ICCK,IFFCO Chowk,28.472137,77.072502,,false,false,DMRC GTFS 2023
+MMCY,Millennium City Centre Gurugram,28.459118,77.072586,Huda City Centre;MCC,false,false,DMRC GTFS 2023
+DW21,Dwarka Sector 21,28.552322,77.056198,Dwarka Sector - 21,false,false,DMRC GTFS 2023
+DW08,Dwarka Sector 8,28.565706,77.064896,Dwarka Sector - 8,false,false,DMRC GTFS 2023
+DW09,Dwarka Sector 9,28.574284,77.065086,Dwarka Sector - 9,false,false,DMRC GTFS 2023
+DW10,Dwarka Sector 10,28.581108,77.057190,Dwarka Sector - 10,false,false,DMRC GTFS 2023
+DW11,Dwarka Sector 11,28.586420,77.049255,Dwarka Sector - 11,false,false,DMRC GTFS 2023
+DW12,Dwarka Sector 12,28.592234,77.040558,Dwarka Sector - 12,false,false,DMRC GTFS 2023
+DW13,Dwarka Sector 13,28.597050,77.033043,Dwarka Sector - 13,false,false,DMRC GTFS 2023
+DW14,Dwarka Sector 14,28.602232,77.025940,Dwarka Sector - 14,false,false,DMRC GTFS 2023
+DWRK,Dwarka,28.614899,77.022629,,false,false,DMRC GTFS 2023
+DKMR,Dwarka Mor,28.619366,77.033188,,false,false,DMRC GTFS 2023
+NAWA,Nawada,28.620222,77.044991,,false,false,DMRC GTFS 2023
+UMNR,Uttam Nagar West,28.621672,77.055664,,false,false,DMRC GTFS 2023
+UMNA,Uttam Nagar East,28.624643,77.063126,,false,false,DMRC GTFS 2023
+JNPW,Janakpuri West,28.629637,77.077866,Janak Puri West,false,false,DMRC GTFS 2023
+JRET,Janakpuri East,28.633121,77.086578,Janak Puri East,false,false,DMRC GTFS 2023
+TKNR,Tilak Nagar,28.636568,77.096336,,false,false,DMRC GTFS 2023
+SHNR,Subhash Nagar,28.640381,77.102730,Subash Nagar,false,false,DMRC GTFS 2023
+TRGN,Tagore Garden,28.643795,77.112747,,false,false,DMRC GTFS 2023
+RRGN,Rajouri Garden,28.649157,77.122749,,false,false,DMRC GTFS 2023
+RHNR,Ramesh Nagar,28.652809,77.131462,,false,false,DMRC GTFS 2023
+MTNR,Moti Nagar,28.657803,77.140488,,false,false,DMRC GTFS 2023
+KTNR,Kirti Nagar,28.655773,77.148499,,false,false,DMRC GTFS 2023
+SHDP,Shadipur,28.651430,77.156021,,false,false,DMRC GTFS 2023
+PLNR,Patel Nagar,28.645037,77.167046,,false,false,DMRC GTFS 2023
+RRPC,Rajendra Place,28.642410,77.191833,,false,false,DMRC GTFS 2023
+KLBH,Karol Bagh,28.643925,77.188416,,false,false,DMRC GTFS 2023
+JHND,Jhandewalan,28.644312,77.199791,,false,false,DMRC GTFS 2023
+RKAM,RK Ashram Marg,28.639217,77.206291,,false,false,DMRC GTFS 2023
+BRKH,Barakhamba,28.629662,77.224876,,false,false,DMRC GTFS 2023
+MDHS,Mandi House,28.625816,77.234726,,false,false,DMRC GTFS 2023
+SMCT,Supreme Court,28.623438,77.242500,,false,false,DMRC GTFS 2023
+INDA,Indraprastha,28.620272,77.250076,,false,false,DMRC GTFS 2023
+YMBK,Yamuna Bank,28.623178,77.267937,,false,false,DMRC GTFS 2023
+AKSH,Akshardham,28.618364,77.279816,,false,false,DMRC GTFS 2023
+MRVR,Mayur Vihar-I,28.604425,77.289421,,false,false,DMRC GTFS 2023
+MRVA,Mayur Vihar Extension,28.594124,77.294495,Mayur Vihar Ext,false,false,DMRC GTFS 2023
+NWAK,New Ashok Nagar,28.588470,77.301460,,false,false,DMRC GTFS 2023
+NO15,Noida Sector 15,28.585018,77.311584,Noida Sec -15,false,false,DMRC GTFS 2023
+NO16,Noida Sector 16,28.577921,77.318115,Noida Sec -16,false,false,DMRC GTFS 2023
+NO18,Noida Sector 18,28.570843,77.326088,Noida Sec -18,false,false,DMRC GTFS 2023
+BTGD,Botanical Garden,28.564198,77.334656,,false,false,DMRC GTFS 2023
+GFCS,Golf Course,28.566917,77.345726,,false,false,DMRC GTFS 2023
+NDCY,Noida City Centre,28.574593,77.356117,,false,false,DMRC GTFS 2023
+NO34,Noida Sector 34,28.580229,77.363518,Noida Sec-34,false,false,DMRC GTFS 2023
+NO52,Noida Sector 52,28.586849,77.372749,Noida Sec-52,false,false,DMRC GTFS 2023
+NO61,Noida Sector 61,28.597677,77.372368,Noida Sec-61,false,false,DMRC GTFS 2023
+NO59,Noida Sector 59,28.609089,77.372955,Noida Sec-59,false,false,DMRC GTFS 2023
+NO62,Noida Sector 62,28.616991,77.373611,Noida Sec-62,false,false,DMRC GTFS 2023
+NECT,Noida Electronic City,28.628685,77.375229,,false,false,DMRC GTFS 2023
+LMNR,Laxmi Nagar,28.629843,77.276428,,false,false,DMRC GTFS 2023
+NNVR,Nirman Vihar,28.637049,77.287872,,false,false,DMRC GTFS 2023
+PTVR,Preet Vihar,28.641352,77.295158,,false,false,DMRC GTFS 2023
+KRKR,Karkarduma,28.648653,77.304581,,false,false,DMRC GTFS 2023
+ADVR,Anand Vihar,28.647005,77.316185,,false,false,DMRC GTFS 2023
+KSHM,Kaushambi,28.645428,77.322273,,false,false,DMRC GTFS 2023
+VASH,Vaishali,28.650059,77.337608,,false,false,DMRC GTFS 2023
+AKPK,Ashok Park Main,28.671572,77.155159,,false,false,DMRC GTFS 2023
+PBBH,Punjabi Bagh,28.672943,77.146011,,false,false,DMRC GTFS 2023
+SJPK,Shivaji Park,28.674965,77.128258,,false,false,DMRC GTFS 2023
+MDPR,Madipur,28.676418,77.117294,,false,false,DMRC GTFS 2023
+PMVR,Paschim Vihar (East),28.677305,77.112251,,false,false,DMRC GTFS 2023
+PMVA,Paschim Vihar (West),28.678539,77.102119,,false,false,DMRC GTFS 2023
+PRGR,Peeragarhi,28.679720,77.092491,Peera Garhi,false,false,DMRC GTFS 2023
+UGNR,Udyog Nagar,28.681047,77.078674,,false,false,DMRC GTFS 2023
+MJSL,Maharaja Surajmal Stadium,28.681833,77.073891,,false,false,DMRC GTFS 2023
+NNGL,Nangloi,28.682356,77.064728,,false,false,DMRC GTFS 2023
+NLRY,Nangloi Railway Station,28.682091,77.056190,,false,false,DMRC GTFS 2023
+RNPK,Rajdhani Park,28.682217,77.043869,,false,false,DMRC GTFS 2023
+MNDK,Mundka,28.682411,77.028282,,false,false,DMRC GTFS 2023
+MKIL,Mundka Industrial Area,28.683960,76.989822,Mundka Industrial Area (M.I.A),false,false,DMRC GTFS 2023
+GHVR,Ghevra,28.685289,76.993584,Ghevra Metro station,false,false,DMRC GTFS 2023
+TRKN,Tikri Kalan,28.686899,76.977249,,false,false,DMRC GTFS 2023
+TRBR,Tikri Border,28.687876,76.963783,,false,false,DMRC GTFS 2023
+PTSR,Pandit Shree Ram Sharma,28.689213,76.951088,,false,false,DMRC GTFS 2023
+BHCY,Bahadurgarh City,28.690784,76.935265,,false,false,DMRC GTFS 2023
+BRHR,Brigadier Hoshiyar Singh,28.697428,76.919128,,false,false,DMRC GTFS 2023
+SRRM,Satguru Ram Singh Marg,28.662188,77.157829,,false,false,DMRC GTFS 2023
+LLQL,Lal Quila,28.657576,77.236595,,false,false,DMRC GTFS 2023
+JMMD,Jama Masjid,28.650393,77.237556,,false,false,DMRC GTFS 2023
+DHGT,Delhi Gate,28.640488,77.240303,,false,false,DMRC GTFS 2023
+ITOX,ITO,28.627205,77.240952,,false,false,DMRC GTFS 2023
+JNPT,Janpath,28.627817,77.218956,,false,false,DMRC GTFS 2023
+KNMT,Khan Market,28.602682,77.228096,,false,false,DMRC GTFS 2023
+JLNR,Jawaharlal Nehru Stadium,28.590475,77.233070,Jawahar Lal Nehru Stadium,false,false,DMRC GTFS 2023
+JNGP,Jangpura,28.583231,77.239662,,false,false,DMRC GTFS 2023
+LTNR,Lajpat Nagar,28.570705,77.233124,,false,false,DMRC GTFS 2023
+MLCH,Moolchand,28.564629,77.234222,,false,false,DMRC GTFS 2023
+KHCY,Kailash Colony,28.554617,77.239738,,false,false,DMRC GTFS 2023
+NRPC,Nehru Place,28.551134,77.251511,,false,false,DMRC GTFS 2023
+KJMR,Kalkaji Mandir,28.549532,77.258789,,false,false,DMRC GTFS 2023
+GDPR,Govind Puri,28.544413,77.264259,,false,false,DMRC GTFS 2023
+HHNR,Harkesh Nagar Okhla,28.543194,77.275955,,false,false,DMRC GTFS 2023
+JLAL,Jasola-Apollo,28.538084,77.285538,,false,false,DMRC GTFS 2023
+STVR,Sarita Vihar,28.528622,77.288345,,false,false,DMRC GTFS 2023
+MNET,Mohan Estate,28.519590,77.294518,,false,false,DMRC GTFS 2023
+TGHL,Tughlakabad,28.502232,77.298660,Tughlakabad Station,false,false,DMRC GTFS 2023
+BRBR,Badarpur Border,28.493200,77.300850,,false,false,DMRC GTFS 2023
+SARA,Sarai,28.477940,77.304932,,false,false,DMRC GTFS 2023
+NCCK,NHPC Chowk,28.462435,77.305252,,false,false,DMRC GTFS 2023
+MLMR,Mewala Maharajpur,28.448500,77.308098,,false,false,DMRC GTFS 2023
+SE28,Sector 28,28.440586,77.305992,Sector-28,false,false,DMRC GTFS 2023
+BLMR,Badkal Mor,28.422707,77.310234,,false,false,DMRC GTFS 2023
+ODFD,Old Faridabad,28.412172,77.311272,,false,false,DMRC GTFS 2023
+NMCK,Neelam Chowk Ajronda,28.400707,77.309105,,false,false,DMRC GTFS 2023
+BTCK,Bata Chowk,28.386362,77.298782,,false,false,DMRC GTFS 2023
+ESMR,Escorts Mujesar,28.370199,77.315002,,false,false,DMRC GTFS 2023
+STSS,Sant Surdas (Sihi),28.354666,77.316261,,false,false,DMRC GTFS 2023
+RJNR,Raja Nahar Singh,28.339899,77.331657,Ballabhgarh,false,false,DMRC GTFS 2023
+MJPK,Majlis Park,28.724157,77.182068,,false,false,DMRC GTFS 2023
+SRBH,Shalimar Bagh,28.701820,77.165184,,false,false,DMRC GTFS 2023
+SHKR,Shakurpur,28.685781,77.149651,,false,false,DMRC GTFS 2023
+PBBA,Punjabi Bagh West,28.672747,77.139183,,false,false,DMRC GTFS 2023
+ESBR,ESI - Basaidarapur,28.658159,77.127319,ESI Basai Darapur,false,false,DMRC GTFS 2023
+MYPR,Mayapuri,28.637098,77.129738,,false,false,DMRC GTFS 2023
+NNVA,Naraina Vihar,28.624121,77.136482,,false,false,DMRC GTFS 2023
+DHCT,Delhi Cantt.,28.608641,77.140373,,false,false,DMRC GTFS 2023
+DDSC,Durgabai Deshmukh South Campus,28.589376,77.169518,,false,false,DMRC GTFS 2023
+SRVH,Sir Vishweshwaraiah Moti Bagh,28.578529,77.175713,,false,false,DMRC GTFS 2023
+BJCM,Bhikaji Cama Place,28.570208,77.187866,,false,false,DMRC GTFS 2023
+SNNR,Sarojini Nagar,28.570208,77.187866,,false,false,DMRC GTFS 2023
+SHEN,South Extension,28.568600,77.219818,,false,false,DMRC GTFS 2023
+VNBP,Vinobapuri,28.566179,77.249367,,false,false,DMRC GTFS 2023
+ASHR,Ashram,28.576065,77.257530,,false,false,DMRC GTFS 2023
+SRKL,Sarai Kale Khan - Nizamuddin,28.588900,77.253189,Nizamuddin,false,false,DMRC GTFS 2023
+SRRA,Shree Ram Mandir Mayur Vihar,28.606598,77.296326,Mayur Vihar Pocket 1,false,false,DMRC GTFS 2023
+TRSY,Trilokpuri - Sanjay Lake,28.613506,77.308678,Trilokpuri Sanjay Lake,false,false,DMRC GTFS 2023
+ETVD,East Vinod Nagar - Mayur Vihar-II,28.620052,77.305588,,false,false,DMRC GTFS 2023
+MLWT,Mandawali - West Vinod Nagar,28.624861,77.304146,,false,false,DMRC GTFS 2023
+IPEN,IP Extension,28.631599,77.310898,,false,false,DMRC GTFS 2023
+KMCT,Karkarduma Court,28.649473,77.295341,,false,false,DMRC GTFS 2023
+KNNR,Krishna Nagar,28.657820,77.290306,,false,false,DMRC GTFS 2023
+ETAD,East Azad Nagar,28.665043,77.284599,,false,false,DMRC GTFS 2023
+JFFR,Jaffrabad,28.682943,77.275070,Jafrabad,false,false,DMRC GTFS 2023
+MJBR,Maujpur - Babarpur,28.692057,77.280922,,false,false,DMRC GTFS 2023
+YNVR,Yamuna Vihar,28.702376,77.277311,,false,false,OpenStreetMap (station not in 2023 GTFS)
+BHJN,Bhajanpura,28.703599,77.262647,,false,false,OpenStreetMap (station not in 2023 GTFS)
+KRKS,Khajuri Khas,28.705261,77.254499,,false,false,OpenStreetMap (station not in 2023 GTFS)
+NRSN,Nanaksar - Sonia Vihar,28.708718,77.242509,,false,false,OpenStreetMap (station not in 2023 GTFS)
+JRWD,Jagatpur - Wazirabad,28.721116,77.223995,,false,false,OpenStreetMap (station not in 2023 GTFS)
+JDMR,Jharoda Majra,28.724965,77.213712,,false,false,OpenStreetMap (station not in 2023 GTFS)
+BURA,Burari,28.729829,77.199570,,false,false,OpenStreetMap (station not in 2023 GTFS)
+GKLP,Gokulpuri,28.703009,77.286301,,false,false,DMRC GTFS 2023
+JREV,Johri Enclave,28.713297,77.290154,,false,false,DMRC GTFS 2023
+SVVR,Shiv Vihar,28.721863,77.289635,,false,false,DMRC GTFS 2023
+KNPK,Krishna Park Extension,28.647792,77.084343,,false,false,OpenStreetMap (station not in 2023 GTFS)
+DRMR,Dabri Mor - Janakpuri South,28.615904,77.085258,,false,false,DMRC GTFS 2023
+DSHR,Dashrathpuri,28.602333,77.082550,Dashrath Puri,false,false,DMRC GTFS 2023
+PALA,Palam,28.589067,77.082954,,false,false,DMRC GTFS 2023
+SRBR,Sadar Bazar Cantonment,28.577108,77.111305,Sadar Bazar Contonment,false,false,DMRC GTFS 2023
+TE01,Terminal 1-IGI Airport,28.565275,77.122391,Terminal 1- IGI Airport;T1;Domestic Airport,false,false,DMRC GTFS 2023
+SRVR,Shankar Vihar,28.560787,77.140442,,false,false,DMRC GTFS 2023
+VTVR,Vasant Vihar,28.558378,77.160774,,false,false,DMRC GTFS 2023
+MNRK,Munirka,28.557821,77.174026,,false,false,DMRC GTFS 2023
+RRKK,R.K. Puram,28.550486,77.184952,RK Puram,false,false,DMRC GTFS 2023
+IITX,IIT,28.547194,77.193832,,false,false,DMRC GTFS 2023
+PLPK,Panchsheel Park,28.542339,77.220512,,false,false,DMRC GTFS 2023
+CGDH,Chirag Delhi,28.541229,77.229385,,false,false,DMRC GTFS 2023
+GRKH,Greater Kailash,28.541836,77.238243,,false,false,DMRC GTFS 2023
+NREV,Nehru Enclave,28.545856,77.251160,,false,false,DMRC GTFS 2023
+OLNC,Okhla NSIC,28.554575,77.264870,,false,false,DMRC GTFS 2023
+SVVA,Sukhdev Vihar,28.559887,77.275116,,false,false,DMRC GTFS 2023
+JMML,Jamia Millia Islamia,28.562944,77.286209,,false,false,DMRC GTFS 2023
+OLVR,Okhla Vihar,28.561255,77.291916,,false,false,DMRC GTFS 2023
+JLVR,Jasola Vihar Shaheen Bagh,28.546005,77.296715,,false,false,DMRC GTFS 2023
+KDKJ,Kalindi Kunj,28.542835,77.310173,,false,false,DMRC GTFS 2023
+OLBD,Okhla Bird Sanctuary,28.552816,77.321564,,false,false,DMRC GTFS 2023
+BHLS,Bhalaswa,28.736957,77.168087,Bhalswa,false,false,OpenStreetMap (station not in 2023 GTFS)
+HRVG,Haiderpur Village,28.724899,77.142467,,false,false,OpenStreetMap (station not in 2023 GTFS)
+URPR,Uttari Pitampura - Prashant Vihar,28.713074,77.138731,North Pitampura - Prashant Vihar,false,false,OpenStreetMap (station not in 2023 GTFS)
+MNCK,Madhuban Chowk,28.703567,77.130072,,false,false,OpenStreetMap (station not in 2023 GTFS)
+DLCK,Deepali Chowk,28.698100,77.118279,,false,false,OpenStreetMap (station not in 2023 GTFS)
+NNGA,Nangli,28.617220,77.010345,,false,false,DMRC GTFS 2023
+NJFG,Najafgarh,28.613316,76.986259,,false,false,DMRC GTFS 2023
+DSBS,Dhansa Bus Stand,28.611858,76.975426,,false,false,DMRC GTFS 2023
+YA25,Yashobhoomi Dwarka Sector 25,28.550832,77.045307,,false,false,OpenStreetMap (station not in 2023 GTFS)
+IGAT,IGI Airport,28.554869,77.087921,T3;Airport T3,false,false,DMRC GTFS 2023
+DHAY,Delhi Aerocity,28.548792,77.120743,,false,false,DMRC GTFS 2023
+DHKN,Dhaula Kuan,28.591776,77.161545,,false,false,DMRC GTFS 2023
+SJSM,Shivaji Stadium,28.629007,77.209213,,false,false,DMRC GTFS 2023

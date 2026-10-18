@@ -1,0 +1,10 @@
+line_id,name,color
+RED,Red Line,#E2231A
+YELLOW,Yellow Line,#E8B100
+BLUE,Blue Line,#1E5AA8
+GREEN,Green Line,#1B9E4B
+VIOLET,Violet Line,#7B3FA0
+PINK,Pink Line,#E0559B
+MAGENTA,Magenta Line,#B0167F
+GREY,Grey Line,#7D7F82
+AIRPORT,Airport Express,#F07C00
