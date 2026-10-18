@@ -1,0 +1,23 @@
+# Local only
+PRD.md
+CLAUDE.md
+.claude/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# App
+metro.log
+
+# OS
+.DS_Store
