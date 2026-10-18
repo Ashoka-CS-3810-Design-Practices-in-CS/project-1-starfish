@@ -17,6 +17,7 @@ include = ["metro*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 markers = ["slow: long-running checks (all-pairs oracle on real data)"]
 
 [tool.ruff]
