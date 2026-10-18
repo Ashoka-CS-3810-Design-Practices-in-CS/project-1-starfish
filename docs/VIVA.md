@@ -80,3 +80,21 @@ Running notes for the viva, one section per build step.
 - *Why is stopping early correct?* — Each cell in the next row is at least the smallest value in the current row (all three moves add 0 or 1 to a cell from the row above or the same row). If the whole row is above k, the final answer must be too.
 - *Why no fuzzy matching below 3 characters?* — With 1–2 letters, one edit can turn the query into almost anything, so every station would match ([D16]).
 - *Why not a trie?* — About 300 stations × 3 texts is ~1 000 comparisons per keystroke, a few milliseconds. A trie would need insertion, traversal and cached top-8 code to save time nobody can notice ([D26]).
+
+## Step 6 — Real data, CLI and real-data tests (M3)
+
+**What was built.** The draft dataset (244 stations, 13 services on 9 lines, 260 segments; see `data/README.md`), `tools/csv_to_json.py` (team CSV → JSON), `tools/route_cli.py` (the walking skeleton), `metro/describe.py` (route text), 30 golden routes, and tests T1–T10, T19 (networkx, slow), T20, T29 and T30.
+
+**Key functions.**
+- `convert_lines_and_segments(...)` (`tools/csv_to_json.py`): groups CSV rows by service, sorts by `seq`, makes one segment per (line, station pair), and drops the repeated first station of a loop after using its time for the closing segment.
+- `route_cli.main(argv)`: loads, validates, picks stations through `search` (only exact CODE/NAME matches are routed; otherwise it prints "Did you mean"), routes, and prints `route_lines`.
+- `route_lines(network, route)`: summary line, numbered legs, with an "⇒ Change at …" row between consecutive RIDE legs.
+- `networkx_times(graph, src)` (`tests/test_oracle_real.py`): an independent oracle with a super-source and one super-sink per station.
+- `synthetic_network()` (`tests/test_performance.py`): 9 × 330 stations with every 8th station shared, giving about 2 600 stations and 12% interchanges.
+
+**Measured.** Route p95 0.25 ms on real data (target 50 ms); 3.3 ms on the synthetic network (target 100 ms); load + validate about 3 ms (target 1 s). All 59 000 ordered pairs agree with networkx.
+
+**Likely questions.**
+- *Where did the data come from and how much is verified?* — DMRC's GTFS feed for order, coordinates and running times; Wikipedia and OpenStreetMap for the sections opened in 2025–26; 120 s default where no times exist. Nothing is marked verified until the team checks it (`data/README.md`).
+- *How can the golden test not be circular?* — The golden file holds structures expected from the official map (line sequence and interchange stations), not router output. Minutes are compared to networkx, not written down.
+- *What does T20 prove?* — Closing a station only removes nodes and arcs, so it can never create a shorter path. If a closure ever made a route faster, the graph build or the search would be wrong.

@@ -37,3 +37,19 @@ Each folder in `tests/fixtures/broken/` holds only the file(s) that differ from 
 - **Fuzzy also compares with the start of the name.** Comparing a 5-letter query with a 11-letter name always fails the length check, so a typo while still typing ("rajib") would never be found. `classify` compares the query with the whole name *and* with the name's first `len(query)` characters, using the same `k` [D16].
 - **Codes match only exactly.** A code is short and arbitrary, so prefix or fuzzy matches on codes would mostly be noise.
 - **Whitespace becomes a space before control characters are dropped.** Tabs and newlines are Unicode category `Cc`; dropping them first would join words ("rajivchowk"). Found by `test_t13_normalise_steps`.
+
+### D39 — Route text shared by the CLI and the UI (Step 6)
+
+`metro/describe.py` turns a `Route` into the summary line, leg rows and interchange rows of §6.4. The CLI (`tools/route_cli.py`) and the route panel both use it, so the wording and the minute rounding live in one place. It is pure Python, so it sits in the core.
+
+### D40 — Real-data router tests in their own file (Step 6)
+
+T1–T10 and T20 run on the real data and are in `tests/test_router_real.py`; `tests/test_router.py` keeps the toy-fixture tests. One file for both would pass the 300-line limit.
+
+### D41 — T2 uses a large override, not 104 s (Step 6)
+
+A3 says the Janakpuri West transfer is "overridden to 104 s". A transfer *cheaper* than normal cannot force a Blue-only route, so this looks like a typo. T2 sets the Janakpuri West `BLUE-MAIN`↔`MAG-1` transfer to 10 000 s and asserts that Uttam Nagar East → Botanical Garden is a single Blue leg with 0 interchanges.
+
+### D42 — How the draft dataset was produced (Step 6)
+
+The real data was drafted from the DMRC GTFS feed plus Wikipedia/OpenStreetMap for the 2025–26 sections (details and every source in `data/README.md`). The drafted CSVs in `data/source/` are now the team's master copy, and `tools/csv_to_json.py` generates the JSON. Every station is `verified: false` until the team checks it. The 30 golden routes in `tests/golden/routes.json` are structures expected from the DMRC map (`"checked": false` until the team confirms each one).
