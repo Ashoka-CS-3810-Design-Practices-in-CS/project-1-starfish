@@ -1,0 +1,323 @@
+[
+ {
+  "from": "KSHG",
+  "to": "RJCK",
+  "lines": [
+   "YELLOW"
+  ],
+  "interchanges": [],
+  "note": "T1: one line, no change",
+  "checked": false
+ },
+ {
+  "from": "RJCK",
+  "to": "HZKS",
+  "lines": [
+   "YELLOW"
+  ],
+  "interchanges": [],
+  "note": "Yellow through Central Secretariat",
+  "checked": false
+ },
+ {
+  "from": "NECT",
+  "to": "VASH",
+  "lines": [
+   "BLUE",
+   "BLUE"
+  ],
+  "interchanges": [
+   "YMBK"
+  ],
+  "note": "T4: Blue main -> Blue branch at Yamuna Bank",
+  "checked": false
+ },
+ {
+  "from": "DHKN",
+  "to": "LTNR",
+  "lines": [
+   "PINK"
+  ],
+  "interchanges": [],
+  "note": "T5: WALK leg to Durgabai Deshmukh South Campus, then Pink",
+  "checked": false
+ },
+ {
+  "from": "KTNR",
+  "to": "MNDK",
+  "lines": [
+   "GREEN",
+   "GREEN"
+  ],
+  "interchanges": [
+   "AKPK"
+  ],
+  "note": "T6: Green branch -> Green main at Ashok Park Main",
+  "checked": false
+ },
+ {
+  "from": "SRBL",
+  "to": "NDCY",
+  "lines": [
+   "YELLOW",
+   "BLUE"
+  ],
+  "interchanges": [
+   "RJCK"
+  ],
+  "note": "T3: classic Yellow -> Blue change at Rajiv Chowk",
+  "checked": false
+ },
+ {
+  "from": "NDLS",
+  "to": "LTNR",
+  "lines": [
+   "YELLOW",
+   "VIOLET"
+  ],
+  "interchanges": [
+   "CLST"
+  ],
+  "note": "Yellow -> Violet at Central Secretariat",
+  "checked": false
+ },
+ {
+  "from": "HZKS",
+  "to": "KJMR",
+  "lines": [
+   "MAGENTA"
+  ],
+  "interchanges": [],
+  "note": "Magenta only",
+  "checked": false
+ },
+ {
+  "from": "JNPW",
+  "to": "HZKS",
+  "lines": [
+   "MAGENTA"
+  ],
+  "interchanges": [],
+  "note": "Magenta only; no Blue detour",
+  "checked": false
+ },
+ {
+  "from": "RRGN",
+  "to": "LTNR",
+  "lines": [
+   "PINK"
+  ],
+  "interchanges": [],
+  "note": "Pink only",
+  "checked": false
+ },
+ {
+  "from": "MDHS",
+  "to": "BRBR",
+  "lines": [
+   "VIOLET"
+  ],
+  "interchanges": [],
+  "note": "Violet only",
+  "checked": false
+ },
+ {
+  "from": "KSHG",
+  "to": "RTHL",
+  "lines": [
+   "RED"
+  ],
+  "interchanges": [],
+  "note": "Red only",
+  "checked": false
+ },
+ {
+  "from": "INDR",
+  "to": "MNDK",
+  "lines": [
+   "GREEN"
+  ],
+  "interchanges": [],
+  "note": "Green main only",
+  "checked": false
+ },
+ {
+  "from": "DWRK",
+  "to": "NJFG",
+  "lines": [
+   "GREY"
+  ],
+  "interchanges": [],
+  "note": "Grey only",
+  "checked": false
+ },
+ {
+  "from": "NDLS",
+  "to": "IGAT",
+  "lines": [
+   "AIRPORT"
+  ],
+  "interchanges": [],
+  "note": "Airport Express only",
+  "checked": false
+ },
+ {
+  "from": "BTGD",
+  "to": "KJMR",
+  "lines": [
+   "MAGENTA"
+  ],
+  "interchanges": [],
+  "note": "Magenta only",
+  "checked": false
+ },
+ {
+  "from": "RJCK",
+  "to": "NDCY",
+  "lines": [
+   "BLUE"
+  ],
+  "interchanges": [],
+  "note": "Blue main only",
+  "checked": false
+ },
+ {
+  "from": "AZDP",
+  "to": "NJSH",
+  "lines": [
+   "PINK"
+  ],
+  "interchanges": [],
+  "note": "Pink only",
+  "checked": false
+ },
+ {
+  "from": "DLCK",
+  "to": "HRBL",
+  "lines": [
+   "MAGENTA"
+  ],
+  "interchanges": [],
+  "note": "Magenta section 2 only",
+  "checked": false
+ },
+ {
+  "from": "MJPK",
+  "to": "MJBR",
+  "lines": [
+   "PINK"
+  ],
+  "interchanges": [],
+  "note": "Pink ring via the 2026 section",
+  "checked": false
+ },
+ {
+  "from": "SVVR",
+  "to": "WLCM",
+  "lines": [
+   "PINK",
+   "PINK"
+  ],
+  "interchanges": [
+   "MJBR"
+  ],
+  "note": "Pink spur -> Pink ring at Maujpur - Babarpur",
+  "checked": false
+ },
+ {
+  "from": "DW21",
+  "to": "DHKN",
+  "lines": [
+   "AIRPORT"
+  ],
+  "interchanges": [],
+  "note": "Airport Express only",
+  "checked": false
+ },
+ {
+  "from": "YA25",
+  "to": "NDLS",
+  "lines": [
+   "AIRPORT"
+  ],
+  "interchanges": [],
+  "note": "Airport Express from its 2023 extension",
+  "checked": false
+ },
+ {
+  "from": "MLTN",
+  "to": "HZKS",
+  "lines": [
+   "YELLOW"
+  ],
+  "interchanges": [],
+  "note": "Yellow only",
+  "checked": false
+ },
+ {
+  "from": "SAKE",
+  "to": "RJCK",
+  "lines": [
+   "YELLOW"
+  ],
+  "interchanges": [],
+  "note": "Yellow only",
+  "checked": false
+ },
+ {
+  "from": "ADVR",
+  "to": "RJCK",
+  "lines": [
+   "BLUE",
+   "BLUE"
+  ],
+  "interchanges": [
+   "YMBK"
+  ],
+  "note": "Blue branch -> Blue main at Yamuna Bank",
+  "checked": false
+ },
+ {
+  "from": "NWAK",
+  "to": "MDHS",
+  "lines": [
+   "BLUE"
+  ],
+  "interchanges": [],
+  "note": "Blue main only",
+  "checked": false
+ },
+ {
+  "from": "KRKR",
+  "to": "KTNR",
+  "lines": [
+   "BLUE",
+   "BLUE"
+  ],
+  "interchanges": [
+   "YMBK"
+  ],
+  "note": "Blue branch -> Blue main at Yamuna Bank",
+  "checked": false
+ },
+ {
+  "from": "TGHL",
+  "to": "KJMR",
+  "lines": [
+   "VIOLET"
+  ],
+  "interchanges": [],
+  "note": "Violet only",
+  "checked": false
+ },
+ {
+  "from": "RTHL",
+  "to": "DDGN",
+  "lines": [
+   "RED"
+  ],
+  "interchanges": [],
+  "note": "Red end to end through Kashmere Gate",
+  "checked": false
+ }
+]
