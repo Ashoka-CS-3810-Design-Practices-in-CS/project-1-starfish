@@ -1,0 +1,65 @@
+[
+  {
+    "id": "RED",
+    "name": "Red Line",
+    "color": "#D7263D",
+    "services": [
+      {
+        "id": "R1",
+        "stations": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "loop": false
+      }
+    ]
+  },
+  {
+    "id": "BLUE",
+    "name": "Blue Line",
+    "color": "#1E5AA8",
+    "services": [
+      {
+        "id": "B1",
+        "stations": [
+          "E",
+          "C",
+          "F"
+        ],
+        "loop": false
+      }
+    ]
+  },
+  {
+    "id": "GREEN",
+    "name": "Green Line",
+    "color": "#2E8B57",
+    "services": [
+      {
+        "id": "G1",
+        "stations": [
+          "B",
+          "F"
+        ],
+        "loop": false
+      }
+    ]
+  },
+  {
+    "id": "YELLOW",
+    "name": "Yellow Line",
+    "color": "#E0B000",
+    "services": [
+      {
+        "id": "Y1",
+        "stations": [
+          "H",
+          "I"
+        ],
+        "loop": false
+      }
+    ]
+  }
+]

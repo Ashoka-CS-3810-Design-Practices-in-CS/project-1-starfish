@@ -1,0 +1,73 @@
+[
+  {
+    "id": "A",
+    "name": "Station A",
+    "lat": 28.6,
+    "lon": 77.1,
+    "aliases": [],
+    "closed": false,
+    "verified": true
+  },
+  {
+    "id": "B",
+    "name": "Station B",
+    "lat": 28.6,
+    "lon": 77.15,
+    "aliases": [],
+    "closed": false,
+    "verified": true
+  },
+  {
+    "id": "C",
+    "name": "Station C",
+    "lat": 28.6,
+    "lon": 77.2,
+    "aliases": [],
+    "closed": false,
+    "verified": true
+  },
+  {
+    "id": "D",
+    "name": "Station D",
+    "lat": 28.6,
+    "lon": 77.25,
+    "aliases": [],
+    "closed": false,
+    "verified": true
+  },
+  {
+    "id": "E",
+    "name": "Station E",
+    "lat": 28.65,
+    "lon": 77.2,
+    "aliases": [],
+    "closed": false,
+    "verified": true
+  },
+  {
+    "id": "F",
+    "name": "Station F",
+    "lat": 28.55,
+    "lon": 77.2,
+    "aliases": [],
+    "closed": false,
+    "verified": true
+  },
+  {
+    "id": "H",
+    "name": "Station H",
+    "lat": 28.6,
+    "lon": 77.3,
+    "aliases": [],
+    "closed": false,
+    "verified": true
+  },
+  {
+    "id": "I",
+    "name": "Station I",
+    "lon": 77.35,
+    "aliases": [],
+    "closed": false,
+    "verified": true
+  }
+]

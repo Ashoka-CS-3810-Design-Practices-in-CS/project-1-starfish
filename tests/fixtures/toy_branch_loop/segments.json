@@ -1,0 +1,58 @@
+[
+  {
+    "id": "S-01",
+    "line": "ORANGE",
+    "a": "A",
+    "b": "B",
+    "time_s": 120
+  },
+  {
+    "id": "S-02",
+    "line": "ORANGE",
+    "a": "B",
+    "b": "J",
+    "time_s": 120
+  },
+  {
+    "id": "S-03",
+    "line": "ORANGE",
+    "a": "J",
+    "b": "C",
+    "time_s": 120
+  },
+  {
+    "id": "S-04",
+    "line": "ORANGE",
+    "a": "J",
+    "b": "D",
+    "time_s": 180
+  },
+  {
+    "id": "S-05",
+    "line": "VIOLET",
+    "a": "C",
+    "b": "L2",
+    "time_s": 120
+  },
+  {
+    "id": "S-06",
+    "line": "VIOLET",
+    "a": "L2",
+    "b": "L3",
+    "time_s": 120
+  },
+  {
+    "id": "S-07",
+    "line": "VIOLET",
+    "a": "L3",
+    "b": "L4",
+    "time_s": 120
+  },
+  {
+    "id": "S-08",
+    "line": "VIOLET",
+    "a": "L4",
+    "b": "C",
+    "time_s": 120
+  }
+]

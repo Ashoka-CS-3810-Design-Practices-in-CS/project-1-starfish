@@ -1,0 +1,22 @@
+{
+  "default_other_line_s": 240,
+  "default_same_line_s": 120,
+  "overrides": [
+    {
+      "station": "A",
+      "service_a": "R1",
+      "service_b": "B1",
+      "time_s": 120
+    }
+  ],
+  "no_transfer": [],
+  "walkways": [
+    {
+      "id": "W-01",
+      "a": "D",
+      "b": "H",
+      "time_s": 300,
+      "one_way": false
+    }
+  ]
+}

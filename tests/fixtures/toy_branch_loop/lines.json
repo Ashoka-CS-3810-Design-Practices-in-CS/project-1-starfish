@@ -1,0 +1,44 @@
+[
+  {
+    "id": "ORANGE",
+    "name": "Orange Line",
+    "color": "#F28C28",
+    "services": [
+      {
+        "id": "O1",
+        "stations": [
+          "A",
+          "B",
+          "J",
+          "C"
+        ],
+        "loop": false
+      },
+      {
+        "id": "O2",
+        "stations": [
+          "J",
+          "D"
+        ],
+        "loop": false
+      }
+    ]
+  },
+  {
+    "id": "VIOLET",
+    "name": "Violet Line",
+    "color": "#7B3FA0",
+    "services": [
+      {
+        "id": "V",
+        "stations": [
+          "C",
+          "L2",
+          "L3",
+          "L4"
+        ],
+        "loop": true
+      }
+    ]
+  }
+]

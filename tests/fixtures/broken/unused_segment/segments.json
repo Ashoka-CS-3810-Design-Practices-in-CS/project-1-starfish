@@ -1,0 +1,58 @@
+[
+  {
+    "id": "S-01",
+    "line": "RED",
+    "a": "A",
+    "b": "B",
+    "time_s": 120
+  },
+  {
+    "id": "S-02",
+    "line": "RED",
+    "a": "B",
+    "b": "C",
+    "time_s": 180
+  },
+  {
+    "id": "S-03",
+    "line": "RED",
+    "a": "C",
+    "b": "D",
+    "time_s": 120
+  },
+  {
+    "id": "S-04",
+    "line": "BLUE",
+    "a": "E",
+    "b": "C",
+    "time_s": 180
+  },
+  {
+    "id": "S-05",
+    "line": "BLUE",
+    "a": "C",
+    "b": "F",
+    "time_s": 180
+  },
+  {
+    "id": "S-06",
+    "line": "GREEN",
+    "a": "B",
+    "b": "F",
+    "time_s": 420
+  },
+  {
+    "id": "S-07",
+    "line": "YELLOW",
+    "a": "H",
+    "b": "I",
+    "time_s": 180
+  },
+  {
+    "id": "S-08",
+    "line": "RED",
+    "a": "A",
+    "b": "C",
+    "time_s": 200
+  }
+]
