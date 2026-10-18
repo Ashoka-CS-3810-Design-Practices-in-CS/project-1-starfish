@@ -42,3 +42,15 @@ def test_cli_usage_on_bad_arguments(capsys):
     """Wrong argument count prints usage and returns 2."""
     assert route_cli.main(["route_cli.py"]) == 2
     assert "Usage" in capsys.readouterr().out
+
+
+def test_station_tooltip_text():
+    """Tooltips show name, code, lines and badges; one line means no interchange badge."""
+    from metro.data import load_network
+    from metro.describe import station_lines, station_tooltip
+    net = load_network(TOY_METRO)
+    lines = station_lines(net)
+    assert lines["C"] == ["Blue Line", "Red Line"]
+    assert station_tooltip(net, "C", lines["C"]) == \
+        "Station C (C)\nBlue Line, Red Line\nInterchange"
+    assert station_tooltip(net, "A", lines["A"]) == "Station A (A)\nRed Line"

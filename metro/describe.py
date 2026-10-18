@@ -54,3 +54,23 @@ def route_lines(network: Network, route: Route) -> list[str]:
             ride_count += 1
         out.append(f"{number}. {leg_text(network, leg)}")
     return out
+
+
+def station_lines(network: Network) -> dict[str, list[str]]:
+    """For each station, the names of the lines that stop there, in line-ID order."""
+    lines: dict[str, list[str]] = {sid: [] for sid in network.stations}
+    for line in network.lines.values():
+        for station in sorted({st for s in line.services for st in s.stations}):
+            lines[station].append(line.name)
+    return lines
+
+
+def station_tooltip(network: Network, station_id: str, lines: list[str]) -> str:
+    """Hover text: name, code, lines, and badges for interchanges and closures (FR12)."""
+    st = network.stations[station_id]
+    text = f"{st.name} ({st.id})\n" + (", ".join(lines) if lines else "No line")
+    if len(lines) > 1:
+        text += "\nInterchange"
+    if st.closed:
+        text += "\nClosed"
+    return text
