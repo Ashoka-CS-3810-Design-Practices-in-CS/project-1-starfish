@@ -25,3 +25,4 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B"]
+ignore = ["B905"]  # zip(a, a[1:]) is deliberately unequal in length
