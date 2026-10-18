@@ -161,3 +161,14 @@ def test_t21_fewest_changes_and_fewest_stops(real):
         assert len(fewest.interchanges) <= key_changes(fewest)
         assert fewest.total_s >= fastest.total_s
         assert stops.stops <= fastest.stops
+
+
+def test_no_two_real_stations_share_a_position(real):
+    """Data sanity: distinct stations are at least ~100 m apart, so map markers and
+    labels never sit exactly on top of each other (the 2023 GTFS feed gave Sarojini
+    Nagar the coordinates of Bhikaji Cama Place)."""
+    network, _ = real
+    stations = list(network.stations.values())
+    too_close = [(a.id, b.id) for i, a in enumerate(stations) for b in stations[i + 1:]
+                 if abs(a.lat - b.lat) < 0.0009 and abs(a.lon - b.lon) < 0.0009]
+    assert too_close == []
