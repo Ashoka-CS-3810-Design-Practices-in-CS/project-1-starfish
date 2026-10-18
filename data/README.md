@@ -30,7 +30,8 @@ Services:
 
 | Field | Source |
 |---|---|
-| Station order and coordinates (230 stations) | DMRC static GTFS feed (`stops.txt`, `stop_times.txt`; feed dated 2023), published on the Delhi Open Transit Data portal (otd.delhi.gov.in). The copy used was a public mirror of that feed. |
+| Station order and coordinates (229 stations) | DMRC static GTFS feed (`stops.txt`, `stop_times.txt`; feed dated 2023), published on the Delhi Open Transit Data portal (otd.delhi.gov.in). The copy used was a public mirror of that feed. |
+| Sarojini Nagar coordinates | OpenStreetMap: the GTFS feed gives it exactly the coordinates of Bhikaji Cama Place (a data error found when the two map labels overlapped). |
 | Running times (244 of 260 segments) | Median over all GTFS trips of (arrival at next stop − arrival at this stop), so the time includes the dwell at the first station. |
 | Pink ring section (Majlis Park – Maujpur-Babarpur), Magenta `MAG-2` (Majlis Park – Deepali Chowk), Krishna Park Extension, Yashobhoomi Dwarka Sector 25 | Station order from Wikipedia line articles (checked October 2026); coordinates for the 14 new stations from OpenStreetMap (© OpenStreetMap contributors, ODbL). |
 | Running times on those new sections (16 segments) | **Documented default of 120 s per segment.** No timetable source was available. Marked `default 120 s` in `services.csv`. |

@@ -183,7 +183,7 @@ DHCT,Delhi Cantt.,28.608641,77.140373,,false,false,DMRC GTFS 2023
 DDSC,Durgabai Deshmukh South Campus,28.589376,77.169518,,false,false,DMRC GTFS 2023
 SRVH,Sir Vishweshwaraiah Moti Bagh,28.578529,77.175713,,false,false,DMRC GTFS 2023
 BJCM,Bhikaji Cama Place,28.570208,77.187866,,false,false,DMRC GTFS 2023
-SNNR,Sarojini Nagar,28.570208,77.187866,,false,false,DMRC GTFS 2023
+SNNR,Sarojini Nagar,28.575817,77.198079,,false,false,OpenStreetMap (GTFS 2023 duplicated Bhikaji Cama Place coordinates)
 SHEN,South Extension,28.568600,77.219818,,false,false,DMRC GTFS 2023
 VNBP,Vinobapuri,28.566179,77.249367,,false,false,DMRC GTFS 2023
 ASHR,Ashram,28.576065,77.257530,,false,false,DMRC GTFS 2023
