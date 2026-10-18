@@ -1,6 +1,7 @@
 """Shared test helpers: fixture paths, one-defect datasets and network variants."""
 
 import json
+import os
 import random
 import shutil
 from dataclasses import replace
@@ -9,6 +10,9 @@ from pathlib import Path
 import pytest
 
 from metro.models import Network, TransferOverride
+
+# GUI tests run without a screen, locally and on CI.
+os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 TOY_METRO = FIXTURES / "toy_metro"
