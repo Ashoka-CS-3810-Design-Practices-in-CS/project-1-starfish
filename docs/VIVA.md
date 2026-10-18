@@ -131,3 +131,20 @@ Running notes for the viva, one section per build step.
 - *What stops an old, slow result from overwriting a newer one?* — The request number. `is_current` compares the result's number with the latest; anything else is discarded. T25 tests this with a deliberately slow search function.
 - *Why can't the cancel just kill the thread?* — Killing a thread can leave data half-updated. Instead `find_route` checks the cancel event every 256 pops and stops cleanly by raising `RouteCancelled`.
 - *What happens on an unexpected exception?* — The worker logs the stack trace to `metro.log` and the user sees "Something went wrong. Your selection was kept." with Retry (ER17).
+
+## Step 9 — Messages, start-up dialog, accessibility, criteria, packaging (M5)
+
+**What was built.** All A3 Table 12 messages are in place (inline banner and field hints; the start-up dialog is the only modal one). Tests for T21 (the Should-tier criteria), the accessibility baseline, the criterion workflow and the start-up dialog text. `packaging/metro.spec` builds a one-folder desktop app with PyInstaller (checked on macOS).
+
+**Key functions.**
+- `main.problems_text(error, folder)`: "The network data has N problems." + the first 10 + the data folder (ER8–ER10).
+- `main.show_data_error(...)`: the modal dialog with Open folder / Quit; `main()` then returns exit code 1 without creating the main window.
+- `fewest_changes_key` / `fewest_stops_key` (`metro/router.py`): each criterion is one key function that reorders the (time, changes, stops) tuple — nothing else in the router changes.
+- `test_accessibility_baseline`: walks every button, field, combo box and list in the window and fails if any has no accessible name.
+
+**Likely questions.**
+- *Why is fewest-changes allowed to report fewer interchanges than its key counts?* — A walk at the start or end counts as a change in the key (so the search avoids pointless walks) but is shown as a WALK leg, not an interchange [D17]. T21 checks `reported ≤ key`.
+- *Why is only the start-up error modal?* — Without data there is nothing to show, so the user must decide (open the folder or quit). Every other error leaves the app usable, so it is shown inline and never blocks [D19].
+- *How is colour never the only cue?* — Leg rows show the line name next to the swatch, and neighbouring legs on the map differ by a dashed centre line; walks are dotted.
+
+**Still to do by the team:** the manual smoke test on Windows, macOS and Linux (A3 M5).
