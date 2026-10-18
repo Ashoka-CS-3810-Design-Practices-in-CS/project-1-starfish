@@ -101,3 +101,12 @@ def add_walk_arcs(network: Network, station_nodes: dict[str, list[int]],
                 adj[na].append((nb, walk.time_s, "walk"))
                 if not walk.one_way:
                     adj[nb].append((na, walk.time_s, "walk"))
+
+
+def interchange_stations(network: Network) -> set[str]:
+    """Stations served by two or more services (including branch changes like Yamuna Bank)."""
+    count: dict[str, int] = {}
+    for service in network.services.values():
+        for station in set(service.stations):
+            count[station] = count.get(station, 0) + 1
+    return {station for station, n in count.items() if n >= 2}
