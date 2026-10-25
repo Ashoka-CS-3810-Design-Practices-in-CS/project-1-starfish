@@ -1,8 +1,9 @@
 """Command-line walking skeleton: route any pair of stations and print the result.
 
 The optional last argument is the criterion: fastest, fewest_changes or fewest_stops.
+Add --stations anywhere to list every station each ride passes through.
 
-Usage: python tools/route_cli.py data "Rajiv Chowk" "Hauz Khas" [criterion]
+Usage: python tools/route_cli.py data "Rajiv Chowk" "Hauz Khas" [criterion] [--stations]
 """
 
 import sys
@@ -29,6 +30,8 @@ def pick_station(index, text: str) -> str | None:
 
 def main(argv: list[str]) -> int:
     """Run one query from the command line; return the process exit code."""
+    expand = "--stations" in argv
+    argv = [a for a in argv if a != "--stations"]
     if len(argv) not in (4, 5) or (len(argv) == 5 and argv[4] not in KEY_FUNCTIONS):
         print(__doc__.strip().splitlines()[-1])
         return 2
@@ -52,7 +55,7 @@ def main(argv: list[str]) -> int:
         print(f"No route found between {names} with the current closures.")
         return 1
     print(f"{network.stations[src].name} → {network.stations[dst].name}")
-    print("\n".join(route_lines(network, route)))
+    print("\n".join(route_lines(network, route, expand)))
     return 0
 
 

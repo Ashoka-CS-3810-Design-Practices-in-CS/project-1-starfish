@@ -42,18 +42,81 @@ def interchange_text(network: Network, ic: Interchange) -> str:
     return f"⇒ Change at {at} ({mins} min)"
 
 
-def route_lines(network: Network, route: Route) -> list[str]:
-    """The whole route as lines of text: summary, then legs and interchanges in order."""
-    out = [summary_text(route)]
+def route_steps(route: Route) -> list[Leg | Interchange]:
+    """Legs and interchanges in the order a traveller meets them: a change sits between two
+    rides, never before the first or after the last."""
+    steps: list[Leg | Interchange] = []
     changes = iter(route.interchanges)
-    ride_count = 0
-    for number, leg in enumerate(route.legs, start=1):
+    rides = 0
+    for leg in route.legs:
         if leg.kind == "RIDE":
-            if ride_count > 0:
-                out.append("   " + interchange_text(network, next(changes)))
-            ride_count += 1
-        out.append(f"{number}. {leg_text(network, leg)}")
+            if rides > 0:
+                steps.append(next(changes))
+            rides += 1
+        steps.append(leg)
+    return steps
+
+
+def leg_station_names(network: Network, leg: Leg) -> list[str]:
+    """Names of every station a leg visits in travel order, boarding and alighting included."""
+    return [station_name(network, sid) for sid in leg.stations]
+
+
+def between_names(network: Network, leg: Leg) -> list[str]:
+    """The stations passed through without getting off: all but the first and last."""
+    return leg_station_names(network, leg)[1:-1]
+
+
+def route_lines(network: Network, route: Route, expand: bool = False) -> list[str]:
+    """The whole route as lines of text: summary, then legs and interchanges in order.
+
+    With `expand`, each ride lists the stations it passes through, one per line.
+    """
+    out = [summary_text(route)]
+    number = 0
+    for step in route_steps(route):
+        if isinstance(step, Interchange):
+            out.append("   " + interchange_text(network, step))
+            continue
+        number += 1
+        out.append(f"{number}. {leg_text(network, step)}")
+        if expand:
+            out += [f"     · {name}" for name in between_names(network, step)]
     return out
+
+
+def route_title(network: Network, route: Route) -> str:
+    """'Rajiv Chowk → Hauz Khas'."""
+    return f"{station_name(network, route.source)} → {station_name(network, route.destination)}"
+
+
+def export_route_text(network: Network, route: Route, format: str = "txt") -> str:
+    """The route as a document to save or paste: plain text ("txt") or Markdown ("md").
+
+    Both list every intermediate station. An unknown format is a programming error.
+    """
+    if format == "txt":
+        return "\n".join([route_title(network, route), *route_lines(network, route, True)]) + "\n"
+    if format == "md":
+        return export_markdown(network, route)
+    raise ValueError(f"Unknown export format {format!r}; use 'txt' or 'md'.")
+
+
+def export_markdown(network: Network, route: Route) -> str:
+    """Markdown version of the route: a heading, the summary in bold, a numbered list.
+
+    A change is its own italic paragraph between the legs; the legs keep their explicit
+    numbers, which Markdown renderers honour when a list restarts."""
+    out = [f"# {route_title(network, route)}", "", f"**{summary_text(route)}**", ""]
+    number = 0
+    for step in route_steps(route):
+        if isinstance(step, Interchange):
+            out += ["", f"*{interchange_text(network, step)}*", ""]
+            continue
+        number += 1
+        out.append(f"{number}. {leg_text(network, step)}")
+        out += [f"   - {name}" for name in between_names(network, step)]
+    return "\n".join(out) + "\n"
 
 
 def station_lines(network: Network) -> dict[str, list[str]]:

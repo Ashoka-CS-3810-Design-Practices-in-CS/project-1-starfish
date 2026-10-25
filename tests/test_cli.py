@@ -54,3 +54,14 @@ def test_station_tooltip_text():
     assert station_tooltip(net, "C", lines["C"]) == \
         "Station C (C)\nBlue Line, Red Line\nInterchange"
     assert station_tooltip(net, "A", lines["A"]) == "Station A (A)\nRed Line"
+
+
+def test_cli_stations_flag_lists_intermediate_stations(capsys):
+    """--stations works in any position and adds one row per station passed through."""
+    args = ["route_cli.py", "--stations", str(REAL_DATA), "Rajiv Chowk", "Hauz Khas"]
+    assert route_cli.main(args) == 0
+    out = capsys.readouterr().out
+    rows = [line for line in out.splitlines() if line.startswith("     · ")]
+    assert len(rows) == 8  # Rajiv Chowk -> Hauz Khas is 9 stops, so 8 stations in between
+    assert route_cli.main(args[:1] + args[2:]) == 0
+    assert "     · " not in capsys.readouterr().out
