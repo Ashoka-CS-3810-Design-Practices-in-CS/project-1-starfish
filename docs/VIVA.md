@@ -151,7 +151,27 @@ Running notes for the viva, one section per build step.
 
 ## Step 10 — Documentation (M6)
 
-**What was written.** `docs/algorithms.md` (Algorithms 1–5 and 8, with [D16] and [D17]), `docs/data_repr.md`, `docs/performance.md` (measured numbers and coverage), `docs/demo.md` (6 scenarios), a template for `docs/usability.md` (the team fills it in after the SUS sessions), and the answers below.
+**What was written.** `docs/algorithms.md` (Algorithms 1–5 and 8, with [D16] and [D17]), `docs/data_repr.md`, `docs/performance.md` (measured numbers and coverage), `docs/demo.md` (12 scenarios), a template for `docs/usability.md` (the team fills it in after the SUS sessions), and the answers below.
+
+
+## Step 11 — Optional features (Could tier, after the M4 feature freeze)
+
+**What was built.** Alternative routes (`metro/alternatives.py`), favourites (`metro/favorites.py`, `metro/ui/favorites_bar.py`), a station card (`station_details` in `describe.py`, `metro/ui/station_dialog.py`), route export (`export_route_text`, `metro/ui/export.py`), route tabs and a comparison table (`route_panel.py`, `compare_dialog.py`), the dark theme (`theme.py`), floating map buttons and label overlap handling (`map_controls.py`, `map_labels.py`), station dots and change badges on the route (`route_overlay.py`), expandable station lists (`route_panel.py`), a route animation (`route_animation.py`), a Windows-safe start-up (`console.py`, `setup_logging` in `main.py`) and a new search whenever the criterion changes. Each has its decision in `decisions.md` [D47]–[D59]. Tests: `test_alternatives.py`, `test_favorites*.py`, `test_describe.py`, `test_station_dialog.py`, `test_export.py`, `test_compare.py`, `test_theme.py`, `test_map_labels.py`, `test_route_overlay.py`, `test_route_panel.py`, `test_animation.py`, `test_startup.py`.
+
+**Key functions.**
+- `find_alternative_routes(graph, network, src, dst, criterion, max_k)`: gets the best route, then the best route of each other criterion, then runs `find_route` again on a copy of the graph with some arcs removed (the transfers at a change station, or the middle stretch of a ride). Routes more than 1.5 times slower than the fastest are dropped, and the result is the same every time [D47].
+- `route_badges(routes)`: for each route, the criteria it wins among those given. The tab caption, the comparison table's bold values and the "Best at" row all use it, so they cannot disagree.
+- `declutter(candidates)`: takes labels in order of importance and keeps one only if it does not overlap a label already kept; a grid of 64 px cells keeps it fast [D50].
+- `decode(text, network)` in `favorites.py`: reads the saved list and never raises; damaged text gives an empty list, and entries with stations that no longer exist are dropped [D48].
+- `RouteAnimator.advance(ms)`: moves the marker by a fraction of the trip. The timer calls it every 16 ms, and the tests call it directly, so no test has to wait [D58].
+- `export_route(...)`: returns a message instead of raising when a file cannot be written, so a failed save never loses the route on screen [D57].
+
+**Likely questions.**
+- *Why not Yen's algorithm for alternatives?* — Its paths usually differ by one station on the same line, which is not a different way to travel. Removing a change station or a stretch of line forces a different journey, and it needs no change to `router.py`: the new file only calls `find_route`.
+- *Why is `find_alternative_routes` not on the worker thread?* — It takes about 2 ms (p95 about 4.5 ms for 300 random pairs, a test checks the 50 ms budget). If it ever failed, the window logs the error and still shows the route.
+- *How do you know the dark theme is readable?* — `test_theme.py` computes WCAG contrast ratios for the map text, the badge text, the hint and both banner kinds in both themes, and asserts at least 4.5:1.
+- *What did the tests catch while you built this?* — `route_badges([])` raised when Swap cleared the route; a file name came out as "Haat---INA"; `route_found` left a duplicate when the same alternative appeared twice; and `QSettings(org, app)` wrote to the real macOS preferences instead of the test folder, so the tests would have overwritten a developer's saved theme. The settings now use an explicit `.ini` format that tests can redirect.
+- *Why is some of the window in a mixin?* — `main_window.py` reached 344 lines against a 300-line rule. The handlers for the optional features moved into `ExtrasMixin` with their names unchanged; the cost is that the mixin depends on the window's attributes [D59].
 
 ---
 
@@ -172,4 +192,4 @@ Running notes for the viva, one section per build step.
 
 **7. Rejected alternatives.** Modal error dialogs (they block the user for problems that leave the app usable [D19]); all-pairs precomputation (59 000 routes to store when one query takes 0.25 ms); and the simplifications [D26]–[D35] (trie, custom viewport maths, executor abstraction, transition table, …), each with its reason in `docs/decisions.md`.
 
-**8. A feature addable without redesign.** A new criterion is one key function added to `KEY_FUNCTIONS` and one entry in the criterion box. Alternative routes (FR17) would be a new function that calls `find_route` repeatedly with some arcs masked out; nothing else changes.
+**8. A feature addable without redesign.** A new criterion is one key function added to `KEY_FUNCTIONS` and one entry in `CRITERION_LABELS`. Alternative routes (FR17) were added exactly that way: `metro/alternatives.py` calls `find_route` repeatedly on a graph with some arcs masked out, and `router.py` did not change [D47].
