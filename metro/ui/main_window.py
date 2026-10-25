@@ -9,11 +9,9 @@ import logging
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QKeySequence, QShortcut
 from PySide6.QtWidgets import (
-    QComboBox,
     QHBoxLayout,
     QLabel,
     QMainWindow,
-    QPushButton,
     QToolButton,
     QVBoxLayout,
     QWidget,
@@ -21,19 +19,17 @@ from PySide6.QtWidgets import (
 
 from metro import app_state as st
 from metro.alternatives import find_alternative_routes
-from metro.describe import CRITERION_LABELS
 from metro.graph import RoutingGraph
 from metro.models import Network
 from metro.router import find_route
 from metro.ui.map_view import MapView
-from metro.ui.route_panel import Banner, RoutePanel
 from metro.ui.search_box import SearchBox
+from metro.ui.side_panel import SidePanel
 from metro.ui.station_dialog import StationDialog
 from metro.ui.worker import RouteRunner
 
 log = logging.getLogger(__name__)
 
-CRITERIA = [(text, key) for key, text in CRITERION_LABELS.items()]
 NARROW_PX = 1100  # below this width the side panel hides behind a toggle
 
 
@@ -64,22 +60,14 @@ class MainWindow(QMainWindow):
     # ---- construction ---------------------------------------------------------------------
 
     def build_widgets(self) -> None:
-        """Create every widget, with accessible names (A3 [D20])."""
-        self.from_box = SearchBox("From", self.network)
-        self.to_box = SearchBox("To", self.network)
-        self.criterion = QComboBox()
-        for text, value in CRITERIA:
-            self.criterion.addItem(text, value)
-        self.criterion.setAccessibleName("Criterion")
-        self.find_button = QPushButton("Find route")
-        self.swap_button = QPushButton("Swap")
-        self.reset_button = QPushButton("Reset (Esc)")
-        for button, name in ((self.find_button, "Find route"), (self.swap_button, "Swap"),
-                             (self.reset_button, "Reset")):
-            button.setAccessibleName(name)
-        self.swap_button.setToolTip("Swap From and To (Alt+W)")
-        self.banner = Banner()
-        self.route_panel = RoutePanel(self.network)
+        """Create the side panel, the map and the controls around them (A3 [D20])."""
+        self.panel = SidePanel(self.network)
+        # Short names for the panel's widgets, used by the handlers below and by the tests.
+        self.from_box, self.to_box = self.panel.from_box, self.panel.to_box
+        self.criterion = self.panel.criterion
+        self.find_button, self.swap_button = self.panel.find_button, self.panel.swap_button
+        self.reset_button = self.panel.reset_button
+        self.banner, self.route_panel = self.panel.banner, self.panel.route_panel
         self.map = MapView(self.network)
         self.panel_toggle = QToolButton()
         self.panel_toggle.setText("☰ Route panel")
@@ -90,26 +78,7 @@ class MainWindow(QMainWindow):
         self.statusBar().addPermanentWidget(self.zoom_label)
 
     def build_layout(self) -> None:
-        """Left panel and map side by side; tab order follows the panel top to bottom."""
-        self.panel = QWidget()
-        self.panel.setFixedWidth(380)
-        side = QVBoxLayout(self.panel)
-        hint = QLabel("Type a station or click the map: first click sets From, second sets "
-                      "To, a third click starts again.")
-        hint.setWordWrap(True)
-        criterion_row = QHBoxLayout()
-        criterion_row.addWidget(QLabel("Criterion"))
-        criterion_row.addWidget(self.criterion, 1)
-        buttons = QHBoxLayout()
-        for button in (self.find_button, self.swap_button, self.reset_button):
-            buttons.addWidget(button)
-        side.addWidget(hint)
-        side.addWidget(self.from_box)
-        side.addWidget(self.to_box)
-        side.addLayout(criterion_row)
-        side.addLayout(buttons)
-        side.addWidget(self.banner)
-        side.addWidget(self.route_panel, 1)
+        """Side panel and map side by side; tab order follows the panel top to bottom."""
         right = QVBoxLayout()
         right.addWidget(self.panel_toggle, 0, Qt.AlignmentFlag.AlignLeft)
         right.addWidget(self.map, 1)
@@ -118,8 +87,7 @@ class MainWindow(QMainWindow):
         row.addWidget(self.panel)
         row.addLayout(right, 1)
         self.setCentralWidget(body)
-        order = [self.from_box.field, self.to_box.field, self.criterion, self.find_button,
-                 self.swap_button, self.reset_button, self.route_panel.rows, self.map]
+        order = [*self.panel.tab_chain(), self.map]
         for a, b in zip(order, order[1:]):
             self.setTabOrder(a, b)
 
