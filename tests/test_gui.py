@@ -49,7 +49,8 @@ def test_full_workflow_shows_route(qtbot):
     choose(window, "A", "F")
     qtbot.waitUntil(lambda: window.state.phase == "RouteShown")
     assert window.route_panel.summary.text() == "Estimated 12 min · 1 interchange · 3 stops"
-    assert window.route_panel.rows.count() == 3  # leg, change, leg
+    rows = window.route_panel.rows  # leg, its closed station list, change, leg
+    assert [rows.item(i).text()[:2] for i in range(rows.count())] == ["1.", "▶ ", "⇒ ", "2."]
     assert window.map.overlay.items
 
 
