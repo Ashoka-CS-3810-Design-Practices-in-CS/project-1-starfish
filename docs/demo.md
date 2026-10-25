@@ -59,7 +59,7 @@ Start with `python main.py`. Each scenario lists what to do, what the audience s
 1. With a route on screen press **☆ Add to favourites**; it becomes **★ Saved - click to remove**.
 2. Press **Reset (Esc)**, open **Favourites** and choose the saved route: both fields, the Criterion box and the route come back.
 3. Press **Export**. *Copy to clipboard* and paste into any editor. *Save as Markdown…* writes a `.md` file with a heading, the summary and every station of every leg.
-4. To show that a failed save does not lose the route, save into a folder you cannot write to: a red message appears in the banner and the route stays.
+4. If a file cannot be written (a full disk, a folder that went read-only), a red message appears in the banner and the route stays on screen. The tests simulate this; the operating system's own save dialog may stop you before it can happen, so it is not worth trying live.
 5. Close and reopen the program: the favourite is still there.
 
 ## 11. Dark theme, map buttons and crowded labels (Could tier, [D50], [D51], [D55])
