@@ -45,6 +45,14 @@ def interchange_text(network: Network, ic: Interchange) -> str:
     return f"⇒ Change at {at} ({mins} min)"
 
 
+def interchange_badge_text(network: Network, ic: Interchange) -> str:
+    """Short label for a change drawn on the map: '⇄ Change at X' or '⇄ Walk X → Y'."""
+    at = station_name(network, ic.at_station)
+    if ic.is_walk:
+        return f"⇄ Walk {at} → {station_name(network, ic.to_station)}"
+    return f"⇄ Change at {at}"
+
+
 def route_steps(route: Route) -> list[Leg | Interchange]:
     """Legs and interchanges in the order a traveller meets them: a change sits between two
     rides, never before the first or after the last."""

@@ -1,18 +1,30 @@
-"""The route drawn on top of the dimmed network (FR10, [D20]).
+"""The route drawn on top of the dimmed network (FR10, FR11, [D20], [D52]).
 
 Legs alternate between a solid line and the same colour with a white dashed centre, so
 neighbouring legs can be told apart without relying on colour. Walks are dotted grey.
+Every station on the route gets a small disc, and every change gets a ringed badge with a
+label, so the stations and the places to change stay readable over the dimmed network.
 """
 
 from PySide6.QtCore import QPointF, QRectF, Qt
-from PySide6.QtGui import QBrush, QColor, QPen
-from PySide6.QtWidgets import QGraphicsEllipseItem, QGraphicsItem, QGraphicsScene
+from PySide6.QtGui import QBrush, QColor, QFont, QPen
+from PySide6.QtWidgets import (
+    QGraphicsEllipseItem,
+    QGraphicsItem,
+    QGraphicsRectItem,
+    QGraphicsScene,
+    QGraphicsSimpleTextItem,
+)
 
-from metro.models import Network, Route
+from metro.describe import interchange_badge_text
+from metro.models import Interchange, Network, Route
 
 WALK_COLOUR = QColor("#666666")
 SOURCE_COLOUR = QColor("#1A7F37")
 DESTINATION_COLOUR = QColor("#C62828")
+DOT_RADIUS = 4
+BADGE_RADIUS = 9
+BADGE_OFFSETS = ((12, -30), (12, 10))  # label corner relative to the ring; alternate up/down
 
 
 def cosmetic_pen(colour: QColor, width: float, style=Qt.PenStyle.SolidLine) -> QPen:
@@ -31,6 +43,8 @@ class RouteOverlay:
         self.scene = scene
         self.point_of = point_of
         self.items: list[QGraphicsItem] = []
+        self.dots: list[QGraphicsItem] = []
+        self.badges: list[QGraphicsSimpleTextItem] = []
         self.selection: list[QGraphicsItem] = []
 
     def draw(self, route: Route, network: Network) -> QRectF:
@@ -53,6 +67,9 @@ class RouteOverlay:
             if ic.is_walk:
                 walk = [self.point_of(ic.at_station), self.point_of(ic.to_station)]
                 self.add_path(walk, cosmetic_pen(WALK_COLOUR, 4, Qt.PenStyle.DotLine))
+        self.add_dots(route)
+        for number, ic in enumerate(route.interchanges):
+            self.add_badge(network, ic, number)
         if not points:
             return QRectF()
         xs, ys = [p.x() for p in points], [p.y() for p in points]
@@ -65,11 +82,60 @@ class RouteOverlay:
             item.setZValue(5)
             self.items.append(item)
 
+    def add_disc(self, station: str, radius: float, fill: QColor, pen: QPen,
+                 z: float) -> QGraphicsEllipseItem:
+        """A circle of constant pixel size centred on a station, tracked for clearing."""
+        disc = QGraphicsEllipseItem(-radius, -radius, 2 * radius, 2 * radius)
+        disc.setPos(self.point_of(station))
+        disc.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations)
+        disc.setPen(pen)
+        disc.setBrush(QBrush(fill))
+        disc.setZValue(z)
+        self.scene.addItem(disc)
+        self.items.append(disc)
+        return disc
+
+    def add_dots(self, route: Route) -> None:
+        """A small white disc with a dark rim on every station the route passes."""
+        seen: set[str] = set()
+        for leg in route.legs:
+            for station in leg.stations:
+                if station not in seen:
+                    seen.add(station)
+                    self.dots.append(self.add_disc(station, DOT_RADIUS, QColor("white"),
+                                                   cosmetic_pen(QColor("#222222"), 2), 5.5))
+
+    def add_badge(self, network: Network, ic: Interchange, number: int) -> None:
+        """A heavy ring on the change station(s) and a boxed label such as '⇄ Change at X'.
+
+        Labels of neighbouring changes alternate above and below so they rarely collide."""
+        for station in dict.fromkeys((ic.at_station, ic.to_station)):
+            self.add_disc(station, BADGE_RADIUS, QColor("white"),
+                          cosmetic_pen(QColor("#111111"), 3.5), 6.5)
+        label = QGraphicsSimpleTextItem(interchange_badge_text(network, ic))
+        font = QFont(label.font())
+        font.setBold(True)
+        label.setFont(font)
+        label.setBrush(QBrush(QColor("#111111")))
+        label.setPos(self.point_of(ic.at_station))
+        label.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations)
+        label.setTransform(label.transform().translate(*BADGE_OFFSETS[number % 2]))
+        label.setZValue(7)
+        box = QGraphicsRectItem(label.boundingRect().adjusted(-5, -2, 5, 2), label)
+        box.setBrush(QBrush(QColor(255, 255, 255, 235)))
+        box.setPen(cosmetic_pen(QColor("#111111"), 1.5))
+        box.setFlag(QGraphicsItem.GraphicsItemFlag.ItemStacksBehindParent)
+        self.scene.addItem(label)
+        self.items.append(label)
+        self.badges.append(label)
+
     def clear(self) -> None:
         """Remove every overlay item (the selection rings stay)."""
         for item in self.items:
             self.scene.removeItem(item)
         self.items = []
+        self.dots = []
+        self.badges = []
 
     def mark_selection(self, source: str | None, destination: str | None) -> None:
         """Draw a ring around the source (green, solid) and destination (red, dashed)."""

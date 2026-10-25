@@ -157,6 +157,10 @@ class MapView(QGraphicsView):
         for item in self.network_items:
             item.setOpacity(0.25)
         rect = self.overlay.draw(route, self.network)
+        for leg in route.legs:  # the route's own stations and names stay crisp
+            for sid in leg.stations:
+                self.markers[sid].setOpacity(1.0)
+                self.labels[sid].setOpacity(1.0)
         self.fit_rect(rect)
 
     def clear_route(self) -> None:
