@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (
 
 from metro import app_state as st
 from metro.alternatives import find_alternative_routes
+from metro.favorites import Favorite
 from metro.graph import RoutingGraph
 from metro.models import Network
 from metro.router import find_route
@@ -67,13 +68,14 @@ class MainWindow(QMainWindow):
 
     def build_widgets(self) -> None:
         """Create the side panel, the map and the controls around them (A3 [D20])."""
-        self.panel = SidePanel(self.network)
+        self.panel = SidePanel(self.network, self.settings)
         # Short names for the panel's widgets, used by the handlers below and by the tests.
         self.from_box, self.to_box = self.panel.from_box, self.panel.to_box
         self.criterion = self.panel.criterion
         self.find_button, self.swap_button = self.panel.find_button, self.panel.swap_button
         self.reset_button = self.panel.reset_button
         self.banner, self.route_panel = self.panel.banner, self.panel.route_panel
+        self.favorites = self.panel.favorites
         self.map = MapView(self.network, theme=self.theme)
         self.setStyleSheet(self.theme.stylesheet)
         self.panel_toggle = QToolButton()
@@ -116,6 +118,7 @@ class MainWindow(QMainWindow):
         self.reset_button.clicked.connect(self.reset)
         self.banner.action.connect(lambda name: self.find() if name == "Retry" else self.reset())
         self.route_panel.leg_clicked.connect(self.map.focus_leg)
+        self.favorites.chosen.connect(self.on_favorite)
         self.route_panel.alternative_chosen.connect(self.on_alternative)
         self.route_panel.compare_requested.connect(self.show_comparison)
         self.panel_toggle.toggled.connect(self.panel.setVisible)
@@ -143,6 +146,12 @@ class MainWindow(QMainWindow):
         """Remember the criterion and recompute at once if both stations are set ([D49])."""
         self.apply(st.set_criterion(self.state, self.criterion.itemData(index)))
         self.find()  # does nothing unless both stations are valid
+
+    def on_favorite(self, source: str, destination: str, criterion: str) -> None:
+        """A saved route was picked: fill both stations and the criterion, then search."""
+        self.runner.cancel()
+        self.apply(st.load_route(self.state, self.network, source, destination, criterion))
+        self.find_if_ready()
 
     def on_alternative(self, index: int) -> None:
         """A route tab (or the comparison) picked another route for the same journey."""
@@ -256,6 +265,7 @@ class MainWindow(QMainWindow):
         for box, station in ((self.from_box, state.source), (self.to_box, state.destination)):
             if box.chosen != station:
                 box.set_station(station)
+        self.sync_criterion(state.criterion)
         self.show_missing_hint(self.from_box, state.destination and not state.source)
         self.show_missing_hint(self.to_box, state.source and not state.destination)
         ok, reason = st.can_find(state, self.network)
@@ -266,13 +276,29 @@ class MainWindow(QMainWindow):
             self.statusBar().clearMessage()
         self.map.set_selection(state.source, state.destination)
         if state.route is not self.shown_route:
-            self.shown_route = state.route
-            self.route_panel.show_route(state.route)
-            self.route_panel.show_alternatives(state.alternatives, state.selected)
-            if state.route is None:
-                self.map.clear_route()
-            else:
-                self.map.show_route(state.route)
+            self.show_route_state(state)
+        route = state.route
+        self.favorites.set_journey(
+            Favorite(route.source, route.destination, state.criterion) if route else None)
+
+    def show_route_state(self, state: st.AppState) -> None:
+        """The route on screen changed (or went away): redraw the panel, tabs and map."""
+        self.shown_route = state.route
+        self.route_panel.show_route(state.route)
+        self.route_panel.show_alternatives(state.alternatives, state.selected)
+        if state.route is None:
+            self.map.clear_route()
+        else:
+            self.map.show_route(state.route)
+
+    def sync_criterion(self, criterion: str) -> None:
+        """Make the Criterion box show the state's criterion (a loaded favourite may differ),
+        without triggering a search of its own."""
+        index = self.criterion.findData(criterion)
+        if index != self.criterion.currentIndex():
+            self.criterion.blockSignals(True)
+            self.criterion.setCurrentIndex(index)
+            self.criterion.blockSignals(False)
 
     def show_missing_hint(self, box: SearchBox, missing: bool) -> None:
         """ER1: "Select a source and a destination station." under the empty field."""
