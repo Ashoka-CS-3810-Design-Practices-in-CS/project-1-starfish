@@ -8,6 +8,8 @@ from metro.app_state import (
     MSG_SAME,
     AppState,
     can_find,
+    choose_alternative,
+    load_route,
     reset,
     route_failed,
     route_found,
@@ -16,6 +18,7 @@ from metro.app_state import (
     select_from_map,
     select_source,
     set_criterion,
+    show_message,
     start_computing,
     swap,
 )
@@ -114,3 +117,69 @@ def test_updates_never_mutate():
     swap(before)
     reset(before)
     assert (before.source, before.destination) == ("A", "F")
+
+
+# ---- alternatives, saved routes and messages ([D47]–[D49]) ------------------------------
+
+
+def two_routes():
+    """TM2 (fastest) and TM6 (fewest stops) for A -> F."""
+    graph = build_graph(NET)
+    return find_route(graph, NET, "A", "F"), find_route(graph, NET, "A", "F", "fewest_stops")
+
+
+def test_route_found_puts_the_shown_route_first_without_duplicates():
+    """The alternatives list starts with the route on screen and lists each route once."""
+    fast, few = two_routes()
+    state = route_found(ready(), few, (fast, few, fast))
+    assert state.route == few and state.alternatives == (few, fast)
+    assert state.selected == 0
+
+
+def test_choose_alternative_switches_the_route_and_keeps_the_list():
+    """Choosing index 1 shows the second route; the list stays so the user can go back."""
+    fast, few = two_routes()
+    state = choose_alternative(route_found(ready(), fast, (fast, few)), 1)
+    assert state.route == few and state.alternatives == (fast, few) and state.selected == 1
+
+
+def test_choose_alternative_ignores_a_bad_index():
+    """Out-of-range indexes (stale clicks) change nothing."""
+    fast, few = two_routes()
+    state = route_found(ready(), fast, (fast, few))
+    assert choose_alternative(state, 5) is state and choose_alternative(state, -1) is state
+
+
+def test_choosing_stations_or_swapping_clears_the_alternatives():
+    """The old alternatives belong to the old stations."""
+    fast, few = two_routes()
+    shown = route_found(ready(), fast, (fast, few))
+    assert select_destination(shown, NET, "E").alternatives == ()
+    assert swap(shown).alternatives == ()
+    assert route_not_found(shown, NET).alternatives == ()
+
+
+def test_load_route_sets_everything_and_clears_the_route():
+    """A saved favourite fills both stations and the criterion; a search is still needed."""
+    fast, _ = two_routes()
+    state = load_route(route_found(ready(), fast), NET, "B", "E", "fewest_stops")
+    assert (state.source, state.destination, state.criterion) == ("B", "E", "fewest_stops")
+    assert state.route is None and state.message is None
+    assert can_find(state, NET) == (True, "")
+
+
+def test_load_route_refuses_a_closed_station_and_changes_nothing_else():
+    """ER6 applies to a favourite whose station has since closed."""
+    before = ready()
+    state = load_route(before, CLOSED_C, "C", "E", "fastest")
+    assert state.message == "Station Station C is closed and cannot be used."
+    assert (state.source, state.destination) == ("A", "F") and state.message_kind == "error"
+
+
+def test_show_message_only_changes_the_message():
+    """Used for export problems: the route and selection stay."""
+    fast, _ = two_routes()
+    shown = route_found(ready(), fast)
+    state = show_message(shown, "Could not save.", "error")
+    assert state.message == "Could not save." and state.message_kind == "error"
+    assert state.route == fast and state.source == "A"

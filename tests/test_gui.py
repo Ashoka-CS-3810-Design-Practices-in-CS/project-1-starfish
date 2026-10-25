@@ -217,3 +217,41 @@ def test_criterion_change_then_find(qtbot):
     qtbot.mouseClick(window.find_button, Qt.MouseButton.LeftButton)
     qtbot.waitUntil(lambda: window.state.route.stops == 2)
     assert window.state.route.total_s == 780
+
+
+def test_changing_the_criterion_recomputes_without_pressing_find(qtbot):
+    """[D49] With a route on screen, picking Fewest stops shows the TM6 route by itself."""
+    window = make_window(qtbot)
+    choose(window, "A", "F")
+    qtbot.waitUntil(lambda: window.state.phase == "RouteShown")
+    assert window.state.route.stops == 3
+    window.criterion.setCurrentIndex(2)
+    qtbot.waitUntil(lambda: window.state.route is not None and window.state.route.stops == 2)
+    assert window.state.route.total_s == 780
+
+
+def test_changing_the_criterion_with_no_stations_does_nothing(qtbot):
+    """No search starts when From and To are not both chosen."""
+    window = make_window(qtbot)
+    window.criterion.setCurrentIndex(1)
+    assert window.state.criterion == "fewest_changes" and window.state.phase == "Idle"
+
+
+def test_a_found_route_comes_with_alternatives(qtbot):
+    """After a search the state lists the route first, then the other routes for A -> F."""
+    window = make_window(qtbot)
+    choose(window, "A", "F")
+    qtbot.waitUntil(lambda: window.state.phase == "RouteShown")
+    assert window.state.alternatives[0] == window.state.route
+    assert {r.stops for r in window.state.alternatives} >= {2, 3}
+
+
+def test_failing_alternatives_still_show_the_route(qtbot, monkeypatch):
+    """If finding alternatives raises, the main route is shown and the error is only logged."""
+    def boom(*args, **kwargs):
+        raise RuntimeError("no alternatives today")
+    monkeypatch.setattr("metro.ui.main_window.find_alternative_routes", boom)
+    window = make_window(qtbot)
+    choose(window, "A", "F")
+    qtbot.waitUntil(lambda: window.state.phase == "RouteShown")
+    assert window.state.alternatives == (window.state.route,)

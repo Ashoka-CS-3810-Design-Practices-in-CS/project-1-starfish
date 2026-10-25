@@ -23,6 +23,7 @@ class AppState:
     destination: str | None = None
     criterion: str = "fastest"
     route: Route | None = None
+    alternatives: tuple[Route, ...] = ()  # the route on screen first; see metro.alternatives
     computing: bool = False
     message: str | None = None  # banner text
     message_kind: str | None = None  # "error" or "info"
@@ -41,6 +42,11 @@ class AppState:
             return "Ready"
         return "Partial" if self.source or self.destination else "Idle"
 
+    @property
+    def selected(self) -> int:
+        """Index in `alternatives` of the route on screen (0 if it is not listed)."""
+        return self.alternatives.index(self.route) if self.route in self.alternatives else 0
+
 
 def closed_message(network: Network, station_id: str) -> str:
     """ER6 text for a closed station."""
@@ -56,8 +62,8 @@ def select_station(state: AppState, network: Network, field: str,
     """
     if station_id is not None and network.stations[station_id].closed:
         return replace(state, message=closed_message(network, station_id), message_kind="error")
-    new = replace(state, route=None, no_route=False, message=None, message_kind=None,
-                  **{field: station_id})
+    new = replace(state, route=None, alternatives=(), no_route=False, message=None,
+                  message_kind=None, **{field: station_id})
     if new.source is not None and new.source == new.destination:
         return replace(new, message=MSG_SAME, message_kind="error")  # ER5
     return new
@@ -91,7 +97,7 @@ def set_criterion(state: AppState, criterion: str) -> AppState:
 def swap(state: AppState) -> AppState:
     """Exchange source and destination; the old route no longer matches, so clear it."""
     return replace(state, source=state.destination, destination=state.source, route=None,
-                   no_route=False, message=None, message_kind=None)
+                   alternatives=(), no_route=False, message=None, message_kind=None)
 
 
 def reset(state: AppState) -> AppState:
@@ -116,16 +122,44 @@ def start_computing(state: AppState) -> AppState:
     return replace(state, computing=True, message=None, message_kind=None)
 
 
-def route_found(state: AppState, route: Route) -> AppState:
-    """The search succeeded."""
-    return replace(state, computing=False, route=route, no_route=False,
-                   message=None, message_kind=None)
+def route_found(state: AppState, route: Route,
+                alternatives: tuple[Route, ...] = ()) -> AppState:
+    """The search succeeded. `route` is shown and always comes first in the alternatives,
+    each route appearing once."""
+    others = tuple(dict.fromkeys(r for r in alternatives if r != route))
+    return replace(state, computing=False, route=route, alternatives=(route, *others),
+                   no_route=False, message=None, message_kind=None)
+
+
+def choose_alternative(state: AppState, index: int) -> AppState:
+    """Show another of the routes found for the same stations; a bad index changes nothing."""
+    if not 0 <= index < len(state.alternatives):
+        return state
+    return replace(state, route=state.alternatives[index])
+
+
+def load_route(state: AppState, network: Network, source: str, destination: str,
+               criterion: str) -> AppState:
+    """Set both stations and the criterion at once (a saved favourite), with no route yet.
+
+    A closed station is refused with the ER6 message and nothing changes."""
+    for station_id in (source, destination):
+        if network.stations[station_id].closed:
+            return show_message(state, closed_message(network, station_id), "error")
+    return replace(state, source=source, destination=destination, criterion=criterion,
+                   route=None, alternatives=(), no_route=False, message=None, message_kind=None)
+
+
+def show_message(state: AppState, text: str, kind: str) -> AppState:
+    """Put a message in the banner ("error" or "info") without touching anything else."""
+    return replace(state, message=text, message_kind=kind)
 
 
 def route_not_found(state: AppState, network: Network) -> AppState:
     """The search finished without a route (ER7)."""
     names = [network.stations[s].name for s in (state.source, state.destination)]
-    return replace(state, computing=False, route=None, no_route=True, message_kind="info",
+    return replace(state, computing=False, route=None, alternatives=(), no_route=True,
+                   message_kind="info",
                    message=f"No route found between {names[0]} and {names[1]} "
                            "with the current closures.")
 

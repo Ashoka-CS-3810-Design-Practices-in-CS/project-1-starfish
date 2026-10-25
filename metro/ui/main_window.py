@@ -4,6 +4,8 @@ All decisions about *what* to show live in `metro.app_state`. This file only tur
 actions into AppState updates and then redraws everything from the new state (`apply`).
 """
 
+import logging
+
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QKeySequence, QShortcut
 from PySide6.QtWidgets import (
@@ -18,6 +20,8 @@ from PySide6.QtWidgets import (
 )
 
 from metro import app_state as st
+from metro.alternatives import find_alternative_routes
+from metro.describe import CRITERION_LABELS
 from metro.graph import RoutingGraph
 from metro.models import Network
 from metro.router import find_route
@@ -26,8 +30,9 @@ from metro.ui.route_panel import Banner, RoutePanel
 from metro.ui.search_box import SearchBox
 from metro.ui.worker import RouteRunner
 
-CRITERIA = [("Fastest", "fastest"), ("Fewest interchanges", "fewest_changes"),
-            ("Fewest stops", "fewest_stops")]
+log = logging.getLogger(__name__)
+
+CRITERIA = [(text, key) for key, text in CRITERION_LABELS.items()]
 NARROW_PX = 1100  # below this width the side panel hides behind a toggle
 
 
@@ -39,6 +44,7 @@ class MainWindow(QMainWindow):
         """`find` and `watchdog_ms` only change in tests (a slow fake, a short watchdog)."""
         super().__init__()
         self.network = network
+        self.graph = graph
         self.state = st.AppState()
         self.shown_route = None
         self.runner = RouteRunner(graph, network, find, watchdog_ms)
@@ -151,8 +157,9 @@ class MainWindow(QMainWindow):
         self.find_if_ready()
 
     def on_criterion(self, index: int) -> None:
-        """Remember the criterion; the Find button recomputes with it."""
+        """Remember the criterion and recompute at once if both stations are set ([D49])."""
         self.apply(st.set_criterion(self.state, self.criterion.itemData(index)))
+        self.find()  # does nothing unless both stations are valid
 
     def find_if_ready(self) -> None:
         """Searching starts automatically once both stations are valid (§6.5)."""
@@ -192,8 +199,19 @@ class MainWindow(QMainWindow):
         if route is None:
             self.apply(st.route_not_found(self.state, self.network))
         else:
-            self.apply(st.route_found(self.state, route))
+            self.apply(st.route_found(self.state, route, self.alternatives_for(route)))
             self.statusBar().showMessage("Route found. Map fitted to route.", 5000)
+
+    def alternatives_for(self, route) -> tuple:
+        """Other routes for the same stations. They are optional: if finding them fails, the
+        route is still shown and the problem is only logged."""
+        try:
+            return tuple(find_alternative_routes(self.graph, self.network, route.source,
+                                                 route.destination, self.state.criterion))
+        except Exception:
+            log.exception("Could not find alternatives for %s -> %s",
+                          route.source, route.destination)
+            return ()
 
     def on_failed(self, message: str) -> None:
         """Timeout or unexpected error: keep everything, offer Retry (ER13, ER17)."""
