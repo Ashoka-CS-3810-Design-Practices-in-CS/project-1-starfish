@@ -8,6 +8,7 @@ Usage: python tools/route_cli.py data "Rajiv Chowk" "Hauz Khas" [criterion] [--s
 
 import sys
 
+from metro.console import use_utf8_output
 from metro.data import load_network
 from metro.describe import route_lines
 from metro.errors import DataError, DatasetUnreadable
@@ -30,6 +31,7 @@ def pick_station(index, text: str) -> str | None:
 
 def main(argv: list[str]) -> int:
     """Run one query from the command line; return the process exit code."""
+    use_utf8_output()  # a Windows console in cp1252 cannot print → and ⇒
     expand = "--stations" in argv
     argv = [a for a in argv if a != "--stations"]
     if len(argv) not in (4, 5) or (len(argv) == 5 and argv[4] not in KEY_FUNCTIONS):

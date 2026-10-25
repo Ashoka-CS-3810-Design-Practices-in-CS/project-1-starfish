@@ -4,6 +4,7 @@ Usage: python main.py [data-folder]     (default: the data/ folder next to this 
 """
 
 import logging
+import os
 import sys
 from pathlib import Path
 
@@ -11,12 +12,51 @@ from PySide6.QtCore import QUrl
 from PySide6.QtGui import QDesktopServices
 from PySide6.QtWidgets import QApplication, QLabel, QMessageBox
 
+from metro.console import use_utf8_output
 from metro.data import load_network
 from metro.errors import DataError, DatasetUnreadable
 from metro.graph import build_graph
 from metro.ui.main_window import MainWindow
 
 DEFAULT_DATA = Path(__file__).resolve().parent / "data"
+LOG_NAME = "metro.log"
+LOG_FORMAT = "%(asctime)s %(levelname)s %(name)s: %(message)s"
+
+
+def user_log_folder() -> Path:
+    """The per-user folder for the log when the current folder cannot be written to."""
+    if sys.platform == "win32":
+        base = Path(os.environ.get("APPDATA") or Path.home() / "AppData" / "Roaming")
+        return base / "DelhiMetroPlanner"
+    if sys.platform == "darwin":
+        return Path.home() / "Library" / "Logs" / "DelhiMetroPlanner"
+    state = os.environ.get("XDG_STATE_HOME") or Path.home() / ".local" / "state"
+    return Path(state) / "DelhiMetroPlanner"
+
+
+def setup_logging(candidates: list[Path] | None = None,
+                  logger: logging.Logger | None = None) -> Path | None:
+    """Log to the first file we can open, else to stderr; return the file used (or None).
+
+    A read-only start folder (an installed copy, a locked-down lab PC) must not stop the app
+    from starting, so a failure to open the log is never an error.
+    """
+    logger = logger or logging.getLogger()
+    paths = candidates or [Path(LOG_NAME), user_log_folder() / LOG_NAME]
+    handler: logging.Handler = logging.StreamHandler()
+    used = None
+    for path in paths:
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            handler = logging.FileHandler(path, encoding="utf-8")
+            used = path
+            break
+        except OSError:
+            continue
+    handler.setFormatter(logging.Formatter(LOG_FORMAT))
+    logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
+    return used
 
 
 def problems_text(error: Exception, folder: Path) -> str:
@@ -46,8 +86,8 @@ def show_data_error(error: Exception, folder: Path) -> None:
 
 def main(argv: list[str]) -> int:
     """Run the app; returns the process exit code (1 when the data cannot be loaded)."""
-    logging.basicConfig(filename="metro.log", level=logging.INFO,
-                        format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+    use_utf8_output()
+    setup_logging()
     app = QApplication(argv)
     folder = Path(argv[1]) if len(argv) > 1 else DEFAULT_DATA
     splash = QLabel("Loading network…")
