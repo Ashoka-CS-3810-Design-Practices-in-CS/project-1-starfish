@@ -104,8 +104,11 @@ def find_alternative_routes(graph: RoutingGraph, network: Network, src: str, dst
 
 def route_badges(routes: list[Route]) -> list[tuple[str, ...]]:
     """For each route, the criteria it wins among `routes` (ties win together)."""
+    if not routes:
+        return []
     costs = [route_cost(r) for r in routes]
     best = {name: min(c[i] for c in costs)
             for name, i in zip(CRITERION_LABELS.values(), (0, 1, 2))}
     return [tuple(name for name, i in zip(CRITERION_LABELS.values(), (0, 1, 2))
                   if cost[i] == best[name]) for cost in costs]
+

@@ -1,7 +1,8 @@
-"""Route details and the message banner (FR7, FR8, FR14, [D19], [D20], [D53]).
+"""Route details and the message banner (FR7, FR8, FR14, [D19], [D20], [D53], [D56]).
 
 Each leg row shows a colour swatch *and* the line name, so colour is never the only cue.
 A ride with stations in between has a "▶ N stations in between" row that opens the list.
+When there are alternative routes, tabs above the summary switch between them.
 """
 
 from PySide6.QtCore import QEvent, Qt, Signal
@@ -12,10 +13,12 @@ from PySide6.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QPushButton,
+    QTabBar,
     QVBoxLayout,
     QWidget,
 )
 
+from metro.alternatives import route_badges
 from metro.describe import (
     between_names,
     interchange_text,
@@ -75,12 +78,28 @@ class RoutePanel(QWidget):
     """Summary line plus one row per leg and per interchange. Emits `leg_clicked(leg)`."""
 
     leg_clicked = Signal(object)
+    alternative_chosen = Signal(int)  # index in the alternatives
+    compare_requested = Signal()
 
     def __init__(self, network: Network, parent=None):
         """Empty until a route is shown."""
         super().__init__(parent)
         self.network = network
         self.route: Route | None = None
+        self.tabs = QTabBar()
+        self.tabs.setAccessibleName("Alternative routes")
+        self.tabs.setExpanding(True)
+        self.tabs.setUsesScrollButtons(False)  # three short tabs always fit in the panel
+        self.tabs.currentChanged.connect(self.on_tab_changed)
+        self.tabs.hide()
+        self.caption = QLabel()  # what the selected route is best at; tabs have no room for it
+        self.caption.setAccessibleName("What this route is best at")
+        self.caption.hide()
+        self.badges: list[tuple[str, ...]] = []
+        self.compare_button = QPushButton("Compare routes")
+        self.compare_button.setAccessibleName("Compare routes")
+        self.compare_button.clicked.connect(self.compare_requested)
+        self.compare_button.hide()
         self.expanded: set[int] = set()  # indexes in route.legs whose stations are listed
         self.summary = QLabel()
         self.summary.setWordWrap(True)
@@ -97,9 +116,43 @@ class RoutePanel(QWidget):
         self.rows.installEventFilter(self)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(self.tabs)
+        layout.addWidget(self.caption)
         layout.addWidget(self.summary)
         layout.addWidget(self.rows, 1)
+        layout.addWidget(self.compare_button)
         self.show_route(None)
+
+    def show_alternatives(self, routes: tuple[Route, ...], selected: int) -> None:
+        """One tab per alternative and, under them, what the selected route is best at; all
+        hidden when there is nothing to choose between. Setting the tab here does not send
+        `alternative_chosen`."""
+        self.tabs.blockSignals(True)
+        while self.tabs.count():
+            self.tabs.removeTab(0)
+        self.badges = route_badges(list(routes))
+        for number, (route, badges) in enumerate(zip(routes, self.badges), 1):
+            self.tabs.addTab(f"Route {number}")
+            self.tabs.setTabToolTip(number - 1, f"{summary_text(route)}"
+                                    + (f" - {', '.join(badges)}" if badges else ""))
+        if routes:
+            self.tabs.setCurrentIndex(selected)
+        self.tabs.blockSignals(False)
+        self.update_caption()
+        many = len(routes) > 1
+        for widget in (self.tabs, self.caption, self.compare_button):
+            widget.setVisible(many)
+
+    def on_tab_changed(self, index: int) -> None:
+        """The user picked a tab: update the caption and tell the window."""
+        self.update_caption()
+        self.alternative_chosen.emit(index)
+
+    def update_caption(self) -> None:
+        """'Best at: Fastest, Fewest interchanges' for the selected tab."""
+        index = self.tabs.currentIndex()
+        best = self.badges[index] if 0 <= index < len(self.badges) else ()
+        self.caption.setText("Best at: " + (", ".join(best) if best else "-"))
 
     def show_route(self, route: Route | None) -> None:
         """Fill the panel from a route, or empty it. Every station list starts closed."""

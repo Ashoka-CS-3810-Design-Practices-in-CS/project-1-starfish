@@ -196,16 +196,21 @@ def test_startup_error_text_lists_problems(broken_dataset):
 
 
 def test_accessibility_baseline(qtbot):
-    """[D20] Every control has an accessible name; the route rows name the line in words."""
+    """[D20] Every control has an accessible name, before and after a route (with its tabs
+    and Compare button) appears; the route rows name the line in words."""
     from PySide6.QtWidgets import QAbstractButton, QComboBox, QLineEdit, QListWidget
     window = make_window(qtbot)
-    controls = window.findChildren(QAbstractButton) + window.findChildren(QLineEdit) + \
-        window.findChildren(QComboBox) + window.findChildren(QListWidget)
-    unnamed = [w for w in controls if w.isVisible() and not w.accessibleName()
-               and w.parent() is not None and w.objectName() != "qt_spinbox_lineedit"]
-    assert unnamed == []
+
+    def unnamed() -> list:
+        controls = window.findChildren(QAbstractButton) + window.findChildren(QLineEdit) + \
+            window.findChildren(QComboBox) + window.findChildren(QListWidget)
+        return [w for w in controls if w.isVisible() and not w.accessibleName()
+                and w.parent() is not None and w.objectName() != "qt_spinbox_lineedit"]
+    assert unnamed() == []
     choose(window, "A", "F")
     qtbot.waitUntil(lambda: window.state.phase == "RouteShown")
+    assert window.route_panel.tabs.isVisible()
+    assert unnamed() == []
     assert "Red Line" in window.route_panel.rows.item(0).text()
 
 

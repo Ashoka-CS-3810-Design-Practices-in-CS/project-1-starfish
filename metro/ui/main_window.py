@@ -23,6 +23,7 @@ from metro.graph import RoutingGraph
 from metro.models import Network
 from metro.router import find_route
 from metro.ui.app_settings import app_settings
+from metro.ui.compare_dialog import RouteCompareDialog
 from metro.ui.map_view import MapView
 from metro.ui.search_box import SearchBox
 from metro.ui.side_panel import SidePanel
@@ -49,6 +50,7 @@ class MainWindow(QMainWindow):
         self.state = st.AppState()
         self.shown_route = None
         self.station_dialog: StationDialog | None = None
+        self.compare_dialog: RouteCompareDialog | None = None
         self.runner = RouteRunner(graph, network, find, watchdog_ms)
         self.runner.found.connect(self.on_found)
         self.runner.failed.connect(self.on_failed)
@@ -114,6 +116,8 @@ class MainWindow(QMainWindow):
         self.reset_button.clicked.connect(self.reset)
         self.banner.action.connect(lambda name: self.find() if name == "Retry" else self.reset())
         self.route_panel.leg_clicked.connect(self.map.focus_leg)
+        self.route_panel.alternative_chosen.connect(self.on_alternative)
+        self.route_panel.compare_requested.connect(self.show_comparison)
         self.panel_toggle.toggled.connect(self.panel.setVisible)
 
     def add_shortcuts(self) -> None:
@@ -139,6 +143,20 @@ class MainWindow(QMainWindow):
         """Remember the criterion and recompute at once if both stations are set ([D49])."""
         self.apply(st.set_criterion(self.state, self.criterion.itemData(index)))
         self.find()  # does nothing unless both stations are valid
+
+    def on_alternative(self, index: int) -> None:
+        """A route tab (or the comparison) picked another route for the same journey."""
+        self.apply(st.choose_alternative(self.state, index))
+
+    def show_comparison(self) -> None:
+        """Open the side-by-side comparison when there is more than one route ([D56])."""
+        if len(self.state.alternatives) < 2:
+            return
+        dialog = RouteCompareDialog(self.network, self.state.alternatives, self.state.selected,
+                                    self)
+        dialog.route_chosen.connect(self.on_alternative)
+        self.compare_dialog = dialog
+        dialog.show()
 
     def toggle_theme(self) -> None:
         """The map's theme button: light becomes dark and the other way round."""
@@ -250,6 +268,7 @@ class MainWindow(QMainWindow):
         if state.route is not self.shown_route:
             self.shown_route = state.route
             self.route_panel.show_route(state.route)
+            self.route_panel.show_alternatives(state.alternatives, state.selected)
             if state.route is None:
                 self.map.clear_route()
             else:

@@ -127,6 +127,11 @@ def test_masking_removes_only_the_listed_arcs(toy):
     assert sum(map(len, copy.adj)) == sum(map(len, graph.adj)) - 1
 
 
+def test_badges_of_no_routes_is_empty():
+    """A cleared route leaves nothing to badge (the panel asks anyway)."""
+    assert route_badges([]) == []
+
+
 def test_route_cost_counts_an_end_walk_as_a_change(toy):
     """TM10 A -> H is Red then a walk: the router charges the walk as a change."""
     network, graph = toy
@@ -147,3 +152,4 @@ def test_alternatives_p95_under_50_ms(real):
         find_alternative_routes(graph, network, src, dst)
         samples.append(time.perf_counter() - start)
     assert statistics.quantiles(samples, n=20)[-1] <= 0.050 * SLACK
+
