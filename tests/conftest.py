@@ -8,6 +8,7 @@ from dataclasses import replace
 from pathlib import Path
 
 import pytest
+from PySide6.QtCore import QSettings
 
 from metro.models import Network, TransferOverride
 
@@ -63,3 +64,11 @@ def shuffled_copy(src: Path, dst: Path, seed: int) -> Path:
         rng.shuffle(transfers[key])
     (dst / "transfers.json").write_text(json.dumps(transfers))
     return dst
+
+
+@pytest.fixture(autouse=True)
+def isolated_settings(tmp_path):
+    """Every test gets its own empty QSettings folder, so no test reads or overwrites the
+    developer's real saved theme or favourites."""
+    QSettings.setPath(QSettings.Format.IniFormat, QSettings.Scope.UserScope,
+                      str(tmp_path / "qsettings"))

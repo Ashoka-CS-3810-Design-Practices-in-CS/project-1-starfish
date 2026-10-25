@@ -1,4 +1,4 @@
-"""Buttons floating on the corner of the map (Should/Could tier, [D20], [D51]).
+"""Buttons floating on the corner of the map (Should/Could tier, [D20], [D51], [D55]).
 
 Mouse users who have no wheel or never learn the + / - / 0 keys get visible controls.
 The buttons never take keyboard focus by click, so the map keeps its key shortcuts.
@@ -16,6 +16,7 @@ class MapControls(QWidget):
     zoom_in = Signal()
     zoom_out = Signal()
     fit = Signal()
+    theme_toggled = Signal()
 
     def __init__(self, parent=None):
         """Build the column: zoom in, zoom out, fit."""
@@ -29,7 +30,14 @@ class MapControls(QWidget):
                                                self.zoom_out)
         self.fit_button = self.add_button(layout, "Fit", "Fit the whole network",
                                           "Show the whole network (0)", self.fit)
+        self.theme_button = self.add_button(layout, "◐", "Switch theme", "Switch theme",
+                                            self.theme_toggled)
         self.adjustSize()
+
+    def show_theme(self, next_name: str) -> None:
+        """Say what the theme button will switch to ("dark" or "light")."""
+        self.theme_button.setAccessibleName(f"Switch to {next_name} theme")
+        self.theme_button.setToolTip(f"Switch to the {next_name} theme")
 
     def add_button(self, layout: QVBoxLayout, text: str, name: str, tip: str,
                    signal: Signal) -> QToolButton:

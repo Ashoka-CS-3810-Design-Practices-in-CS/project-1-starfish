@@ -18,13 +18,14 @@ from PySide6.QtWidgets import (
 
 from metro.describe import interchange_badge_text
 from metro.models import Interchange, Network, Route
+from metro.ui.theme import LIGHT, Theme
 
-WALK_COLOUR = QColor("#666666")
 SOURCE_COLOUR = QColor("#1A7F37")
 DESTINATION_COLOUR = QColor("#C62828")
 DOT_RADIUS = 4
 BADGE_RADIUS = 9
 BADGE_OFFSETS = ((12, -30), (12, 10))  # label corner relative to the ring; alternate up/down
+GLOW_ALPHA, GLOW_WIDTH = 80, 18  # the soft halo under a route in the dark theme
 
 
 def cosmetic_pen(colour: QColor, width: float, style=Qt.PenStyle.SolidLine) -> QPen:
@@ -38,10 +39,11 @@ def cosmetic_pen(colour: QColor, width: float, style=Qt.PenStyle.SolidLine) -> Q
 class RouteOverlay:
     """Owns the overlay items so they can be removed without touching the network."""
 
-    def __init__(self, scene: QGraphicsScene, point_of):
+    def __init__(self, scene: QGraphicsScene, point_of, theme: Theme = LIGHT):
         """`point_of(station_id)` gives a station's scene position."""
         self.scene = scene
         self.point_of = point_of
+        self.theme = theme
         self.items: list[QGraphicsItem] = []
         self.dots: list[QGraphicsItem] = []
         self.badges: list[QGraphicsSimpleTextItem] = []
@@ -56,9 +58,13 @@ class RouteOverlay:
             stops = [self.point_of(s) for s in leg.stations]
             points += stops
             if leg.kind == "WALK":
-                self.add_path(stops, cosmetic_pen(WALK_COLOUR, 4, Qt.PenStyle.DotLine))
+                self.add_path(stops, cosmetic_pen(QColor(self.theme.walk), 4, Qt.PenStyle.DotLine))
                 continue
             colour = QColor(network.lines[leg.line_id].color)
+            if self.theme.glow:
+                halo = QColor(colour)
+                halo.setAlpha(GLOW_ALPHA)
+                self.add_path(stops, cosmetic_pen(halo, GLOW_WIDTH), 4.5)
             self.add_path(stops, cosmetic_pen(colour, 8))
             if ride_number % 2 == 1:
                 self.add_path(stops, cosmetic_pen(QColor("white"), 2.5, Qt.PenStyle.DashLine))
@@ -66,7 +72,7 @@ class RouteOverlay:
         for ic in route.interchanges:
             if ic.is_walk:
                 walk = [self.point_of(ic.at_station), self.point_of(ic.to_station)]
-                self.add_path(walk, cosmetic_pen(WALK_COLOUR, 4, Qt.PenStyle.DotLine))
+                self.add_path(walk, cosmetic_pen(QColor(self.theme.walk), 4, Qt.PenStyle.DotLine))
         self.add_dots(route)
         for number, ic in enumerate(route.interchanges):
             self.add_badge(network, ic, number)
@@ -75,11 +81,11 @@ class RouteOverlay:
         xs, ys = [p.x() for p in points], [p.y() for p in points]
         return QRectF(min(xs), min(ys), max(xs) - min(xs), max(ys) - min(ys))
 
-    def add_path(self, points: list[QPointF], pen: QPen) -> None:
+    def add_path(self, points: list[QPointF], pen: QPen, z: float = 5) -> None:
         """Draw straight lines through consecutive points, above the network."""
         for a, b in zip(points, points[1:]):
             item = self.scene.addLine(a.x(), a.y(), b.x(), b.y(), pen)
-            item.setZValue(5)
+            item.setZValue(z)
             self.items.append(item)
 
     def add_disc(self, station: str, radius: float, fill: QColor, pen: QPen,
@@ -96,34 +102,35 @@ class RouteOverlay:
         return disc
 
     def add_dots(self, route: Route) -> None:
-        """A small white disc with a dark rim on every station the route passes."""
+        """A small disc with a contrasting rim on every station the route passes."""
         seen: set[str] = set()
         for leg in route.legs:
             for station in leg.stations:
                 if station not in seen:
                     seen.add(station)
-                    self.dots.append(self.add_disc(station, DOT_RADIUS, QColor("white"),
-                                                   cosmetic_pen(QColor("#222222"), 2), 5.5))
+                    self.dots.append(self.add_disc(
+                        station, DOT_RADIUS, QColor(self.theme.dot_fill),
+                        cosmetic_pen(QColor(self.theme.dot_outline), 2), 5.5))
 
     def add_badge(self, network: Network, ic: Interchange, number: int) -> None:
         """A heavy ring on the change station(s) and a boxed label such as '⇄ Change at X'.
 
         Labels of neighbouring changes alternate above and below so they rarely collide."""
         for station in dict.fromkeys((ic.at_station, ic.to_station)):
-            self.add_disc(station, BADGE_RADIUS, QColor("white"),
-                          cosmetic_pen(QColor("#111111"), 3.5), 6.5)
+            self.add_disc(station, BADGE_RADIUS, QColor(self.theme.ring_fill),
+                          cosmetic_pen(QColor(self.theme.ring_outline), 3.5), 6.5)
         label = QGraphicsSimpleTextItem(interchange_badge_text(network, ic))
         font = QFont(label.font())
         font.setBold(True)
         label.setFont(font)
-        label.setBrush(QBrush(QColor("#111111")))
+        label.setBrush(QBrush(QColor(self.theme.badge_text)))
         label.setPos(self.point_of(ic.at_station))
         label.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations)
         label.setTransform(label.transform().translate(*BADGE_OFFSETS[number % 2]))
         label.setZValue(7)
         box = QGraphicsRectItem(label.boundingRect().adjusted(-5, -2, 5, 2), label)
-        box.setBrush(QBrush(QColor(255, 255, 255, 235)))
-        box.setPen(cosmetic_pen(QColor("#111111"), 1.5))
+        box.setBrush(QBrush(QColor(self.theme.badge_fill)))
+        box.setPen(cosmetic_pen(QColor(self.theme.ring_outline), 1.5))
         box.setFlag(QGraphicsItem.GraphicsItemFlag.ItemStacksBehindParent)
         self.scene.addItem(label)
         self.items.append(label)

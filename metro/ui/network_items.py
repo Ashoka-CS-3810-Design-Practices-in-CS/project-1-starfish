@@ -13,8 +13,8 @@ from PySide6.QtWidgets import (
 
 from metro.graph import interchange_stations
 from metro.models import Network
+from metro.ui.theme import LIGHT, Theme
 
-LABEL_COLOUR = QColor("#222222")
 LABEL_OFFSET = (7, -8)  # label's top-left relative to its marker, in pixels
 
 
@@ -31,26 +31,32 @@ def draw_segments(scene: QGraphicsScene, network: Network, point_of) -> list[QGr
     return items
 
 
-def make_marker(sid: str, big: bool, closed: bool, position) -> QGraphicsEllipseItem:
-    """A station dot of constant pixel size; interchanges larger and white, closed grey."""
+def style_marker(marker: QGraphicsEllipseItem, big: bool, closed: bool, theme: Theme) -> None:
+    """Colours of a station dot: interchanges light, closed stations grey. Leaves opacity
+    alone, because that belongs to the route dimming."""
+    marker.setPen(QPen(QColor(theme.marker_outline), 1.5))
+    fill = theme.closed_fill if closed else theme.interchange_fill if big else theme.marker_fill
+    marker.setBrush(QBrush(QColor(fill)))
+
+
+def make_marker(sid: str, big: bool, closed: bool, position, theme: Theme) -> QGraphicsEllipseItem:
+    """A station dot of constant pixel size; interchanges larger."""
     radius = 5 if big else 3
     marker = QGraphicsEllipseItem(-radius, -radius, 2 * radius, 2 * radius)
     marker.setPos(position)
     marker.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations)
-    marker.setPen(QPen(QColor("#333333"), 1.5))
-    marker.setBrush(QBrush(QColor("white" if big else "#555555")))
+    style_marker(marker, big, closed, theme)
     if closed:
-        marker.setBrush(QBrush(QColor("#BBBBBB")))
         marker.setOpacity(0.5)
     marker.setZValue(2)
     marker.setData(0, sid)
     return marker
 
 
-def make_label(name: str, position) -> QGraphicsSimpleTextItem:
+def make_label(name: str, position, theme: Theme) -> QGraphicsSimpleTextItem:
     """A label that keeps its pixel size at every zoom, offset to the marker's right."""
     label = QGraphicsSimpleTextItem(name)
-    label.setBrush(QBrush(LABEL_COLOUR))
+    label.setBrush(QBrush(QColor(theme.label)))
     label.setPos(position)
     label.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations)
     label.setTransform(label.transform().translate(*LABEL_OFFSET))
@@ -58,7 +64,16 @@ def make_label(name: str, position) -> QGraphicsSimpleTextItem:
     return label
 
 
-def draw_network(scene: QGraphicsScene, network: Network, point_of) -> tuple[
+def restyle(network: Network, markers: dict, labels: dict, theme: Theme) -> None:
+    """Apply a theme to the markers and labels already in the scene."""
+    interchanges = interchange_stations(network)
+    for sid, station in network.stations.items():
+        style_marker(markers[sid], sid in interchanges, station.closed, theme)
+        labels[sid].setBrush(QBrush(QColor(theme.label)))
+
+
+def draw_network(scene: QGraphicsScene, network: Network, point_of,
+                 theme: Theme = LIGHT) -> tuple[
         list[QGraphicsItem], dict[str, QGraphicsEllipseItem], dict[str, QGraphicsSimpleTextItem]]:
     """Add the whole network to the scene; returns (all items, markers by ID, labels by ID)."""
     items = draw_segments(scene, network, point_of)
@@ -66,8 +81,9 @@ def draw_network(scene: QGraphicsScene, network: Network, point_of) -> tuple[
     markers: dict[str, QGraphicsEllipseItem] = {}
     labels: dict[str, QGraphicsSimpleTextItem] = {}
     for sid, station in network.stations.items():
-        markers[sid] = make_marker(sid, sid in interchanges, station.closed, point_of(sid))
-        labels[sid] = make_label(station.name, point_of(sid))
+        markers[sid] = make_marker(sid, sid in interchanges, station.closed, point_of(sid),
+                                   theme)
+        labels[sid] = make_label(station.name, point_of(sid), theme)
         scene.addItem(markers[sid])
         scene.addItem(labels[sid])
         items += [markers[sid], labels[sid]]

@@ -12,8 +12,6 @@ from metro.describe import station_lines
 from metro.models import Network
 from metro.search import build_index, is_too_long, search
 
-HINT_COLOUR = "#B3261E"  # dark red: 6.0:1 contrast on white
-
 
 class SearchBox(QWidget):
     """Emits `station_chosen(id)` when a suggestion is chosen, `cleared()` when the text
@@ -43,7 +41,7 @@ class SearchBox(QWidget):
         self.list.itemClicked.connect(self.choose_item)
         self.list.hide()
         self.hint = QLabel()
-        self.hint.setStyleSheet(f"color: {HINT_COLOUR};")
+        self.hint.setObjectName("hint")  # coloured by the theme's style sheet
         self.hint.setWordWrap(True)
         self.hint.setAccessibleName(f"{label} message")
         self.hint.hide()

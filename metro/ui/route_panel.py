@@ -28,12 +28,6 @@ from metro.models import Interchange, Network, Route
 
 TOGGLE_ROLE = Qt.ItemDataRole.UserRole + 1  # on a "stations in between" row: its leg's index
 
-BANNER_STYLES = {
-    "error": "background: #FDECEA; color: #8C1D18; border: 1px solid #F2B8B5;",
-    "info": "background: #E8F0FE; color: #174EA6; border: 1px solid #AECBFA;",
-}
-
-
 def swatch(colour: str) -> QIcon:
     """A small square icon in a line's colour."""
     pixmap = QPixmap(14, 14)
@@ -58,6 +52,7 @@ class Banner(QWidget):
         layout.setContentsMargins(8, 6, 8, 6)
         layout.addWidget(self.text, 1)
         layout.addWidget(self.button)
+        self.setObjectName("banner")  # coloured by the theme's style sheet, by kind
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
         self.hide()
 
@@ -66,7 +61,9 @@ class Banner(QWidget):
         if not text:
             self.hide()
             return
-        self.setStyleSheet(BANNER_STYLES.get(kind or "info", ""))
+        self.setProperty("kind", kind or "info")
+        self.style().unpolish(self)  # make Qt re-read the style sheet for the new kind
+        self.style().polish(self)
         self.text.setText(text)
         self.button.setText(button or "")
         self.button.setAccessibleName(button or "")

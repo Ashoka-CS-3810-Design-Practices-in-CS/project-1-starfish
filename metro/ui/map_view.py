@@ -8,7 +8,7 @@ import logging
 import math
 
 from PySide6.QtCore import QPoint, QPointF, QRect, QRectF, Qt, Signal
-from PySide6.QtGui import QColor, QPainter
+from PySide6.QtGui import QBrush, QColor, QPainter
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsView, QMenu, QToolTip
 
 from metro.describe import station_lines, station_tooltip
@@ -16,8 +16,9 @@ from metro.graph import interchange_stations
 from metro.models import Leg, Network, Route
 from metro.ui.map_controls import MapControls
 from metro.ui.map_labels import declutter, eligible, importance, label_tier
-from metro.ui.network_items import LABEL_OFFSET, draw_network
+from metro.ui.network_items import LABEL_OFFSET, draw_network, restyle
 from metro.ui.route_overlay import RouteOverlay
+from metro.ui.theme import LIGHT, Theme
 
 log = logging.getLogger(__name__)
 
@@ -26,7 +27,6 @@ MIN_ZOOM, MAX_ZOOM = 0.2, 20.0  # allowed scale, as a multiple of the fit scale
 ZOOM_STEP = 1.15  # per wheel notch (120 units of angleDelta)
 HOVER_RADIUS_PX = 8
 CLICK_SLOP_PX = 4  # a press and release closer than this is a click, not a drag
-BACKGROUND = QColor("#FAFAF7")
 
 
 def projection_origin(network: Network) -> tuple[float, float]:
@@ -49,17 +49,19 @@ class MapView(QGraphicsView):
     station_action = Signal(str, str)  # ("details" | "from" | "to", station ID) from the menu
     zoom_changed = Signal(int)
 
-    def __init__(self, network: Network, parent=None):
+    def __init__(self, network: Network, parent=None, theme: Theme = LIGHT):
         """Draw the whole network once; routes are later drawn on top, never rebuilt."""
         super().__init__(parent)
         self.network = network
+        self.theme = theme
+        self.route: Route | None = None  # the route on screen, redrawn when the theme changes
         self.origin = projection_origin(network)
         self.lines_at = station_lines(network)
         self.fit_scale = 1.0
         self.tier = -1
         self.press_pos: QPoint | None = None
         self.setScene(QGraphicsScene(self))
-        self.setBackgroundBrush(BACKGROUND)
+        self.setBackgroundBrush(QBrush(QColor(theme.background)))
         self.setRenderHint(QPainter.RenderHint.Antialiasing)
         self.setDragMode(QGraphicsView.DragMode.ScrollHandDrag)
         self.setTransformationAnchor(QGraphicsView.ViewportAnchor.AnchorUnderMouse)
@@ -70,12 +72,13 @@ class MapView(QGraphicsView):
         self.setAccessibleName("Metro map")
         self.setToolTip("Click a station to choose it. Scroll or + / - to zoom, 0 to fit.")
         self.network_items, self.markers, self.labels = draw_network(
-            self.scene(), network, self.point_of)
-        self.overlay = RouteOverlay(self.scene(), self.point_of)
+            self.scene(), network, self.point_of, theme)
+        self.overlay = RouteOverlay(self.scene(), self.point_of, theme)
         self.controls = MapControls(self)
         self.controls.zoom_in.connect(lambda: self.zoom_by(ZOOM_STEP))
         self.controls.zoom_out.connect(lambda: self.zoom_by(1 / ZOOM_STEP))
         self.controls.fit.connect(self.fit_all)
+        self.controls.show_theme("dark" if theme is LIGHT else "light")
 
     # ---- drawing the network ----------------------------------------------------------
 
@@ -151,10 +154,21 @@ class MapView(QGraphicsView):
         self.update_labels()
         self.zoom_changed.emit(round(self.zoom() * 100))
 
+    def set_theme(self, theme: Theme) -> None:
+        """Recolour the map, and redraw the route in the new colours without moving the view."""
+        self.theme = theme
+        self.setBackgroundBrush(QBrush(QColor(theme.background)))
+        restyle(self.network, self.markers, self.labels, theme)
+        self.overlay.theme = theme
+        if self.route is not None:
+            self.overlay.draw(self.route, self.network)
+        self.controls.show_theme("light" if theme.name == "dark" else "dark")
+
     # ---- route overlay ----------------------------------------------------------------
 
     def show_route(self, route: Route) -> None:
         """Dim the network to 25% and draw the route on top, then fit to it."""
+        self.route = route
         for item in self.network_items:
             item.setOpacity(0.25)
         rect = self.overlay.draw(route, self.network)
@@ -166,6 +180,7 @@ class MapView(QGraphicsView):
 
     def clear_route(self) -> None:
         """Remove the route overlay and restore full opacity."""
+        self.route = None
         self.overlay.clear()
         for item in self.network_items:
             item.setOpacity(1.0)

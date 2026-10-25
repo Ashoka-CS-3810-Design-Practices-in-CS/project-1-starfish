@@ -17,23 +17,13 @@ from PySide6.QtWidgets import (
 
 from metro.describe import station_details
 from metro.models import Network
-
-
-def luminance(colour: str) -> float:
-    """WCAG relative luminance of '#RRGGBB'."""
-    def channel(value: int) -> float:
-        c = value / 255
-        return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
-    r, g, b = (int(colour[i:i + 2], 16) for i in (1, 3, 5))
-    return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b)
+from metro.ui.theme import contrast_ratio, luminance  # noqa: F401  (luminance re-exported)
 
 
 def text_colour_on(background: str) -> str:
     """Black or white, whichever has the higher contrast ratio on `background`."""
-    light = luminance(background)
-    with_black = (light + 0.05) / 0.05
-    with_white = 1.05 / (light + 0.05)
-    return "#000000" if with_black >= with_white else "#FFFFFF"
+    return "#000000" if contrast_ratio(background, "#000000") >= \
+        contrast_ratio(background, "#FFFFFF") else "#FFFFFF"
 
 
 class StationDialog(QDialog):

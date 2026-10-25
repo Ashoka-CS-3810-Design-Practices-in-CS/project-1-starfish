@@ -6,7 +6,7 @@ actions into AppState updates and then redraws everything from the new state (`a
 
 import logging
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QSettings, Qt
 from PySide6.QtGui import QKeySequence, QShortcut
 from PySide6.QtWidgets import (
     QHBoxLayout,
@@ -22,10 +22,12 @@ from metro.alternatives import find_alternative_routes
 from metro.graph import RoutingGraph
 from metro.models import Network
 from metro.router import find_route
+from metro.ui.app_settings import app_settings
 from metro.ui.map_view import MapView
 from metro.ui.search_box import SearchBox
 from metro.ui.side_panel import SidePanel
 from metro.ui.station_dialog import StationDialog
+from metro.ui.theme import Theme, other_theme, theme_named
 from metro.ui.worker import RouteRunner
 
 log = logging.getLogger(__name__)
@@ -37,11 +39,13 @@ class MainWindow(QMainWindow):
     """Side panel (search, controls, route) on the left, map on the right."""
 
     def __init__(self, network: Network, graph: RoutingGraph, find=find_route,
-                 watchdog_ms: int = 2000):
+                 watchdog_ms: int = 2000, settings: QSettings | None = None):
         """`find` and `watchdog_ms` only change in tests (a slow fake, a short watchdog)."""
         super().__init__()
         self.network = network
         self.graph = graph
+        self.settings = settings or app_settings()
+        self.theme = theme_named(self.settings.value("theme"))
         self.state = st.AppState()
         self.shown_route = None
         self.station_dialog: StationDialog | None = None
@@ -68,7 +72,8 @@ class MainWindow(QMainWindow):
         self.find_button, self.swap_button = self.panel.find_button, self.panel.swap_button
         self.reset_button = self.panel.reset_button
         self.banner, self.route_panel = self.panel.banner, self.panel.route_panel
-        self.map = MapView(self.network)
+        self.map = MapView(self.network, theme=self.theme)
+        self.setStyleSheet(self.theme.stylesheet)
         self.panel_toggle = QToolButton()
         self.panel_toggle.setText("☰ Route panel")
         self.panel_toggle.setAccessibleName("Show or hide the route panel")
@@ -101,6 +106,7 @@ class MainWindow(QMainWindow):
         self.from_box.submitted.connect(self.find)
         self.map.station_clicked.connect(self.on_map_click)
         self.map.station_action.connect(self.on_station_action)
+        self.map.controls.theme_toggled.connect(self.toggle_theme)
         self.map.zoom_changed.connect(lambda pct: self.zoom_label.setText(f"Zoom {pct}%"))
         self.criterion.currentIndexChanged.connect(self.on_criterion)
         self.find_button.clicked.connect(self.find)
@@ -133,6 +139,17 @@ class MainWindow(QMainWindow):
         """Remember the criterion and recompute at once if both stations are set ([D49])."""
         self.apply(st.set_criterion(self.state, self.criterion.itemData(index)))
         self.find()  # does nothing unless both stations are valid
+
+    def toggle_theme(self) -> None:
+        """The map's theme button: light becomes dark and the other way round."""
+        self.set_theme(other_theme(self.theme))
+
+    def set_theme(self, theme: Theme) -> None:
+        """Restyle the window and the map, and remember the choice for next time ([D55])."""
+        self.theme = theme
+        self.setStyleSheet(theme.stylesheet)
+        self.map.set_theme(theme)
+        self.settings.setValue("theme", theme.name)
 
     def on_station_action(self, action: str, station_id: str) -> None:
         """A choice from the map's station menu: open the card or fill a field."""
