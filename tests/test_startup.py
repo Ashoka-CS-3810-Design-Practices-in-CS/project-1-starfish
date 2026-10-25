@@ -68,9 +68,14 @@ def test_user_log_folder_on_linux_uses_xdg_state(monkeypatch, tmp_path):
 
 
 def cp1252_stream():
-    """A text stream like a Windows console in cp1252, and its bytes."""
+    """A text stream like a Windows console in cp1252, and its bytes.
+
+    Line ends are written as they are, so the bytes are the same on every system; the
+    default would write \\r\\n on Windows."""
     raw = io.BytesIO()
-    return io.TextIOWrapper(raw, encoding="cp1252", errors="strict", write_through=True), raw
+    stream = io.TextIOWrapper(raw, encoding="cp1252", errors="strict", write_through=True,
+                              newline="\n")
+    return stream, raw
 
 
 def test_utf8_output_fixes_a_cp1252_console(monkeypatch):
