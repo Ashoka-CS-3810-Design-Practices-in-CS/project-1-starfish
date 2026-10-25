@@ -1,0 +1,19 @@
+Delhi Metro Route Planner - Windows build
+CS-3810 Project 1, Team Starfish (Sanjana Shenai, Arav Kapoor)
+
+TO RUN
+1. Unzip everything first (right-click the zip, Extract All). Do not run the
+   program from inside the zip.
+2. Open the DelhiMetroPlanner folder and double-click DelhiMetroPlanner.exe.
+   Keep the _internal folder next to the .exe: the program needs it.
+
+IF WINDOWS SAYS "Windows protected your PC"
+The program is not code-signed, so SmartScreen warns the first time. Click
+"More info", then "Run anyway".
+
+WHAT THIS BUILD RUNS ON
+64-bit Windows 10 or 11. It will not run on macOS or Linux. On those, run from
+source (Python 3.12):
+    pip install -e .
+    python main.py
+Source and instructions: https://github.com/Ashoka-CS-3810-Design-Practices-in-CS/project-1-starfish

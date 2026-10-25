@@ -1,0 +1,58 @@
+name: Build Windows executable
+
+# Run by hand (Actions tab > Build Windows executable > Run workflow). It is not part of CI.
+# PyInstaller builds only for the system it runs on, so this builds on a Windows runner.
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install -e ".[build]"
+      - name: Build
+        run: pyinstaller packaging/metro.spec --noconfirm
+      - name: Smoke test the built program
+        shell: pwsh
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          # Start the built .exe for 12 s in an empty folder and return what it logged.
+          # Good data: it must still be running and log nothing. Bad data folder (the
+          # control): it must log "Start-up failed", which shows the check can see failures.
+          function Start-Planner($name, $dataArg) {
+            $work = Join-Path $PWD "smoke-$name"
+            New-Item -ItemType Directory -Force $work | Out-Null
+            $exe = Join-Path $PWD "dist\DelhiMetroPlanner\DelhiMetroPlanner.exe"
+            $start = @{ FilePath = $exe; WorkingDirectory = $work; PassThru = $true }
+            if ($dataArg) { $start.ArgumentList = @($dataArg) }
+            $p = Start-Process @start
+            Start-Sleep -Seconds 12
+            $alive = -not $p.HasExited
+            if ($alive) { $p.Kill(); $p.WaitForExit(5000) | Out-Null }
+            $log = Join-Path $work "metro.log"
+            [pscustomobject]@{ Alive = $alive; Log = if (Test-Path $log) { Get-Content $log -Raw } else { "" } }
+          }
+          $good = Start-Planner "good" $null
+          $bad = Start-Planner "bad" (Join-Path $PWD "no-such-folder")
+          Write-Host "good: alive=$($good.Alive) log=[$($good.Log)]"
+          Write-Host "bad:  alive=$($bad.Alive) log=[$($bad.Log)]"
+          if (-not $good.Alive) { throw "The program exited by itself" }
+          if ($good.Log -match "Start-up failed") { throw "The program could not load its data" }
+          if ($bad.Log -notmatch "Start-up failed") { throw "The control run did not log a failure, so the check proves nothing" }
+      - name: Collect the zip contents
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory dist/DelhiMetroPlanner-Windows | Out-Null
+          Copy-Item dist/DelhiMetroPlanner dist/DelhiMetroPlanner-Windows/ -Recurse
+          Copy-Item packaging/HOW-TO-RUN-windows.txt dist/DelhiMetroPlanner-Windows/HOW-TO-RUN.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DelhiMetroPlanner-Windows
+          path: dist/DelhiMetroPlanner-Windows
+          retention-days: 30
