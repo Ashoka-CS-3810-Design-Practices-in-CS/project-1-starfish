@@ -8,19 +8,15 @@ import logging
 import math
 
 from PySide6.QtCore import QPoint, QPointF, QRect, QRectF, Qt, Signal
-from PySide6.QtGui import QBrush, QColor, QPainter, QPen
-from PySide6.QtWidgets import (
-    QGraphicsEllipseItem,
-    QGraphicsItem,
-    QGraphicsScene,
-    QGraphicsSimpleTextItem,
-    QGraphicsView,
-    QToolTip,
-)
+from PySide6.QtGui import QColor, QPainter
+from PySide6.QtWidgets import QGraphicsScene, QGraphicsView, QToolTip
 
 from metro.describe import station_lines, station_tooltip
 from metro.graph import interchange_stations
 from metro.models import Leg, Network, Route
+from metro.ui.map_controls import MapControls
+from metro.ui.map_labels import declutter, eligible, importance, label_tier
+from metro.ui.network_items import LABEL_OFFSET, draw_network
 from metro.ui.route_overlay import RouteOverlay
 
 log = logging.getLogger(__name__)
@@ -31,7 +27,6 @@ ZOOM_STEP = 1.15  # per wheel notch (120 units of angleDelta)
 HOVER_RADIUS_PX = 8
 CLICK_SLOP_PX = 4  # a press and release closer than this is a click, not a drag
 BACKGROUND = QColor("#FAFAF7")
-LABEL_COLOUR = QColor("#222222")
 
 
 def projection_origin(network: Network) -> tuple[float, float]:
@@ -45,13 +40,6 @@ def project(lat: float, lon: float, origin: tuple[float, float]) -> QPointF:
     """Equirectangular projection: x grows east, y grows south (screen convention)."""
     lat0, lon0 = origin
     return QPointF((lon - lon0) * math.cos(math.radians(lat0)) * K, -(lat - lat0) * K)
-
-
-def label_tier(zoom: float) -> int:
-    """[D21] 0 = interchanges only, 1 = also line terminals, 2 = every station."""
-    if zoom < 2:
-        return 0
-    return 1 if zoom < 5 else 2
 
 
 class MapView(QGraphicsView):
@@ -80,12 +68,13 @@ class MapView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setAccessibleName("Metro map")
         self.setToolTip("Click a station to choose it. Scroll or + / - to zoom, 0 to fit.")
-        self.network_items: list[QGraphicsItem] = []
-        self.markers: dict[str, QGraphicsEllipseItem] = {}
-        self.labels: dict[str, QGraphicsSimpleTextItem] = {}
-        self.draw_segments()
-        self.draw_stations()
+        self.network_items, self.markers, self.labels = draw_network(
+            self.scene(), network, self.point_of)
         self.overlay = RouteOverlay(self.scene(), self.point_of)
+        self.controls = MapControls(self)
+        self.controls.zoom_in.connect(lambda: self.zoom_by(ZOOM_STEP))
+        self.controls.zoom_out.connect(lambda: self.zoom_by(1 / ZOOM_STEP))
+        self.controls.fit.connect(self.fit_all)
 
     # ---- drawing the network ----------------------------------------------------------
 
@@ -94,65 +83,27 @@ class MapView(QGraphicsView):
         st = self.network.stations[station_id]
         return project(st.lat, st.lon, self.origin)
 
-    def draw_segments(self) -> None:
-        """One line item per segment in its line colour, with a cosmetic (fixed-width) pen."""
-        for seg in self.network.segments:
-            pen = QPen(QColor(self.network.lines[seg.line_id].color), 3)
-            pen.setCosmetic(True)
-            item = self.scene().addLine(*self.line_coords(seg.a, seg.b), pen)
-            item.setZValue(0)
-            self.network_items.append(item)
-
-    def line_coords(self, a: str, b: str) -> tuple[float, float, float, float]:
-        """x1, y1, x2, y2 of the straight line between two stations."""
-        pa, pb = self.point_of(a), self.point_of(b)
-        return pa.x(), pa.y(), pb.x(), pb.y()
-
-    def draw_stations(self) -> None:
-        """A marker and a label per station; interchanges larger and white, closed grey."""
-        interchanges = interchange_stations(self.network)
-        for sid, st in self.network.stations.items():
-            big = sid in interchanges
-            radius = 5 if big else 3
-            marker = QGraphicsEllipseItem(-radius, -radius, 2 * radius, 2 * radius)
-            marker.setPos(self.point_of(sid))
-            marker.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations)
-            marker.setPen(QPen(QColor("#333333"), 1.5))
-            marker.setBrush(QBrush(QColor("white" if big else "#555555")))
-            if st.closed:
-                marker.setBrush(QBrush(QColor("#BBBBBB")))
-                marker.setOpacity(0.5)
-            marker.setZValue(2)
-            marker.setData(0, sid)
-            self.scene().addItem(marker)
-            self.markers[sid] = marker
-            self.network_items.append(marker)
-            self.labels[sid] = self.make_label(sid, st.name)
-
-    def make_label(self, sid: str, name: str) -> QGraphicsSimpleTextItem:
-        """A label that keeps its pixel size at every zoom, offset to the marker's right."""
-        label = QGraphicsSimpleTextItem(name)
-        label.setBrush(QBrush(LABEL_COLOUR))
-        label.setPos(self.point_of(sid))
-        label.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIgnoresTransformations)
-        label.setTransform(label.transform().translate(7, -8))
-        label.setZValue(3)
-        self.scene().addItem(label)
-        self.network_items.append(label)
-        return label
-
     def update_labels(self) -> None:
-        """Show labels for the current zoom tier; does nothing unless the tier changed."""
+        """Show the labels the zoom tier allows, minus those that would overlap a more
+        important one [D21], [D50]. Panning cannot change the result, only zooming."""
         tier = label_tier(self.zoom())
-        if tier == self.tier:
-            return
         self.tier = tier
         interchanges = interchange_stations(self.network)
         terminals = {s.stations[i] for s in self.network.services.values()
                      if not s.loop for i in (0, -1)}
+        ordered = sorted((sid for sid in self.labels if eligible(tier, sid, interchanges,
+                                                                 terminals)),
+                         key=lambda sid: importance(sid, interchanges, terminals))
+        keep = declutter([(sid, self.label_rect(sid)) for sid in ordered])
         for sid, label in self.labels.items():
-            label.setVisible(tier == 2 or sid in interchanges
-                             or (tier == 1 and sid in terminals))
+            label.setVisible(sid in keep)
+
+    def label_rect(self, sid: str) -> QRectF:
+        """Where a station's label would be drawn, in view pixels."""
+        origin = self.mapFromScene(self.point_of(sid))
+        size = self.labels[sid].boundingRect()
+        return QRectF(origin.x() + LABEL_OFFSET[0], origin.y() + LABEL_OFFSET[1],
+                      size.width(), size.height())
 
     # ---- zoom and fit -----------------------------------------------------------------
 
@@ -295,7 +246,9 @@ class MapView(QGraphicsView):
             QToolTip.hideText()
 
     def resizeEvent(self, event) -> None:
-        """Fit the network the first time the view gets a real size."""
+        """Keep the controls in the top-right corner; fit the network the first time the
+        view gets a real size."""
         super().resizeEvent(event)
+        self.controls.move(self.width() - self.controls.width() - 12, 12)
         if self.tier == -1 and not self.viewport_is_empty():
             self.fit_all()
