@@ -28,6 +28,7 @@ from metro.router import find_route
 from metro.ui.map_view import MapView
 from metro.ui.route_panel import Banner, RoutePanel
 from metro.ui.search_box import SearchBox
+from metro.ui.station_dialog import StationDialog
 from metro.ui.worker import RouteRunner
 
 log = logging.getLogger(__name__)
@@ -47,6 +48,7 @@ class MainWindow(QMainWindow):
         self.graph = graph
         self.state = st.AppState()
         self.shown_route = None
+        self.station_dialog: StationDialog | None = None
         self.runner = RouteRunner(graph, network, find, watchdog_ms)
         self.runner.found.connect(self.on_found)
         self.runner.failed.connect(self.on_failed)
@@ -130,6 +132,7 @@ class MainWindow(QMainWindow):
         self.to_box.submitted.connect(self.find)
         self.from_box.submitted.connect(self.find)
         self.map.station_clicked.connect(self.on_map_click)
+        self.map.station_action.connect(self.on_station_action)
         self.map.zoom_changed.connect(lambda pct: self.zoom_label.setText(f"Zoom {pct}%"))
         self.criterion.currentIndexChanged.connect(self.on_criterion)
         self.find_button.clicked.connect(self.find)
@@ -140,9 +143,11 @@ class MainWindow(QMainWindow):
         self.panel_toggle.toggled.connect(self.panel.setVisible)
 
     def add_shortcuts(self) -> None:
-        """Alt+W swaps and Alt+C focuses the criterion. Esc is handled in keyPressEvent."""
+        """Alt+W swaps, Alt+C focuses the criterion and Ctrl+I opens the station card.
+        Esc is handled in keyPressEvent."""
         QShortcut(QKeySequence("Alt+W"), self, self.swap)
         QShortcut(QKeySequence("Alt+C"), self, self.criterion.setFocus)
+        QShortcut(QKeySequence("Ctrl+I"), self, self.show_chosen_station)
 
     # ---- user actions -------------------------------------------------------------------------
 
@@ -160,6 +165,29 @@ class MainWindow(QMainWindow):
         """Remember the criterion and recompute at once if both stations are set ([D49])."""
         self.apply(st.set_criterion(self.state, self.criterion.itemData(index)))
         self.find()  # does nothing unless both stations are valid
+
+    def on_station_action(self, action: str, station_id: str) -> None:
+        """A choice from the map's station menu: open the card or fill a field."""
+        if action == "details":
+            self.show_station(station_id)
+        else:
+            self.choose("source" if action == "from" else "destination", station_id)
+
+    def show_station(self, station_id: str) -> None:
+        """Open the station card; its buttons fill From or To ([D54])."""
+        dialog = StationDialog(self.network, station_id, self)
+        dialog.set_as_from.connect(lambda sid: self.choose("source", sid))
+        dialog.set_as_to.connect(lambda sid: self.choose("destination", sid))
+        self.station_dialog = dialog
+        dialog.show()
+
+    def show_chosen_station(self) -> None:
+        """Ctrl+I: the card of the To station, else the From station (keyboard route to it)."""
+        station = self.state.destination or self.state.source
+        if station is None:
+            self.statusBar().showMessage("Choose a station first, then press Ctrl+I.", 4000)
+        else:
+            self.show_station(station)
 
     def find_if_ready(self) -> None:
         """Searching starts automatically once both stations are valid (§6.5)."""

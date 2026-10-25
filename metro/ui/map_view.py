@@ -9,7 +9,7 @@ import math
 
 from PySide6.QtCore import QPoint, QPointF, QRect, QRectF, Qt, Signal
 from PySide6.QtGui import QColor, QPainter
-from PySide6.QtWidgets import QGraphicsScene, QGraphicsView, QToolTip
+from PySide6.QtWidgets import QGraphicsScene, QGraphicsView, QMenu, QToolTip
 
 from metro.describe import station_lines, station_tooltip
 from metro.graph import interchange_stations
@@ -46,6 +46,7 @@ class MapView(QGraphicsView):
     """The map widget. Emits `station_clicked(station_id)` and `zoom_changed(percent)`."""
 
     station_clicked = Signal(str)
+    station_action = Signal(str, str)  # ("details" | "from" | "to", station ID) from the menu
     zoom_changed = Signal(int)
 
     def __init__(self, network: Network, parent=None):
@@ -199,6 +200,24 @@ class MapView(QGraphicsView):
         """Tooltip text for a view position: every nearby station, nearest first."""
         return "\n\n".join(station_tooltip(self.network, sid, self.lines_at[sid])
                            for sid in self.stations_near(pos))
+
+    def build_station_menu(self, station_ids: list[str]) -> QMenu:
+        """Details / Set as From / Set as To for one station; a submenu per station when
+        several overlap, so a cluster can still be used ([D54])."""
+        menu = QMenu(self)
+        for sid in station_ids:
+            name = self.network.stations[sid].name
+            target = menu if len(station_ids) == 1 else menu.addMenu(name)
+            for text, action in (("Station details…", "details"), ("Set as From", "from"),
+                                 ("Set as To", "to")):
+                target.addAction(text, lambda a=action, s=sid: self.station_action.emit(a, s))
+        return menu
+
+    def contextMenuEvent(self, event) -> None:
+        """Right-click on a station opens its menu; elsewhere nothing happens."""
+        near = self.stations_near(event.pos())
+        if near:
+            self.build_station_menu(near).exec(event.globalPos())
 
     def wheelEvent(self, event) -> None:
         """Zoom by 1.15 per notch; ignore zero or non-finite deltas (ER11)."""

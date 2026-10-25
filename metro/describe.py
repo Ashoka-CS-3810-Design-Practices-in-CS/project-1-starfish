@@ -3,6 +3,9 @@
 Minutes are always rounded from seconds, never added up from rounded leg minutes (§5.3).
 """
 
+from dataclasses import dataclass
+
+from metro.graph import interchange_stations
 from metro.models import Interchange, Leg, Network, Route
 from metro.router import minutes
 
@@ -158,3 +161,47 @@ def station_tooltip(network: Network, station_id: str, lines: list[str]) -> str:
     if st.closed:
         text += "\nClosed"
     return text
+
+
+@dataclass(frozen=True)
+class StationDetails:
+    """Everything the station card shows, as plain values (Could tier, [D54])."""
+
+    id: str
+    name: str
+    aliases: tuple[str, ...]
+    lines: tuple[tuple[str, str], ...]  # (line name, colour) in line-ID order
+    interchange_note: str  # "" if the station is served by one service only
+    terminal_of: tuple[str, ...]  # names of lines that start or end here
+    neighbours: tuple[str, ...]  # names of the stations next to it on a line
+    closed: bool
+    coordinates: str  # '28.6328° N, 77.2197° E'
+
+
+def coordinates_text(lat: float, lon: float) -> str:
+    """Latitude and longitude with hemisphere letters instead of signs."""
+    return (f"{abs(lat):.4f}° {'N' if lat >= 0 else 'S'}, "
+            f"{abs(lon):.4f}° {'E' if lon >= 0 else 'W'}")
+
+
+def station_details(network: Network, station_id: str) -> StationDetails:
+    """Collect the facts about one station from the network."""
+    st = network.stations[station_id]
+    served = [line for line in network.lines.values()
+              if any(station_id in s.stations for s in line.services)]
+    names = [line.name for line in served]
+    note = ""
+    if station_id in interchange_stations(network):
+        note = (f"Interchange between {', '.join(names)}" if len(names) > 1
+                else f"Change between trains of the {names[0]} (branch)")
+    terminals = [line.name for line in served
+                 if any(not s.loop and station_id in (s.stations[0], s.stations[-1])
+                        for s in line.services)]
+    next_to = {seg.b if seg.a == station_id else seg.a
+               for seg in network.segments if station_id in (seg.a, seg.b)}
+    return StationDetails(
+        id=station_id, name=st.name, aliases=st.aliases,
+        lines=tuple((line.name, line.color) for line in served),
+        interchange_note=note, terminal_of=tuple(terminals),
+        neighbours=tuple(sorted(station_name(network, sid) for sid in next_to)),
+        closed=st.closed, coordinates=coordinates_text(st.lat, st.lon))
