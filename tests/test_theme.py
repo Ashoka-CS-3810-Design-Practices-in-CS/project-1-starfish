@@ -1,6 +1,7 @@
 """Light and dark themes: palette, map recolouring, the toggle and persistence ([D55])."""
 
 import re
+from pathlib import Path
 
 import pytest
 from conftest import REAL_DATA, TOY_METRO
@@ -27,7 +28,8 @@ def test_settings_for_tests_live_in_the_temporary_folder(tmp_path):
     settings = app_settings()
     settings.setValue("probe", 1)
     settings.sync()
-    assert str(tmp_path) in settings.fileName() and settings.fileName().endswith(".ini")
+    saved = Path(settings.fileName()).resolve()  # Qt gives forward slashes, even on Windows
+    assert saved.is_relative_to(tmp_path.resolve()) and saved.suffix == ".ini"
 
 
 # ---- pure theme data -----------------------------------------------------------------------

@@ -43,10 +43,11 @@ def test_ensure_suffix_only_adds_a_missing_extension():
 
 
 def test_write_export_writes_utf8(tmp_path):
-    """The arrows and dots survive a round trip through the file."""
+    """The arrows and dots survive a round trip through the file. The bytes are checked as
+    UTF-8 text with line ends normalised, because Windows writes \\r\\n."""
     path = tmp_path / "r.txt"
     assert write_export(str(path), "A → B · ⇒\n") is None
-    assert path.read_bytes().decode("utf-8") == "A → B · ⇒\n"
+    assert path.read_bytes().decode("utf-8").replace("\r\n", "\n") == "A → B · ⇒\n"
 
 
 def test_write_export_reports_a_problem_instead_of_raising(tmp_path):
