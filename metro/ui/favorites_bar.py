@@ -29,7 +29,7 @@ class FavoritesBar(QWidget):
         self.star = QPushButton()
         self.star.clicked.connect(self.toggle)
         self.menu_button = QToolButton()
-        self.menu_button.setText("Favourites ▾")
+        self.menu_button.setText("Favourites")
         self.menu_button.setAccessibleName("Favourite routes")
         self.menu_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
         self.menu = QMenu(self.menu_button)

@@ -25,11 +25,12 @@ from metro.models import Network
 from metro.router import find_route
 from metro.ui.app_settings import app_settings
 from metro.ui.compare_dialog import RouteCompareDialog
+from metro.ui.extras import ExtrasMixin
 from metro.ui.map_view import MapView
 from metro.ui.search_box import SearchBox
 from metro.ui.side_panel import SidePanel
 from metro.ui.station_dialog import StationDialog
-from metro.ui.theme import Theme, other_theme, theme_named
+from metro.ui.theme import theme_named
 from metro.ui.worker import RouteRunner
 
 log = logging.getLogger(__name__)
@@ -37,7 +38,7 @@ log = logging.getLogger(__name__)
 NARROW_PX = 1100  # below this width the side panel hides behind a toggle
 
 
-class MainWindow(QMainWindow):
+class MainWindow(ExtrasMixin, QMainWindow):
     """Side panel (search, controls, route) on the left, map on the right."""
 
     def __init__(self, network: Network, graph: RoutingGraph, find=find_route,
@@ -121,6 +122,7 @@ class MainWindow(QMainWindow):
         self.favorites.chosen.connect(self.on_favorite)
         self.route_panel.alternative_chosen.connect(self.on_alternative)
         self.route_panel.compare_requested.connect(self.show_comparison)
+        self.route_panel.export_requested.connect(self.on_export)
         self.panel_toggle.toggled.connect(self.panel.setVisible)
 
     def add_shortcuts(self) -> None:
@@ -146,60 +148,6 @@ class MainWindow(QMainWindow):
         """Remember the criterion and recompute at once if both stations are set ([D49])."""
         self.apply(st.set_criterion(self.state, self.criterion.itemData(index)))
         self.find()  # does nothing unless both stations are valid
-
-    def on_favorite(self, source: str, destination: str, criterion: str) -> None:
-        """A saved route was picked: fill both stations and the criterion, then search."""
-        self.runner.cancel()
-        self.apply(st.load_route(self.state, self.network, source, destination, criterion))
-        self.find_if_ready()
-
-    def on_alternative(self, index: int) -> None:
-        """A route tab (or the comparison) picked another route for the same journey."""
-        self.apply(st.choose_alternative(self.state, index))
-
-    def show_comparison(self) -> None:
-        """Open the side-by-side comparison when there is more than one route ([D56])."""
-        if len(self.state.alternatives) < 2:
-            return
-        dialog = RouteCompareDialog(self.network, self.state.alternatives, self.state.selected,
-                                    self)
-        dialog.route_chosen.connect(self.on_alternative)
-        self.compare_dialog = dialog
-        dialog.show()
-
-    def toggle_theme(self) -> None:
-        """The map's theme button: light becomes dark and the other way round."""
-        self.set_theme(other_theme(self.theme))
-
-    def set_theme(self, theme: Theme) -> None:
-        """Restyle the window and the map, and remember the choice for next time ([D55])."""
-        self.theme = theme
-        self.setStyleSheet(theme.stylesheet)
-        self.map.set_theme(theme)
-        self.settings.setValue("theme", theme.name)
-
-    def on_station_action(self, action: str, station_id: str) -> None:
-        """A choice from the map's station menu: open the card or fill a field."""
-        if action == "details":
-            self.show_station(station_id)
-        else:
-            self.choose("source" if action == "from" else "destination", station_id)
-
-    def show_station(self, station_id: str) -> None:
-        """Open the station card; its buttons fill From or To ([D54])."""
-        dialog = StationDialog(self.network, station_id, self)
-        dialog.set_as_from.connect(lambda sid: self.choose("source", sid))
-        dialog.set_as_to.connect(lambda sid: self.choose("destination", sid))
-        self.station_dialog = dialog
-        dialog.show()
-
-    def show_chosen_station(self) -> None:
-        """Ctrl+I: the card of the To station, else the From station (keyboard route to it)."""
-        station = self.state.destination or self.state.source
-        if station is None:
-            self.statusBar().showMessage("Choose a station first, then press Ctrl+I.", 4000)
-        else:
-            self.show_station(station)
 
     def find_if_ready(self) -> None:
         """Searching starts automatically once both stations are valid (§6.5)."""

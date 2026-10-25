@@ -12,8 +12,10 @@ from PySide6.QtWidgets import (
     QLabel,
     QListWidget,
     QListWidgetItem,
+    QMenu,
     QPushButton,
     QTabBar,
+    QToolButton,
     QVBoxLayout,
     QWidget,
 )
@@ -80,6 +82,7 @@ class RoutePanel(QWidget):
     leg_clicked = Signal(object)
     alternative_chosen = Signal(int)  # index in the alternatives
     compare_requested = Signal()
+    export_requested = Signal(str)  # "copy", "txt" or "md"
 
     def __init__(self, network: Network, parent=None):
         """Empty until a route is shown."""
@@ -100,6 +103,16 @@ class RoutePanel(QWidget):
         self.compare_button.setAccessibleName("Compare routes")
         self.compare_button.clicked.connect(self.compare_requested)
         self.compare_button.hide()
+        self.export_button = QToolButton()
+        self.export_button.setText("Export")
+        self.export_button.setAccessibleName("Export route")
+        self.export_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+        menu = QMenu(self.export_button)
+        for text, kind in (("Copy to clipboard", "copy"), ("Save as text…", "txt"),
+                           ("Save as Markdown…", "md")):
+            menu.addAction(text, lambda k=kind: self.export_requested.emit(k))
+        self.export_button.setMenu(menu)
+        self.export_button.hide()
         self.expanded: set[int] = set()  # indexes in route.legs whose stations are listed
         self.summary = QLabel()
         self.summary.setWordWrap(True)
@@ -120,7 +133,10 @@ class RoutePanel(QWidget):
         layout.addWidget(self.caption)
         layout.addWidget(self.summary)
         layout.addWidget(self.rows, 1)
-        layout.addWidget(self.compare_button)
+        buttons = QHBoxLayout()
+        buttons.addWidget(self.compare_button, 1)
+        buttons.addWidget(self.export_button)
+        layout.addLayout(buttons)
         self.show_route(None)
 
     def show_alternatives(self, routes: tuple[Route, ...], selected: int) -> None:
@@ -159,6 +175,7 @@ class RoutePanel(QWidget):
         self.route = route
         self.expanded = set()
         self.summary.setText("" if route is None else summary_text(route))
+        self.export_button.setVisible(route is not None)
         self.render()
 
     def render(self) -> None:
