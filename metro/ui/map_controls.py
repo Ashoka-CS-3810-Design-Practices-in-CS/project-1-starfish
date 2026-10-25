@@ -1,4 +1,4 @@
-"""Buttons floating on the corner of the map (Should/Could tier, [D20], [D51], [D55]).
+"""Buttons floating on the corner of the map (Should/Could tier, [D20], [D51], [D55], [D58]).
 
 Mouse users who have no wheel or never learn the + / - / 0 keys get visible controls.
 The buttons never take keyboard focus by click, so the map keeps its key shortcuts.
@@ -17,6 +17,8 @@ class MapControls(QWidget):
     zoom_out = Signal()
     fit = Signal()
     theme_toggled = Signal()
+    play_toggled = Signal()
+    step_forward = Signal()
 
     def __init__(self, parent=None):
         """Build the column: zoom in, zoom out, fit."""
@@ -32,7 +34,26 @@ class MapControls(QWidget):
                                           "Show the whole network (0)", self.fit)
         self.theme_button = self.add_button(layout, "◐", "Switch theme", "Switch theme",
                                             self.theme_toggled)
+        self.play_button = self.add_button(layout, "▶", "Play route animation",
+                                           "Play the route animation (Space)", self.play_toggled)
+        self.step_button = self.add_button(layout, "»", "Step to the next station",
+                                           "Jump to the next station (.)", self.step_forward)
+        self.show_route_available(False)
         self.adjustSize()
+
+    def show_route_available(self, available: bool) -> None:
+        """The animation buttons only work when there is a route on the map."""
+        for button in (self.play_button, self.step_button):
+            button.setEnabled(available)
+        if not available:
+            self.show_playing(False)
+
+    def show_playing(self, playing: bool) -> None:
+        """Play button shows what a click will do: pause while playing, play otherwise."""
+        self.play_button.setText("❚❚" if playing else "▶")
+        name = "Pause route animation" if playing else "Play route animation"
+        self.play_button.setAccessibleName(name)
+        self.play_button.setToolTip(name + " (Space)")
 
     def show_theme(self, next_name: str) -> None:
         """Say what the theme button will switch to ("dark" or "light")."""

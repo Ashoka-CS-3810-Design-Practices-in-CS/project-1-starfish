@@ -17,7 +17,9 @@ from metro.models import Leg, Network, Route
 from metro.ui.map_controls import MapControls
 from metro.ui.map_labels import declutter, eligible, importance, label_tier
 from metro.ui.network_items import LABEL_OFFSET, draw_network, restyle
+from metro.ui.route_animation import RouteAnimator
 from metro.ui.route_overlay import RouteOverlay
+from metro.ui.station_menu import build_station_menu
 from metro.ui.theme import LIGHT, Theme
 
 log = logging.getLogger(__name__)
@@ -70,11 +72,16 @@ class MapView(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setAccessibleName("Metro map")
-        self.setToolTip("Click a station to choose it. Scroll or + / - to zoom, 0 to fit.")
+        self.setToolTip("Click a station to choose it. Scroll or + / - to zoom, 0 to fit. "
+                        "Space plays the route; . and , step between stations.")
         self.network_items, self.markers, self.labels = draw_network(
             self.scene(), network, self.point_of, theme)
         self.overlay = RouteOverlay(self.scene(), self.point_of, theme)
+        self.animator = RouteAnimator(self.scene(), self.point_of, self)
         self.controls = MapControls(self)
+        self.controls.play_toggled.connect(self.animator.toggle)
+        self.controls.step_forward.connect(lambda: self.animator.step(1))
+        self.animator.playing_changed.connect(self.controls.show_playing)
         self.controls.zoom_in.connect(lambda: self.zoom_by(ZOOM_STEP))
         self.controls.zoom_out.connect(lambda: self.zoom_by(1 / ZOOM_STEP))
         self.controls.fit.connect(self.fit_all)
@@ -176,11 +183,15 @@ class MapView(QGraphicsView):
             for sid in leg.stations:
                 self.markers[sid].setOpacity(1.0)
                 self.labels[sid].setOpacity(1.0)
+        self.animator.set_route(route)
+        self.controls.show_route_available(self.animator.ready)
         self.fit_rect(rect)
 
     def clear_route(self) -> None:
         """Remove the route overlay and restore full opacity."""
         self.route = None
+        self.animator.clear()
+        self.controls.show_route_available(False)
         self.overlay.clear()
         for item in self.network_items:
             item.setOpacity(1.0)
@@ -217,16 +228,8 @@ class MapView(QGraphicsView):
                            for sid in self.stations_near(pos))
 
     def build_station_menu(self, station_ids: list[str]) -> QMenu:
-        """Details / Set as From / Set as To for one station; a submenu per station when
-        several overlap, so a cluster can still be used ([D54])."""
-        menu = QMenu(self)
-        for sid in station_ids:
-            name = self.network.stations[sid].name
-            target = menu if len(station_ids) == 1 else menu.addMenu(name)
-            for text, action in (("Station details…", "details"), ("Set as From", "from"),
-                                 ("Set as To", "to")):
-                target.addAction(text, lambda a=action, s=sid: self.station_action.emit(a, s))
-        return menu
+        """The right-click menu for these stations; choices arrive as `station_action`."""
+        return build_station_menu(self, self.network, station_ids, self.station_action.emit)
 
     def contextMenuEvent(self, event) -> None:
         """Right-click on a station opens its menu; elsewhere nothing happens."""
@@ -243,7 +246,8 @@ class MapView(QGraphicsView):
         self.zoom_by(ZOOM_STEP ** (delta / 120))
 
     def keyPressEvent(self, event) -> None:
-        """+ and - zoom, 0 fits; arrow keys pan (handled by QGraphicsView)."""
+        """+ and - zoom, 0 fits, Space plays the route, . and , step; arrow keys pan (handled
+        by QGraphicsView)."""
         key = event.key()
         if key in (Qt.Key.Key_Plus, Qt.Key.Key_Equal):
             self.zoom_by(ZOOM_STEP)
@@ -251,6 +255,10 @@ class MapView(QGraphicsView):
             self.zoom_by(1 / ZOOM_STEP)
         elif key == Qt.Key.Key_0:
             self.fit_all()
+        elif key == Qt.Key.Key_Space:
+            self.animator.toggle()
+        elif key in (Qt.Key.Key_Period, Qt.Key.Key_Comma):
+            self.animator.step(1 if key == Qt.Key.Key_Period else -1)
         else:
             super().keyPressEvent(event)
 
