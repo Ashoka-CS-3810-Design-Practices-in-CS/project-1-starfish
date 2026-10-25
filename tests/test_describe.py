@@ -113,3 +113,19 @@ def station_ids(network, *names):
     """Station IDs for exact display names."""
     by_name = {st.name: sid for sid, st in network.stations.items()}
     return [by_name[name] for name in names]
+
+
+def test_lines_used_shows_each_line_once_in_order(toy):
+    """TM2 A -> F rides Red then Blue."""
+    from metro.describe import lines_used
+    network, graph = toy
+    assert lines_used(network, find_route(graph, network, "A", "F")) == ["Red Line", "Blue Line"]
+
+
+def test_lines_used_merges_a_branch_change_on_the_same_line(real):
+    """Noida Electronic City -> Vaishali is Blue main then Blue branch: one Blue Line."""
+    from metro.describe import lines_used
+    network, graph = real
+    route = find_route(graph, network,
+                       *station_ids(network, "Noida Electronic City", "Vaishali"))
+    assert len(route.legs) == 2 and lines_used(network, route) == ["Blue Line"]

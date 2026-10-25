@@ -6,6 +6,9 @@ Minutes are always rounded from seconds, never added up from rounded leg minutes
 from metro.models import Interchange, Leg, Network, Route
 from metro.router import minutes
 
+CRITERION_LABELS = {"fastest": "Fastest", "fewest_changes": "Fewest interchanges",
+                    "fewest_stops": "Fewest stops"}
+
 
 def plural(n: int, word: str) -> str:
     """'1 stop', '2 stops'; 'interchange' likewise."""
@@ -83,6 +86,16 @@ def route_lines(network: Network, route: Route, expand: bool = False) -> list[st
         if expand:
             out += [f"     · {name}" for name in between_names(network, step)]
     return out
+
+
+def lines_used(network: Network, route: Route) -> list[str]:
+    """Names of the lines a route rides, in order, with a repeated line shown once in a row
+    (a branch change on the same line is not a new line)."""
+    names: list[str] = []
+    for leg in route.legs:
+        if leg.kind == "RIDE" and (not names or names[-1] != network.lines[leg.line_id].name):
+            names.append(network.lines[leg.line_id].name)
+    return names
 
 
 def route_title(network: Network, route: Route) -> str:
