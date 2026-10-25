@@ -90,7 +90,7 @@ def select_from_map(state: AppState, network: Network, station_id: str) -> AppSt
 
 
 def set_criterion(state: AppState, criterion: str) -> AppState:
-    """Change the criterion; the route on screen stays until Find recomputes it."""
+    """Change the criterion; the route on screen stays until the new search finishes ([D49])."""
     return replace(state, criterion=criterion)
 
 

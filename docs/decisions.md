@@ -14,8 +14,8 @@ Decisions made after A3. A3 says "no design change is silent", so every change f
 | D31 | `RouteFinder` Protocol (Strategy) injected from `main.py` | A plain function `find_route(graph, network, src, dst, criterion)`; the criterion selects a key function | Swapping the algorithm still touches only `router.py`. The UI only ever sees the `Route` dataclass. |
 | D32 | Executor abstraction (`InlineExecutor` / `QThreadExecutor`) | One `RouteWorker` on one `QThread`; core tests call `find_route` directly | Only one executor exists in the real app, so the abstraction served tests only. |
 | D33 | Full FSM with every (phase, action) pair | An `AppState` dataclass whose `phase` is derived from its fields, plus a few pure update functions | Illegal states become unrepresentable without a transition table. |
-| D34 | Yen's k-shortest alternatives (FR17) | Not planned (Could tier, only if all else is done) | Scope tier [D24]. |
-| D35 | TOML settings file | Not built unless the Options dialog [O] is built | Nothing needs configuration in the Must tier. |
+| D34 | Yen's k-shortest alternatives (FR17) | Built after the feature freeze as arc masking, not Yen's: see [D47] | Scope tier [D24]; Yen's paths differ by one station, which is no use to a rider. |
+| D35 | TOML settings file | No settings file of our own; theme and favourites use QSettings, see [D55] | Nothing needs configuration in the Must tier; the optional features need two remembered values. |
 
 ## Kept from A3 exactly
 
@@ -69,3 +69,63 @@ The suggestion list is a `QListWidget` placed directly under each field (as in t
 ### D46 — A station typed over is no longer chosen (Step 8)
 
 Editing the text of a field after choosing a station clears that choice (`SearchBox.cleared`). Otherwise the field could show one name while the state held another station.
+
+## Optional features (Could tier, built after the M4 feature freeze, 25 October 2026)
+
+These were requested explicitly after the Must and Should tiers were done; each keeps the rules in PRD §0.1 (no Qt in the core, files about 300 lines or fewer, accessible names on every control).
+
+### D47 — Alternative routes by masking arcs (FR17)
+
+`metro/alternatives.py` returns up to 3 routes: the best route for the chosen criterion first, then the best route of each other criterion, then "masked" routes. A masked route is `find_route` run on a copy of the graph with some arcs removed: every transfer and walk arc at a change station of a route already found, or the middle hop of each ride. It repeats once on what it finds, keeps routes up to 1.5 times as slow as the fastest, and sorts by the chosen criterion with the leg stations as tie-break, so the result is the same every time. `router.py` is untouched and the file imports no Qt.
+
+Yen's algorithm (the A2 idea, [D34]) gives paths that differ by one station on the same line. That is a poor "alternative" for a rider; masking a change station or a stretch of line gives a different way to travel. It runs on the UI thread, not the worker: p95 over 300 random pairs is about 4.5 ms on the development Mac, and `tests/test_alternatives.py` checks it against the 50 ms budget. If it ever fails, the window logs the error and still shows the route.
+
+### D48 — Favourite routes
+
+A favourite is (source, destination, criterion). The list logic is in `metro/favorites.py` (no Qt): add or remove at the front, at most 20, and `decode` that never raises, so a damaged or outdated saved value gives an empty list and entries naming stations that no longer exist are dropped. The route itself is not saved; choosing a favourite fills the fields and the Criterion box and searches again, so it follows data changes and closures (a closed station gives the ER6 message). `FavoritesBar` keeps the list in QSettings.
+
+### D49 — Changing the criterion searches again at once
+
+Before, choosing a different criterion left a route on screen that no longer matched the box until Find was pressed. Now `on_criterion` stores the criterion and calls `find()`, which does nothing unless both stations are valid. `set_criterion` stays a pure state update.
+
+### D50 — Overlapping labels are hidden, not just zoom-tiered
+
+[D21] picks which labels may show at each zoom, but at tier 2 neighbouring stations still print over each other. `map_labels.declutter` tries labels from the most to the least important (interchange, terminal, rest; station ID as tie-break) and keeps one only if its padded rectangle does not overlap one already kept, with a 64 px grid so it stays fast. Overlap depends only on distances between labels, so panning cannot change the result and it is recomputed on zoom only (about 0.2 ms per zoom step measured).
+
+### D51 — Visible zoom, fit, theme and play buttons on the map
+
+Scrolling and the `+ - 0` keys are invisible. `MapControls` floats buttons in the top-right of the map. They take keyboard focus by Tab but not by click, so the map keeps its key shortcuts. The keys still work.
+
+### D52 — Route stations and changes drawn on top of the dimmed network
+
+Dimming the network to 25% made the route's own stations hard to read. The route's markers and names go back to full opacity, every station on it gets a small disc, and each change gets a heavy ring and a boxed label ("⇄ Change at X" or "⇄ Walk X → Y"). Labels of neighbouring changes alternate above and below the ring so they rarely collide.
+
+### D53 — Station lists are extra rows, not a tree
+
+A ride with stations in between gets a "▶ N stations in between" row in the existing `QListWidget`; opening it inserts one row per station. A `QTreeWidget` would have changed the row model that tests, the accessibility check and leg focusing rely on. Enter and Space are handled in an event filter, because `itemActivated` also fires on a single click on some platforms and a row would toggle twice. The row has a spoken description ("Show 8 stations in between") because the arrow glyph is read out as "black right-pointing triangle". `test_full_workflow_shows_route` now expects the extra row.
+
+### D54 — Station card on right-click and Ctrl+I, not on left-click
+
+FR4 says a click fills From, then To, so a left-click cannot also open a card. Right-click opens a menu (Details, Set as From, Set as To; a submenu per station where markers overlap) and Ctrl+I opens the card of the To station, else the From station, for keyboard users. The card is not modal. Each line is a coloured tag that also says the line's name, with black or white text picked by contrast ratio ([D20]).
+
+### D55 — Themes, and settings kept as an .ini file
+
+A `Theme` is plain data: map colours and a style sheet. The dark sheet restyles every widget; the light sheet only styles the banner, field hints and map buttons and leaves the platform look alone. The map recolours in place, redraws the route (with a soft glow in dark) and keeps the camera and dimming. The first choice is light; the OS setting is not read.
+
+Settings are saved by `app_settings()` as an .ini file. `QSettings(org, app)` ignored `setDefaultFormat` on macOS and wrote a plist, which meant the tests would have overwritten the developer's real saved theme; an explicit `IniFormat` can be redirected with `QSettings.setPath`, and `tests/conftest.py` does that for every test. `tests/test_theme.py` checks that the file really lands in the test's temporary folder.
+
+### D56 — Route tabs with a caption, and a comparison table
+
+The route panel shows "Route 1/2/3" tabs and, under them, "Best at: Fastest, Fewest interchanges" for the selected route. Putting the badge in the tab text gave "Rout…" on a 380 px panel, so the tab only carries the number (tooltips carry the full summary). `RouteCompareDialog` shows one column per route; a value is bold when the route has that criterion's badge, using the same `route_badges` as the caption, so the two cannot disagree when two routes tie to the minute but not to the second. "Choose this route" calls `AppState.choose_alternative`.
+
+### D57 — Export never raises
+
+`export_route` copies to the clipboard or saves UTF-8 text or Markdown (every intermediate station listed). A file problem becomes a message in the banner and the route stays; the file name is made safe for Windows ('Rajiv-Chowk-to-Hauz-Khas.txt') and a missing extension is added. Found by test: "Haat - INA" first became "Haat---INA".
+
+### D58 — Route animation
+
+`RouteAnimator` moves a marker along the route's polyline at 250 ms per station (3 to 15 s). The geometry is plain functions and the timer only calls `advance(ms)`, so tests are exact and do not wait. Step jumps to the next or previous station and pauses; Space plays or pauses; after the end, Play starts again from the beginning. The marker is outside `network_items` and `overlay.items`, so dimming, clearing and the theme redraw leave it alone.
+
+### D59 — Splitting the window to keep to 300 lines
+
+`main_window.py` reached 344 lines. The left column became `SidePanel` (widgets and layout, no logic), the handlers for the optional features became `ExtrasMixin` in `extras.py` (same method names, so nothing that calls them changed), and the map's network drawing, label logic and station menu became `network_items.py`, `map_labels.py` and `station_menu.py`. `ExtrasMixin` depends on the window's attributes and is not usable alone, which is the price of keeping one `MainWindow` class.
